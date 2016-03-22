@@ -1,0 +1,3 @@
+sample_homepage:
+    path:     /
+    defaults: { _controller: SampleBundle:Default:index }

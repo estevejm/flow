@@ -1,4 +1,12 @@
 services:
-#    sample.example:
-#        class: SampleBundle\Example
-#        arguments: ["@service_id", "plain_value", %parameter%]
+    execute_command_handler:
+        class: SampleBundle\Command\ExecuteCommandHandler
+        arguments:
+            - "@event_recorder"
+        tags:
+            - { name: command_handler, handles: execute_command }
+
+    log_command_executed_subscriber:
+        class: SampleBundle\Subscriber\LogCommandExecuted
+        tags:
+            - { name: event_subscriber, subscribes_to: command_executed }

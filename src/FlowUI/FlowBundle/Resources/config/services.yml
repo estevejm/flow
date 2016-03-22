@@ -1,0 +1,6 @@
+services:
+    test_service:
+        class: FlowUI\FlowBundle\Service\TestService
+        arguments:
+            - [] # registerHandlers compiler pass
+            - [] # registerSubscribers compiler pass

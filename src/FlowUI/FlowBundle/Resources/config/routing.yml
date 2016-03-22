@@ -1,0 +1,3 @@
+flow_ui_flow_homepage:
+    path:     /
+    defaults: { _controller: FlowUIFlowBundle:Default:index }

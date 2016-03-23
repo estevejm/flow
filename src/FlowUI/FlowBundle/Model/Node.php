@@ -21,6 +21,7 @@ abstract class Node
      */
     public function __construct($id, $type)
     {
+        // todo: assert string
         $this->id = $id;
         $this->type = $type;
     }

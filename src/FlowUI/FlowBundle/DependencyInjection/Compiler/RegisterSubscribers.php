@@ -2,14 +2,11 @@
 
 namespace FlowUI\FlowBundle\DependencyInjection\Compiler;
 
-use SimpleBus\SymfonyBridge\DependencyInjection\Compiler\CollectServices;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class RegisterSubscribers implements CompilerPassInterface
 {
-    use CollectServices;
-
     private $serviceId;
     private $tag;
     private $keyAttribute;
@@ -42,11 +39,21 @@ class RegisterSubscribers implements CompilerPassInterface
 
         $handlers = array();
 
-        $this->collectServiceIds(
-            $container,
-            $this->tag,
-            $this->keyAttribute,
-            function ($key, $serviceId, array $tagAttributes) use (&$handlers) {
+        foreach ($container->findTaggedServiceIds($this->tag) as $serviceId => $tags) {
+            foreach ($tags as $tagAttributes) {
+                if (!isset($tagAttributes[$this->keyAttribute])) {
+                    throw new \InvalidArgumentException(
+                        sprintf(
+                            'The attribute "%s" of tag "%s" of service "%s" is mandatory',
+                            $this->keyAttribute,
+                            $this->tag,
+                            $serviceId
+                        )
+                    );
+                }
+
+                $key = $tagAttributes[$this->keyAttribute];
+
                 if (isset($tagAttributes['method'])) {
                     $callable = [$serviceId, $tagAttributes['method']];
                 } else {
@@ -55,7 +62,7 @@ class RegisterSubscribers implements CompilerPassInterface
 
                 $handlers[ltrim($key, '\\')][] = $callable;
             }
-        );
+        }
 
         $definition->replaceArgument(1, $handlers);
     }

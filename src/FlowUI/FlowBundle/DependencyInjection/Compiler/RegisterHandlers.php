@@ -2,14 +2,11 @@
 
 namespace FlowUI\FlowBundle\DependencyInjection\Compiler;
 
-use SimpleBus\SymfonyBridge\DependencyInjection\Compiler\CollectServices;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class RegisterHandlers implements CompilerPassInterface
 {
-    use CollectServices;
-
     private $serviceId;
     private $tag;
     private $keyAttribute;
@@ -42,20 +39,27 @@ class RegisterHandlers implements CompilerPassInterface
 
         $handlers = array();
 
-        $this->collectServiceIds(
-            $container,
-            $this->tag,
-            $this->keyAttribute,
-            function ($key, $serviceId, array $tagAttributes) use (&$handlers) {
-                if (isset($tagAttributes['method'])) {
-                    $callable = [$serviceId, $tagAttributes['method']];
-                } else {
-                    $callable = $serviceId;
+        foreach ($container->findTaggedServiceIds($this->tag) as $serviceId => $tags) {
+            foreach ($tags as $tagAttributes) {
+                if (!isset($tagAttributes[$this->keyAttribute])) {
+                    throw new \InvalidArgumentException(
+                        sprintf(
+                            'The attribute "%s" of tag "%s" of service "%s" is mandatory',
+                            $this->keyAttribute,
+                            $this->tag,
+                            $serviceId
+                        )
+                    );
                 }
 
-                $handlers[ltrim($key, '\\')] = $callable;
+                $key = $tagAttributes[$this->keyAttribute];
+
+                $handlers[ltrim($key, '\\')] = [
+                    'id' => $serviceId,
+                    'class' => $container->findDefinition($serviceId)->getClass()
+                ];
             }
-        );
+        }
 
         $definition->replaceArgument(0, $handlers);
     }

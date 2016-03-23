@@ -2,11 +2,15 @@
 
 namespace FlowUI\FlowBundle\Service;
 
+use Exception;
 use FlowUI\FlowBundle\Model\Command;
 use FlowUI\FlowBundle\Model\Event;
 use FlowUI\FlowBundle\Model\Handler;
 use FlowUI\FlowBundle\Model\Subscriber;
-use SimpleBus\Message\CallableResolver\Exception\UndefinedCallable;
+use PhpParser\NodeTraverser;
+use PhpParser\ParserFactory;
+use ReflectionClass;
+use SimpleBus\Message\Name\NamedMessage;
 
 class TestService
 {
@@ -30,32 +34,14 @@ class TestService
         $this->subscribersMap = $subscribersMap;
     }
 
-    /**
-     * @param string $name
-     * @return callable
-     */
-    public function get($name)
-    {
-        if (!array_key_exists($name, $this->handlersMap)) {
-            throw new UndefinedCallable(
-                sprintf(
-                    'Could not find a callable for name "%s"',
-                    $name
-                )
-            );
-        }
-
-        return $this->handlersMap[$name];
-    }
-
     public function build()
     {
-        $tree = [];
+        $commands = $events = [];
 
-        foreach ($this->handlersMap as $commandId => $handlerId) {
+        foreach ($this->handlersMap as $commandId => $handlerData) {
             $command = new Command($commandId);
-            $handler = new Handler($handlerId, $command);
-            $tree[$command->getId()] = $command;
+            new Handler($handlerData['id'], $handlerData['class'], $command);
+            $commands[$command->getId()] = $command;
         }
 
         foreach ($this->subscribersMap as $eventId => $subscriberIds) {
@@ -68,8 +54,57 @@ class TestService
                 $subscriberIds
             );
 
-            $tree[$event->getId()] = $event;
+            $events[$event->getId()] = $event;
         }
-        var_dump($tree);
+
+        /** @var Command $command */
+        foreach ($commands as $command) {
+            $handler = $command->getHandler();
+            $handlerEventIds = $this->getEventsTriggeredByHandler($handler);
+
+            foreach ($handlerEventIds as $handlerEventId) {
+                $handler->addEvent($events[$handlerEventId]);
+            }
+        }
+
+        return array_merge($commands, $events);
+    }
+
+    /**
+     * @param Handler $handler
+     * @return array
+     */
+    private function getEventsTriggeredByHandler(Handler $handler) {
+        $class = new ReflectionClass($handler->getClassName());
+        $fileName = $class->getFileName();
+        $code = file_get_contents($fileName);
+
+        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+        $traverser = new NodeTraverser();
+
+        $visitor = new HandlerNodeVisitor();
+        $traverser->addVisitor($visitor);
+
+        $events = [];
+        try {
+            $stmts = $parser->parse($code);
+            $stmts = $traverser->traverse($stmts);
+
+            $uses = $visitor->getUses();
+
+            foreach ($uses as $className) {
+                var_dump($className);
+                $class = new ReflectionClass($className);
+                if ($class->implementsInterface(NamedMessage::class)) {
+                    $eventId = $class->newInstanceWithoutConstructor()->messageName();
+                    $events[] = $eventId;
+                }
+            }
+
+        } catch (Exception $e) {
+            echo 'Parse Error: ', $e->getMessage();
+        }
+
+        return $events;
     }
 }

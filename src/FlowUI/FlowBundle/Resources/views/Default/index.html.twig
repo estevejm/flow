@@ -4,6 +4,7 @@
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
 
     <style>
 
@@ -34,11 +35,16 @@
         <span class="label" data-group="event">Event</span>
         <span class="label" data-group="subscriber">Subscriber</span>
     </div>
+    <div class="ui-widget">
+        <input id="search">
+        <button type="button" onclick="searchNode()">Search</button>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
 
     <script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
     <script src="//d3js.org/d3.v3.min.js"></script>
     <script>
 
@@ -73,14 +79,14 @@
                     .data(graph.links)
                     .enter().append("line")
                     .attr("class", "link")
-                    .style("marker-end",  "url(#suit)")
+                    .style("marker-end",  "url(#suit)"); // arrow
 
             var node = svg.selectAll(".node")
                     .data(graph.nodes)
                     .enter().append("g")
                     .attr("class", "node")
                     .call(force.drag)
-                    .on('dblclick', connectedNodes);
+                    .on('dblclick', connectedNodes); // show neighboring nodes
 
             node.append("circle")
                     .attr("r", 8)
@@ -117,6 +123,7 @@
                         });
             });
 
+            // show neighboring nodes
             //Toggle stores whether the highlighting is on
             var toggle = 0;
 
@@ -158,8 +165,22 @@
                 }
 
             }
+
+            // search
+
+            var optArray = [];
+            for (var i = 0; i < graph.nodes.length - 1; i++) {
+                optArray.push(graph.nodes[i].name);
+            }
+            optArray = optArray.sort();
+
+            $("#search").autocomplete({
+                source: optArray
+            });
+
         });
 
+        // arrow
         svg.append("defs").selectAll("marker")
                 .data(["suit", "licensing", "resolved"])
                 .enter().append("marker")
@@ -174,5 +195,25 @@
                 .attr("d", "M0,-5L10,0L0,5 L10,0 L0, -5")
                 .style("stroke", "#4679BD")
                 .style("opacity", "0.6");
+
+        function searchNode() {
+            //find the node
+            var selectedVal = document.getElementById('search').value;
+            var node = svg.selectAll(".node");
+            if (selectedVal == "none") {
+                node.style("stroke", "white").style("stroke-width", "1");
+            } else {
+                var selected = node.filter(function (d, i) {
+                    return d.name != selectedVal;
+                });
+                selected.style("opacity", "0");
+                var link = svg.selectAll(".link")
+                link.style("opacity", "0");
+                d3.selectAll(".node, .link").transition()
+                        .duration(5000)
+                        .style("opacity", 1);
+            }
+        }
+
     </script>
 {% endblock %}

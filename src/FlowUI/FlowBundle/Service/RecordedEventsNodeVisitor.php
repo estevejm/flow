@@ -10,6 +10,11 @@ use SimpleBus\Message\Name\NamedMessage;
 class RecordedEventsNodeVisitor extends NodeVisitorAbstract
 {
     /**
+     * @var string
+     */
+    private $namespace;
+
+    /**
      * @var array
      */
     private $classMap;
@@ -23,13 +28,16 @@ class RecordedEventsNodeVisitor extends NodeVisitorAbstract
     {
         $this->classMap = [];
         $this->events = [];
+        $this->namespace = '';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function leaveNode(Node $node) {
-        if ($node instanceof Node\Stmt\Use_) {
+    public function enterNode(Node $node) {
+        if ($node instanceof Node\Stmt\Namespace_) {
+            $this->namespace = $node->name->toString();
+        } elseif ($node instanceof Node\Stmt\Use_) {
             $use = $node->uses[0];
             $this->classMap[$use->alias] = $use->name->toString();
         } elseif ($node instanceof Node\Expr\New_ || $node instanceof Node\Expr\StaticCall) {
@@ -40,15 +48,17 @@ class RecordedEventsNodeVisitor extends NodeVisitorAbstract
             } elseif ($node->class->isQualified()) {
                 $eventClass = $node->class->getFirst();
                 if (empty($this->classMap[$eventClass])) {
-                    throw new \Exception('Qualified class could not be resolved');
+                    $eventClass = $this->namespace . '\\' . $eventClass;
+                } else {
+                    $eventClass = $this->classMap[$eventClass] . '\\' . $node->class->getLast();
                 }
-                $eventClass = $this->classMap[$eventClass] . '\\' . $node->class->getLast();
             } elseif ($node->class->isUnqualified()) {
                 $eventClass = $node->class->toString();
                 if (empty($this->classMap[$eventClass])) {
-                    throw new \Exception('Unqualified class could not be resolved');
+                    $eventClass = $this->namespace . '\\' . $eventClass;
+                } else {
+                    $eventClass = $this->classMap[$eventClass];
                 }
-                $eventClass = $this->classMap[$eventClass];
             } elseif ($node->class->isFullyQualified()) {
                 $eventClass = $node->class->toString();
             } else {

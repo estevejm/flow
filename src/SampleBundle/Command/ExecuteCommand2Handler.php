@@ -39,6 +39,7 @@ class ExecuteCommand2Handler
         $this->eventRecorder->record($this->getEvent());
         $this->eventRecorder->record(CommandExecuted::create());
 
+        new ExecuteCommand(new \DateTime(), 'not a best practice');
     }
 
     private function getEvent()

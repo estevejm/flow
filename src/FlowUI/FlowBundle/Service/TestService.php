@@ -63,6 +63,10 @@ class TestService
             $handlerEventIds = $this->getEventsTriggeredByHandler($handler->getClassName());
 
             foreach ($handlerEventIds as $subscriberMessageId) {
+                if (!empty($commands[$subscriberMessageId])) {
+                    var_dump("warning: you're triggering a command inside a command handler!");
+                }
+
                 if (empty($events[$subscriberMessageId])) {
                     $events[$subscriberMessageId] = new Event($subscriberMessageId);
                 }
@@ -93,8 +97,6 @@ class TestService
             }
 
         }
-
-        // todo: warning if handler trigger command
 
         return array_merge($commands, $events);
     }

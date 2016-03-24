@@ -4,21 +4,15 @@ namespace FlowUI\FlowBundle\Model;
 
 class Subscriber extends Node
 {
-
-    /**
-     * @var Command[]
-     */
-    private $commands;
-
-    /**
-     * @var Event[]
-     */
-    private $events;
-
     /**
      * @var string
      */
     private $className;
+
+    /**
+     * @var Event[]
+     */
+    private $messages;
 
     /**
      * @param string $id
@@ -29,9 +23,8 @@ class Subscriber extends Node
     {
         parent::__construct($id, 'subscriber');
 
-        $this->commands = [];
-        $this->events = [];
         $this->className = $className;
+        $this->messages = [];
 
         $event->addSubscriber($this);
     }
@@ -45,34 +38,18 @@ class Subscriber extends Node
     }
 
     /**
-     * @return Command[]
+     * @return Message[]
      */
-    public function getCommands()
+    public function getMessage()
     {
-        return $this->commands;
+        return $this->messages;
     }
 
     /**
-     * @param Command $command
+     * @param Message $message
      */
-    public function addCommand(Command $command)
+    public function addMessage(Message $message)
     {
-        $this->commands[] = $command;
-    }
-
-    /**
-     * @return Event[]
-     */
-    public function getEvents()
-    {
-        return $this->events;
-    }
-
-    /**
-     * @param Event $event
-     */
-    public function addEvent(Event $event)
-    {
-        $this->events[] = $event;
+        $this->messages[] = $message;
     }
 }

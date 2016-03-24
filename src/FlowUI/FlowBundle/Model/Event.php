@@ -2,7 +2,7 @@
 
 namespace FlowUI\FlowBundle\Model;
 
-class Event extends Node
+class Event extends Node implements Message
 {
 
     /**
@@ -15,6 +15,8 @@ class Event extends Node
      */
     public function __construct($id)
     {
+        // todo: get classname of command
+
         parent::__construct($id, 'event');
 
         $this->subscribers = [];

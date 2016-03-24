@@ -63,13 +63,15 @@ class TestService
 
             foreach ($messages as $messageId) {
                 if (!empty($commands[$messageId])) {
+                    $handler->addMessage($commands[$messageId]);
                     var_dump("warning: you're triggering a command inside a command handler!");
+                    continue;
                 }
 
                 if (empty($events[$messageId])) {
                     $events[$messageId] = new Event($messageId);
                 }
-                $handler->addEvent($events[$messageId]);
+                $handler->addMessage($events[$messageId]);
             }
         }
 
@@ -80,9 +82,9 @@ class TestService
 
                 foreach ($messages as $messageId) {
                     if (!empty($commands[$messageId])) {
-                        $subscriber->addCommand($commands[$messageId]);
+                        $subscriber->addMessage($commands[$messageId]);
 
-                        // if it's a command, it's not an event, moving on... (as we don't want to store false events ...
+                        // if it's a command, it's not an event, moving on ( as we don't want to create an entry for a false event ...
                         continue;
                     }
 
@@ -91,7 +93,7 @@ class TestService
                         $events[$messageId] = new Event($messageId);
                     }
 
-                    $subscriber->addEvent($events[$messageId]);
+                    $subscriber->addMessage($events[$messageId]);
                 }
             }
 

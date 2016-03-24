@@ -2,7 +2,7 @@
 
 namespace FlowUI\FlowBundle\Model;
 
-class Command extends Node
+class Command extends Node implements Message
 {
 
     /**
@@ -15,6 +15,7 @@ class Command extends Node
      */
     public function __construct($id)
     {
+        // todo: get classname of command
         parent::__construct($id, 'command');
     }
 

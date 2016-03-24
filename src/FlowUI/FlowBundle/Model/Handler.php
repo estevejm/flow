@@ -4,16 +4,15 @@ namespace FlowUI\FlowBundle\Model;
 
 class Handler extends Node
 {
-
-    /**
-     * @var Event[]
-     */
-    private $events;
-
     /**
      * @var string
      */
     private $className;
+
+    /**
+     * @var Event[]
+     */
+    private $messages;
 
     /**
      * @param string $id
@@ -28,8 +27,8 @@ class Handler extends Node
 
         parent::__construct($id, 'handler');
 
-        $this->events = [];
         $this->className = $className;
+        $this->messages = [];
 
         $command->setHandler($this);
     }
@@ -43,19 +42,19 @@ class Handler extends Node
     }
 
     /**
-     * @return Event[]
+     * @return Message[]
      */
-    public function getEvents()
+    public function getMessage()
     {
-        return $this->events;
+        return $this->messages;
     }
 
     /**
-     * @param Event $event
+     * @param Message $message
      */
-    public function addEvent(Event $event)
+    public function addMessage(Message $message)
     {
-        $this->events[] = $event;
+        $this->messages[] = $message;
     }
 }
  

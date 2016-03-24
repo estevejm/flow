@@ -44,14 +44,14 @@ class TestService
             $commands[$command->getId()] = $command;
         }
 
-        foreach ($this->subscribersMap as $eventId => $subscriberIds) {
+        foreach ($this->subscribersMap as $eventId => $subscribers) {
             $event = new Event($eventId);
 
             array_map(
-                function($subscriberId) use ($event) {
-                    return new Subscriber($subscriberId, $event);
+                function($subscriber) use ($event) {
+                    return new Subscriber($subscriber['id'], $subscriber['class'], $event);
                 },
-                $subscriberIds
+                $subscribers
             );
 
             $events[$event->getId()] = $event;
@@ -60,25 +60,54 @@ class TestService
         /** @var Command $command */
         foreach ($commands as $command) {
             $handler = $command->getHandler();
-            $handlerEventIds = $this->getEventsTriggeredByHandler($handler);
+            $handlerEventIds = $this->getEventsTriggeredByHandler($handler->getClassName());
 
-            foreach ($handlerEventIds as $handlerEventId) {
-                if (empty($events[$handlerEventId])) {
-                    $events[$handlerEventId] = new Event($handlerEventId);
+            foreach ($handlerEventIds as $subscriberMessageId) {
+                if (empty($events[$subscriberMessageId])) {
+                    $events[$subscriberMessageId] = new Event($subscriberMessageId);
                 }
-                $handler->addEvent($events[$handlerEventId]);
+                $handler->addEvent($events[$subscriberMessageId]);
             }
         }
+
+        /** @var Event $event */
+        foreach ($events as $event) {
+            foreach ($event->getSubscribers() as $subscriber) {
+                $subscriberMessageIds = $this->getEventsTriggeredByHandler($subscriber->getClassName());
+
+                foreach ($subscriberMessageIds as $subscriberMessageId) {
+                    if (!empty($commands[$subscriberMessageId])) {
+                        $subscriber->addCommand($commands[$subscriberMessageId]);
+
+                        // if it's a command, it's not an event, moving on... (as we don't want to create false events ...
+                        continue;
+                    }
+
+                    if (empty($events[$subscriberMessageId])) {
+                        // ... here)
+                        $events[$subscriberMessageId] = new Event($subscriberMessageId);
+                    }
+
+                    $subscriber->addEvent($events[$subscriberMessageId]);
+                }
+            }
+
+        }
+
+        // todo: warning if handler trigger command
 
         return array_merge($commands, $events);
     }
 
     /**
-     * @param Handler $handler
+     * @param string $className
      * @return array
      */
-    private function getEventsTriggeredByHandler(Handler $handler) {
-        $class = new ReflectionClass($handler->getClassName());
+    private function getEventsTriggeredByHandler($className) {
+        if (!class_exists($className)) {
+            throw new \InvalidArgumentException("Invalid class $className.");
+        }
+        $class = new ReflectionClass($className);
         $fileName = $class->getFileName();
         $code = file_get_contents($fileName);
 

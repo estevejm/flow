@@ -16,6 +16,8 @@ class Event extends Node
     public function __construct($id)
     {
         parent::__construct($id, 'event');
+
+        $this->subscribers = [];
     }
 
     /**

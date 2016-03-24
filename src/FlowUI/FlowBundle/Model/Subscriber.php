@@ -16,17 +16,32 @@ class Subscriber extends Node
     private $events;
 
     /**
+     * @var string
+     */
+    private $className;
+
+    /**
      * @param string $id
+     * @param string $className
      * @param Event $event
      */
-    public function __construct($id, Event $event)
+    public function __construct($id, $className, Event $event)
     {
         parent::__construct($id, 'subscriber');
 
         $this->commands = [];
         $this->events = [];
+        $this->className = $className;
 
         $event->addSubscriber($this);
+    }
+
+    /**
+     * @return string
+     */
+    public function getClassName()
+    {
+        return $this->className;
     }
 
     /**
@@ -35,6 +50,14 @@ class Subscriber extends Node
     public function getCommands()
     {
         return $this->commands;
+    }
+
+    /**
+     * @param Command $command
+     */
+    public function addCommand(Command $command)
+    {
+        $this->commands[] = $command;
     }
 
     /**
@@ -53,4 +76,3 @@ class Subscriber extends Node
         $this->events[] = $event;
     }
 }
- 

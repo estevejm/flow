@@ -54,13 +54,10 @@ class RegisterSubscribers implements CompilerPassInterface
 
                 $key = $tagAttributes[$this->keyAttribute];
 
-                if (isset($tagAttributes['method'])) {
-                    $callable = [$serviceId, $tagAttributes['method']];
-                } else {
-                    $callable = $serviceId;
-                }
-
-                $handlers[ltrim($key, '\\')][] = $callable;
+                $handlers[ltrim($key, '\\')][] = [
+                    'id' => $serviceId,
+                    'class' => $container->findDefinition($serviceId)->getClass()
+                ];
             }
         }
 

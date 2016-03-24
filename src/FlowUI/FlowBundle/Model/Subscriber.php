@@ -4,15 +4,12 @@ namespace FlowUI\FlowBundle\Model;
 
 class Subscriber extends Node
 {
+    use CanTriggerMessages;
+
     /**
      * @var string
      */
     private $className;
-
-    /**
-     * @var Event[]
-     */
-    private $messages;
 
     /**
      * @param string $id
@@ -24,7 +21,6 @@ class Subscriber extends Node
         parent::__construct($id, 'subscriber');
 
         $this->className = $className;
-        $this->messages = [];
 
         $event->addSubscriber($this);
     }
@@ -35,21 +31,5 @@ class Subscriber extends Node
     public function getClassName()
     {
         return $this->className;
-    }
-
-    /**
-     * @return Message[]
-     */
-    public function getMessage()
-    {
-        return $this->messages;
-    }
-
-    /**
-     * @param Message $message
-     */
-    public function addMessage(Message $message)
-    {
-        $this->messages[] = $message;
     }
 }

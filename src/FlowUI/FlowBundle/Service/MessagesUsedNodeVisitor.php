@@ -7,7 +7,7 @@ use PhpParser\NodeVisitorAbstract;
 use ReflectionClass;
 use SimpleBus\Message\Name\NamedMessage;
 
-class RecordedEventsNodeVisitor extends NodeVisitorAbstract
+class MessagesUsedNodeVisitor extends NodeVisitorAbstract
 {
     /**
      * @var string
@@ -17,18 +17,18 @@ class RecordedEventsNodeVisitor extends NodeVisitorAbstract
     /**
      * @var array
      */
-    private $classMap;
+    private $uses;
 
     /**
      * @var array
      */
-    private $events;
+    private $messages;
 
     public function __construct()
     {
-        $this->classMap = [];
-        $this->events = [];
         $this->namespace = '';
+        $this->uses = [];
+        $this->messages = [];
     }
 
     /**
@@ -39,7 +39,7 @@ class RecordedEventsNodeVisitor extends NodeVisitorAbstract
             $this->namespace = $node->name->toString();
         } elseif ($node instanceof Node\Stmt\Use_) {
             $use = $node->uses[0];
-            $this->classMap[$use->alias] = $use->name->toString();
+            $this->uses[$use->alias] = $use->name->toString();
         } elseif ($node instanceof Node\Expr\New_ || $node instanceof Node\Expr\StaticCall) {
             if ($node->class->isRelative()) {
                 // don't know how to reproduce
@@ -47,17 +47,17 @@ class RecordedEventsNodeVisitor extends NodeVisitorAbstract
                 $eventClass = $node->class->toString();
             } elseif ($node->class->isQualified()) {
                 $eventClass = $node->class->getFirst();
-                if (empty($this->classMap[$eventClass])) {
+                if (empty($this->uses[$eventClass])) {
                     $eventClass = $this->namespace . '\\' . $eventClass;
                 } else {
-                    $eventClass = $this->classMap[$eventClass] . '\\' . $node->class->getLast();
+                    $eventClass = $this->uses[$eventClass] . '\\' . $node->class->getLast();
                 }
             } elseif ($node->class->isUnqualified()) {
                 $eventClass = $node->class->toString();
-                if (empty($this->classMap[$eventClass])) {
+                if (empty($this->uses[$eventClass])) {
                     $eventClass = $this->namespace . '\\' . $eventClass;
                 } else {
-                    $eventClass = $this->classMap[$eventClass];
+                    $eventClass = $this->uses[$eventClass];
                 }
             } elseif ($node->class->isFullyQualified()) {
                 $eventClass = $node->class->toString();
@@ -66,10 +66,10 @@ class RecordedEventsNodeVisitor extends NodeVisitorAbstract
                 $eventClass = $node->class->toString();
             }
 
-            $eventId = $this->getEventIdOfClass($eventClass);
+            $messageId = $this->getMessageIdOfClass($eventClass);
 
-            if ($eventId) {
-                $this->events[] = $eventId;
+            if ($messageId) {
+                $this->messages[] = $messageId;
             }
         }
     }
@@ -78,7 +78,7 @@ class RecordedEventsNodeVisitor extends NodeVisitorAbstract
      * @param $className
      * @return mixed
      */
-    private function getEventIdOfClass($className){
+    private function getMessageIdOfClass($className){
         if (!class_exists($className)) {
             throw new \InvalidArgumentException("Invalid class $className.");
         }
@@ -92,8 +92,8 @@ class RecordedEventsNodeVisitor extends NodeVisitorAbstract
     /**
      * @return array
      */
-    public function getEventIds()
+    public function getMessages()
     {
-        return array_unique($this->events);
+        return array_unique($this->messages);
     }
 }

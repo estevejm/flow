@@ -10,7 +10,6 @@ use FlowUI\FlowBundle\Model\Subscriber;
 use PhpParser\NodeTraverser;
 use PhpParser\ParserFactory;
 use ReflectionClass;
-use SimpleBus\Message\Name\NamedMessage;
 
 class TestService
 {
@@ -60,39 +59,39 @@ class TestService
         /** @var Command $command */
         foreach ($commands as $command) {
             $handler = $command->getHandler();
-            $handlerEventIds = $this->getEventsTriggeredByHandler($handler->getClassName());
+            $messages = $this->getMessagesUsedInClass($handler->getClassName());
 
-            foreach ($handlerEventIds as $subscriberMessageId) {
-                if (!empty($commands[$subscriberMessageId])) {
+            foreach ($messages as $messageId) {
+                if (!empty($commands[$messageId])) {
                     var_dump("warning: you're triggering a command inside a command handler!");
                 }
 
-                if (empty($events[$subscriberMessageId])) {
-                    $events[$subscriberMessageId] = new Event($subscriberMessageId);
+                if (empty($events[$messageId])) {
+                    $events[$messageId] = new Event($messageId);
                 }
-                $handler->addEvent($events[$subscriberMessageId]);
+                $handler->addEvent($events[$messageId]);
             }
         }
 
         /** @var Event $event */
         foreach ($events as $event) {
             foreach ($event->getSubscribers() as $subscriber) {
-                $subscriberMessageIds = $this->getEventsTriggeredByHandler($subscriber->getClassName());
+                $messages = $this->getMessagesUsedInClass($subscriber->getClassName());
 
-                foreach ($subscriberMessageIds as $subscriberMessageId) {
-                    if (!empty($commands[$subscriberMessageId])) {
-                        $subscriber->addCommand($commands[$subscriberMessageId]);
+                foreach ($messages as $messageId) {
+                    if (!empty($commands[$messageId])) {
+                        $subscriber->addCommand($commands[$messageId]);
 
-                        // if it's a command, it's not an event, moving on... (as we don't want to create false events ...
+                        // if it's a command, it's not an event, moving on... (as we don't want to store false events ...
                         continue;
                     }
 
-                    if (empty($events[$subscriberMessageId])) {
+                    if (empty($events[$messageId])) {
                         // ... here)
-                        $events[$subscriberMessageId] = new Event($subscriberMessageId);
+                        $events[$messageId] = new Event($messageId);
                     }
 
-                    $subscriber->addEvent($events[$subscriberMessageId]);
+                    $subscriber->addEvent($events[$messageId]);
                 }
             }
 
@@ -105,7 +104,7 @@ class TestService
      * @param string $className
      * @return array
      */
-    private function getEventsTriggeredByHandler($className) {
+    private function getMessagesUsedInClass($className) {
         if (!class_exists($className)) {
             throw new \InvalidArgumentException("Invalid class $className.");
         }
@@ -116,7 +115,7 @@ class TestService
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
         $traverser = new NodeTraverser();
 
-        $visitor = new RecordedEventsNodeVisitor();
+        $visitor = new MessagesUsedNodeVisitor();
         $traverser->addVisitor($visitor);
 
         try {
@@ -124,7 +123,7 @@ class TestService
             $stmts = $traverser->traverse($stmts);
 
             //var_dump($stmts);
-            return $visitor->getEventIds();
+            return $visitor->getMessages();
 
 
         } catch (Exception $e) {

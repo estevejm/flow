@@ -53,12 +53,19 @@ class Network
     private function addNode(Node $node, Node $parent = null)
     {
         if ($this->hasIndexAssigned($node)) {
+            if ($parent) {
+                $this->links[] = [
+                    "source" => $this->getIndex($parent),
+                    "target" => $this->getIndex($node),
+                ];
+            }
+
             return;
         }
 
         $this->assignIndex($node);
 
-        $this->nodes[$this->index[$node->getId()]] = [
+        $this->nodes[$this->getIndex($node)] = [
             "name" => $node->getId(),
             "group" => $node->getType(),
         ];

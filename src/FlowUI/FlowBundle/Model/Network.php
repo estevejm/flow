@@ -17,7 +17,7 @@ class Network
     /**
      * @var array
      */
-    private $map = [];
+    private $index = [];
 
     /**
      * @var int
@@ -48,13 +48,13 @@ class Network
      */
     private function addNode(Node $node, Node $parent = null)
     {
-        if (isset($this->map[$node->getId()])) {
+        if ($this->hasIndexAssigned($node)) {
             return;
         }
 
         $this->assignIndex($node);
 
-        $this->nodes[$this->map[$node->getId()]] = [
+        $this->nodes[$this->index[$node->getId()]] = [
             "name" => $node->getId(),
             "group" => $node->getType(),
         ];
@@ -63,7 +63,6 @@ class Network
             $this->links[] = [
                 "source" => $this->getIndex($parent),
                 "target" => $this->getIndex($node),
-                "value" => 1,
             ];
         }
 
@@ -76,18 +75,35 @@ class Network
         }
     }
 
+    /**
+     * @param Node $node
+     * @throws \Exception
+     */
     private function assignIndex(Node $node)
     {
-        if (isset($this->map[$node->getId()])) {
+        if ($this->hasIndexAssigned($node)) {
             throw new \Exception("Node with index already assigned");
         }
 
-        $this->map[$node->getId()] = $this->count++;
+        $this->index[$node->getId()] = $this->count++;
     }
 
+    /**
+     * @param Node $node
+     * @return bool
+     */
+    private function hasIndexAssigned(Node $node)
+    {
+        return isset($this->index[$node->getId()]);
+    }
+
+    /**
+     * @param Node $node
+     * @return int
+     */
     private function getIndex(Node $node)
     {
-        return $this->map[$node->getId()];
+        return $this->index[$node->getId()];
     }
 
     /**

@@ -24,6 +24,10 @@ class Network
      */
     private $count = 0;
 
+    private $config = [
+        'display_handlers' => true,
+        'display_subscribers' => true,
+    ];
     /**
      * @param Node[] $nodes
      */
@@ -67,9 +71,22 @@ class Network
         }
 
         if ($node instanceof Command) {
-            $this->addNode($node->getHandler(), $node);
+            if ($this->config['display_handlers']) {
+                $this->addNode($node->getHandler(), $node);
+            } else {
+                $this->addNodes($node->getHandler()->getMessages(), $node);
+            }
         } elseif ($node instanceof Event) {
-            $this->addNodes($node->getSubscribers(), $node);
+            if ($this->config['display_subscribers']) {
+                $this->addNodes($node->getSubscribers(), $node);
+            } else {
+                array_map(
+                    function($subscriber) use ($node) {
+                        $this->addNodes($subscriber->getMessages(), $node);
+                    },
+                    $node->getSubscribers()
+                );
+            }
         } elseif ($node instanceof Handler || $node instanceof Subscriber) {
             $this->addNodes($node->getMessages(), $node);
         }

@@ -4,7 +4,6 @@ namespace FlowUI\FlowBundle\Model;
 
 trait CanTriggerMessages
 {
-
     /**
      * @var Event[]
      */
@@ -13,7 +12,7 @@ trait CanTriggerMessages
     /**
      * @return Message[]
      */
-    public function getMessage()
+    public function getMessages()
     {
         return $this->messages;
     }

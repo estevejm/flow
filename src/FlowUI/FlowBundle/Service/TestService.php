@@ -64,7 +64,7 @@ class TestService
             foreach ($messages as $messageId) {
                 if (!empty($commands[$messageId])) {
                     $handler->addMessage($commands[$messageId]);
-                    var_dump("warning: you're triggering a command inside a command handler!");
+                    //var_dump("warning: you're triggering a command inside a command handler!");
                     continue;
                 }
 

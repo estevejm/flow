@@ -1,12 +1,11 @@
 <?php
 
-namespace SampleBundle\Event;
+namespace SampleBundle\Command;
 
 use SimpleBus\Message\Name\NamedMessage;
 
-class CommandExecuted implements NamedMessage
+class ExecuteCommand2 implements NamedMessage
 {
-
     /**
      * @var \DateTime
      */
@@ -18,12 +17,11 @@ class CommandExecuted implements NamedMessage
     private $message;
 
     /**
-     * @param \DateTime $createdAt
      * @param string $message
      */
-    public function __construct(\DateTime $createdAt, $message)
+    public function __construct($message)
     {
-        $this->createdAt = $createdAt;
+        $this->createdAt = new \DateTime();
         $this->message = $message;
     }
 
@@ -50,15 +48,6 @@ class CommandExecuted implements NamedMessage
      */
     public static function messageName()
     {
-        return 'command_executed';
-    }
-
-    /**
-     * @return CommandExecuted
-     */
-    public static function create()
-    {
-        return new self(new \DateTime(), 'default message');
+        return 'execute_command_2';
     }
 }
- 

@@ -9,8 +9,9 @@ class DefaultController extends Controller
     public function indexAction()
     {
         echo '<pre>';
-        $handler = $this->get('test_service')->build();
-        die;
+        $data = $this->get('test_service')->build();
+        var_dump($data);
+        //die;
         return $this->render('FlowUIFlowBundle:Default:index.html.twig');
     }
 }

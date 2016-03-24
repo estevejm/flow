@@ -6,7 +6,19 @@ services:
         tags:
             - { name: command_handler, handles: execute_command }
 
-    log_command_executed_subscriber:
+    execute_command_2_handler:
+        class: SampleBundle\Command\ExecuteCommand2Handler
+        arguments:
+            - "@event_recorder"
+        tags:
+            - { name: command_handler, handles: execute_command_2 }
+
+    log_command_executed:
         class: SampleBundle\Subscriber\LogCommandExecuted
+        tags:
+            - { name: event_subscriber, subscribes_to: command_executed }
+
+    trigger_execute_command_2:
+        class: SampleBundle\Subscriber\TriggerExecuteCommand2
         tags:
             - { name: event_subscriber, subscribes_to: command_executed }

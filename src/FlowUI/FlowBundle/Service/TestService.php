@@ -63,6 +63,9 @@ class TestService
             $handlerEventIds = $this->getEventsTriggeredByHandler($handler);
 
             foreach ($handlerEventIds as $handlerEventId) {
+                if (empty($events[$handlerEventId])) {
+                    $events[$handlerEventId] = new Event($handlerEventId);
+                }
                 $handler->addEvent($events[$handlerEventId]);
             }
         }
@@ -82,29 +85,21 @@ class TestService
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
         $traverser = new NodeTraverser();
 
-        $visitor = new HandlerNodeVisitor();
+        $visitor = new RecordedEventsNodeVisitor();
         $traverser->addVisitor($visitor);
 
-        $events = [];
         try {
             $stmts = $parser->parse($code);
             $stmts = $traverser->traverse($stmts);
 
-            $uses = $visitor->getUses();
+            //var_dump($stmts);
+            return $visitor->getEventIds();
 
-            foreach ($uses as $className) {
-                var_dump($className);
-                $class = new ReflectionClass($className);
-                if ($class->implementsInterface(NamedMessage::class)) {
-                    $eventId = $class->newInstanceWithoutConstructor()->messageName();
-                    $events[] = $eventId;
-                }
-            }
 
         } catch (Exception $e) {
             echo 'Parse Error: ', $e->getMessage();
         }
 
-        return $events;
+        return [];
     }
 }

@@ -4,7 +4,7 @@ namespace SampleBundle\Event;
 
 use SimpleBus\Message\Name\NamedMessage;
 
-class CommandExecuted implements NamedMessage
+class Command2Executed implements NamedMessage
 {
 
     /**
@@ -50,15 +50,7 @@ class CommandExecuted implements NamedMessage
      */
     public static function messageName()
     {
-        return 'command_executed';
-    }
-
-    /**
-     * @return CommandExecuted
-     */
-    public static function create()
-    {
-        return new self(new \DateTime(), 'default message');
+        return 'command_2_executed';
     }
 }
  

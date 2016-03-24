@@ -11,6 +11,11 @@ class Subscriber extends Node
     private $commands;
 
     /**
+     * @var Event[]
+     */
+    private $events;
+
+    /**
      * @param string $id
      * @param Event $event
      */
@@ -19,6 +24,7 @@ class Subscriber extends Node
         parent::__construct($id, 'subscriber');
 
         $this->commands = [];
+        $this->events = [];
 
         $event->addSubscriber($this);
     }
@@ -29,6 +35,22 @@ class Subscriber extends Node
     public function getCommands()
     {
         return $this->commands;
+    }
+
+    /**
+     * @return Event[]
+     */
+    public function getEvents()
+    {
+        return $this->events;
+    }
+
+    /**
+     * @param Event $event
+     */
+    public function addEvent(Event $event)
+    {
+        $this->events[] = $event;
     }
 }
  

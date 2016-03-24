@@ -29,15 +29,17 @@
 {% endblock %}
 
 {% block body %}
-    <div class="legend">
-        <span class="label" data-group="command">Command</span>
-        <span class="label" data-group="handler">Handler</span>
-        <span class="label" data-group="event">Event</span>
-        <span class="label" data-group="subscriber">Subscriber</span>
-    </div>
-    <div class="ui-widget">
-        <input id="search">
-        <button type="button" onclick="searchNode()">Search</button>
+    <div class="well clearfix">
+        <div class="legend pull-left">
+            <span class="label" data-group="command">Command</span>
+            <span class="label" data-group="handler">Handler</span>
+            <span class="label" data-group="event">Event</span>
+            <span class="label" data-group="subscriber">Subscriber</span>
+        </div>
+        <div class="ui-widget pull-right">
+            <input id="search">
+            <button type="button" onclick="searchNode()">Search</button>
+        </div>
     </div>
 {% endblock %}
 
@@ -49,7 +51,7 @@
     <script>
 
         var width = 1200,
-                height = 700;
+                height = 500;
 
         var color = d3.scale.category20();
 

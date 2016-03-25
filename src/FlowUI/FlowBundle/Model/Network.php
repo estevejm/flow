@@ -24,10 +24,14 @@ class Network
      */
     private $count = 0;
 
+    /**
+     * @var array
+     */
     private $config = [
         'display_handlers' => true,
         'display_subscribers' => true,
     ];
+
     /**
      * @param Node[] $nodes
      */

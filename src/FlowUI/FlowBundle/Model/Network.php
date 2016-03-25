@@ -89,8 +89,8 @@ class Network
     private function createNode(Node $node)
     {
         $this->nodes[$this->getIndex($node)] = [
-            "name" => $node->getId(),
-            "group" => $node->getType(),
+            "id" => $node->getId(),
+            "type" => $node->getType(),
         ];
     }
 

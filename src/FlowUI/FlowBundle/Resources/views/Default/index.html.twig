@@ -32,10 +32,10 @@
 {% block body %}
     <div class="well clearfix">
         <div class="legend pull-left">
-            <span class="label" data-group="command">Command</span>
-            <span class="label" data-group="handler">Handler</span>
-            <span class="label" data-group="event">Event</span>
-            <span class="label" data-group="subscriber">Subscriber</span>
+            <span class="label" data-type="command">Command</span>
+            <span class="label" data-type="handler">Handler</span>
+            <span class="label" data-type="event">Event</span>
+            <span class="label" data-type="subscriber">Subscriber</span>
         </div>
         <div class="ui-widget pull-right">
             <form class="search-form">
@@ -60,9 +60,9 @@
 
         // legend
         $('.legend .label').each(function() {
-            var group = $(this).data('group');
+            var type = $(this).data('type');
 
-            this.style.backgroundColor = color(group);
+            this.style.backgroundColor = color(type);
         });
 
         // end legend
@@ -99,13 +99,13 @@
             node.append("circle")
                     .attr("r", 8)
                     .style("fill", function (d) {
-                        return color(d.group);
+                        return color(d.type);
                     });
 
             node.append("text")
                     .attr("dx", 10)
                     .attr("dy", "0.35em")
-                    .text(function(d) { return d.name });
+                    .text(function(d) { return d.id });
 
             force.on("tick", function() {
                 link.attr("x1", function(d) { return d.source.x; })
@@ -178,7 +178,7 @@
 
             var optArray = [];
             for (var i = 0; i < graph.nodes.length - 1; i++) {
-                optArray.push(graph.nodes[i].name);
+                optArray.push(graph.nodes[i].id);
             }
             optArray = optArray.sort();
 
@@ -212,7 +212,7 @@
                 node.style("stroke", "white").style("stroke-width", "1");
             } else {
                 var selected = node.filter(function (d, i) {
-                    return d.name != selectedVal;
+                    return d.id != selectedVal;
                 });
                 selected.style("opacity", "0");
                 var link = svg.selectAll(".link")

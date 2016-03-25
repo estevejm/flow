@@ -7,11 +7,6 @@ class Handler extends Node
     use CanTriggerMessages;
 
     /**
-     * @var string
-     */
-    private $className;
-
-    /**
      * @param string $id
      * @param string $className
      * @param Command $command
@@ -22,19 +17,9 @@ class Handler extends Node
             throw new \InvalidArgumentException("Invalid class $className.");
         }
 
-        parent::__construct($id, 'handler');
-
-        $this->className = $className;
+        parent::__construct($id, $className, 'handler');
 
         $command->setHandler($this);
-    }
-
-    /**
-     * @return string
-     */
-    public function getClassName()
-    {
-        return $this->className;
     }
 }
  

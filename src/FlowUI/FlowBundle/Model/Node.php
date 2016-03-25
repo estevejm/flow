@@ -16,14 +16,21 @@ abstract class Node
     private $type;
 
     /**
+     * @var string
+     */
+    private $className;
+
+    /**
      * @param string $id
+     * @param string $className
      * @param string $type
      */
-    public function __construct($id, $type)
+    public function __construct($id, $className, $type)
     {
         // todo: assert string
         $this->id = $id;
         $this->type = $type;
+        $this->className = $className;
     }
 
     /**
@@ -40,5 +47,13 @@ abstract class Node
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClassName()
+    {
+        return $this->className;
     }
 }

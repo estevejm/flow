@@ -15,8 +15,7 @@ class Command extends Node implements Message
      */
     public function __construct($id)
     {
-        // todo: get classname of command
-        parent::__construct($id, null, 'command');
+        parent::__construct($id, null, Node::TYPE_COMMAND);
     }
 
     /**

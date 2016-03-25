@@ -13,7 +13,7 @@ class Subscriber extends Node
      */
     public function __construct($id, $className, Event $event)
     {
-        parent::__construct($id, $className, 'subscriber');
+        parent::__construct($id, $className, Node::TYPE_SUBSCRIBER);
 
         $event->addSubscriber($this);
     }

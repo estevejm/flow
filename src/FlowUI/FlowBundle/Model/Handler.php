@@ -13,11 +13,7 @@ class Handler extends Node
      */
     public function __construct($id, $className, Command $command)
     {
-        if (!class_exists($className)) {
-            throw new \InvalidArgumentException("Invalid class $className.");
-        }
-
-        parent::__construct($id, $className, 'handler');
+        parent::__construct($id, $className, Node::TYPE_HANDLER);
 
         $command->setHandler($this);
     }

@@ -15,8 +15,7 @@ class Event extends Node implements Message
      */
     public function __construct($id)
     {
-        // todo: get classname of event
-        parent::__construct($id, null, 'event');
+        parent::__construct($id, null, Node::TYPE_EVENT);
 
         $this->subscribers = [];
     }

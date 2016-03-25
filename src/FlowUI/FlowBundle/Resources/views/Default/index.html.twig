@@ -93,6 +93,7 @@
                     .data(graph.nodes)
                     .enter().append("g")
                     .attr("class", "node")
+                    .attr("id", function (d) { return d.id; })
                     .call(force.drag)
                     .on('dblclick', connectedNodes); // show neighboring nodes
 

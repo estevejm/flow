@@ -53,29 +53,13 @@ class Network
     private function addNode(Node $node, Node $parent = null)
     {
         if ($this->hasIndexAssigned($node)) {
-            if ($parent) {
-                $this->links[] = [
-                    "source" => $this->getIndex($parent),
-                    "target" => $this->getIndex($node),
-                ];
-            }
-
+            $this->createLink($node, $parent);
             return;
         }
 
         $this->assignIndex($node);
-
-        $this->nodes[$this->getIndex($node)] = [
-            "name" => $node->getId(),
-            "group" => $node->getType(),
-        ];
-
-        if ($parent) {
-            $this->links[] = [
-                "source" => $this->getIndex($parent),
-                "target" => $this->getIndex($node),
-            ];
-        }
+        $this->createNode($node);
+        $this->createLink($node, $parent);
 
         if ($node instanceof Command) {
             if ($this->config['display_handlers']) {
@@ -96,6 +80,31 @@ class Network
             }
         } elseif ($node instanceof Handler || $node instanceof Subscriber) {
             $this->addNodes($node->getMessages(), $node);
+        }
+    }
+
+    /**
+     * @param Node $node
+     */
+    private function createNode(Node $node)
+    {
+        $this->nodes[$this->getIndex($node)] = [
+            "name" => $node->getId(),
+            "group" => $node->getType(),
+        ];
+    }
+
+    /**
+     * @param Node $node
+     * @param Node $parent
+     */
+    private function createLink(Node $node, Node $parent = null)
+    {
+        if ($parent) {
+            $this->links[] = [
+                "source" => $this->getIndex($parent),
+                "target" => $this->getIndex($node),
+            ];
         }
     }
 

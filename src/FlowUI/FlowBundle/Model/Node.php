@@ -31,7 +31,7 @@ abstract class Node
      */
     public function __construct($id, $className, $type)
     {
-        if (!class_exists($className)) {
+        if (!is_null($className) && !class_exists($className)) {
             throw new \InvalidArgumentException("Invalid class $className.");
         }
 

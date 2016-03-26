@@ -3,10 +3,11 @@
 namespace FlowUI\FlowBundle\Service;
 
 use Exception;
-use FlowUI\FlowBundle\Model\Command;
-use FlowUI\FlowBundle\Model\Event;
-use FlowUI\FlowBundle\Model\Handler;
-use FlowUI\FlowBundle\Model\Subscriber;
+use FlowUI\Component\Parser\Parser;
+use FlowUI\Model\Command;
+use FlowUI\Model\Event;
+use FlowUI\Model\Handler;
+use FlowUI\Model\Subscriber;
 use PhpParser\NodeTraverser;
 use PhpParser\ParserFactory;
 use ReflectionClass;
@@ -109,31 +110,6 @@ class TestService
      * @return array
      */
     private function getMessagesUsedInClass($className) {
-        if (!class_exists($className)) {
-            throw new \InvalidArgumentException("Invalid class $className.");
-        }
-        $class = new ReflectionClass($className);
-        $fileName = $class->getFileName();
-        $code = file_get_contents($fileName);
-
-        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
-        $traverser = new NodeTraverser();
-
-        $visitor = new MessagesUsedNodeVisitor();
-        $traverser->addVisitor($visitor);
-
-        try {
-            $stmts = $parser->parse($code);
-            $stmts = $traverser->traverse($stmts);
-
-            //var_dump($stmts);
-            return $visitor->getMessages();
-
-
-        } catch (Exception $e) {
-            echo 'Parse Error: ', $e->getMessage();
-        }
-
-        return [];
+        return (new Parser())->parse($className);
     }
 }

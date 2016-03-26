@@ -3,8 +3,8 @@
 namespace FlowUI\FlowBundle\Controller;
 
 use FlowUI\Component\Validator\Violation;
-use FlowUI\FlowBundle\Model\Network;
-use FlowUI\FlowBundle\Model\Node;
+use FlowUI\Model\Network;
+use FlowUI\Model\Node;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 

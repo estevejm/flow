@@ -1,6 +1,6 @@
 <?php
 
-namespace FlowUI\FlowBundle\Model;
+namespace FlowUI\Model;
 
 trait CanTriggerMessages
 {

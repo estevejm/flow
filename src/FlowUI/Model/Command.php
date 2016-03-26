@@ -1,6 +1,6 @@
 <?php
 
-namespace FlowUI\FlowBundle\Model;
+namespace FlowUI\Model;
 
 class Command extends Node implements Message
 {

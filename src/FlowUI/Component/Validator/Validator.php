@@ -2,7 +2,7 @@
 
 namespace FlowUI\Component\Validator;
 
-use FlowUI\FlowBundle\Model\Node;
+use FlowUI\Model\Node;
 
 class Validator
 {

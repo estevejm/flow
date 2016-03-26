@@ -1,6 +1,6 @@
 <?php
 
-namespace FlowUI\FlowBundle\Service;
+namespace FlowUI\Component\Parser\Visitor;
 
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;

@@ -35,23 +35,25 @@ class TestService
 
     public function build()
     {
-        $commands = $events = [];
+        $commands = $events = $handlers = $subscribers = [];
 
         foreach ($this->handlersMap as $commandId => $handlerData) {
             $command = new Command($commandId);
-            new Handler($handlerData['id'], $handlerData['class'], $command);
+            $handlers[] = new Handler($handlerData['id'], $handlerData['class'], $command);
             $commands[$command->getId()] = $command;
         }
 
-        foreach ($this->subscribersMap as $eventId => $subscribers) {
+        foreach ($this->subscribersMap as $eventId => $eventSubscribers) {
             $event = new Event($eventId);
 
-            array_map(
+            $newSubscribers = array_map(
                 function($subscriber) use ($event) {
                     return new Subscriber($subscriber['id'], $subscriber['class'], $event);
                 },
-                $subscribers
+                $eventSubscribers
             );
+
+            $subscribers = array_merge($subscribers, $newSubscribers);
 
             $events[$event->getId()] = $event;
         }
@@ -99,7 +101,7 @@ class TestService
 
         }
 
-        return array_merge($commands, $events);
+        return array_merge($commands, $handlers, $events, $subscribers);
     }
 
     /**

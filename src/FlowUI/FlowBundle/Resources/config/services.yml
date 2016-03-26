@@ -4,3 +4,12 @@ services:
         arguments:
             - [] # registerHandlers compiler pass
             - [] # registerSubscribers compiler pass
+
+    flow.validator:
+        class: FlowUI\Component\Validator\Validator
+        arguments:
+            - ['@flow.validator.constraint.handler_triggers_command']
+
+    flow.validator.constraint.handler_triggers_command:
+        class: FlowUI\Component\Validator\Constraint\HandlerTriggersCommand
+        public: false

@@ -29,7 +29,7 @@ class HandlerTriggersCommand implements Constraint
             if ($message instanceof Command) {
                 $violations[] = new Violation(
                     $node,
-                    sprintf('Handler is triggering another command ("%s")', $message->getId())
+                    sprintf('Handler is triggering another command ("%s").', $message->getId())
                 );
             }
         }

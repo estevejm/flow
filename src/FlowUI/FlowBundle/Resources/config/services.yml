@@ -2,8 +2,8 @@ services:
     test_service:
         class: FlowUI\FlowBundle\Service\TestService
         arguments:
-            - [] # registerHandlers compiler pass
-            - [] # registerSubscribers compiler pass
+            - '@flow.network.command_handler_map'
+            - '@flow.network.event_subscribers_map'
 
     flow.validator:
         class: FlowUI\Component\Validator\Validator
@@ -17,3 +17,13 @@ services:
     flow.validator.constraint.event_without_subscriber:
         class: FlowUI\Component\Validator\Constraint\EventWithoutSubscriber
         public: false
+
+    flow.network.command_handler_map:
+        class: FlowUI\Component\Network\CommandHandlerMap
+        arguments:
+            - [] # registerHandlers compiler pass
+
+    flow.network.event_subscribers_map:
+        class: FlowUI\Component\Network\EventSubscribersMap
+        arguments:
+            - [] # registerSubscribers compiler pass

@@ -2,62 +2,40 @@
 
 namespace FlowUI\FlowBundle\Service;
 
-use Exception;
+use FlowUI\Component\Network\CommandHandlerMap;
+use FlowUI\Component\Network\EventSubscribersMap;
 use FlowUI\Component\Parser\Parser;
 use FlowUI\Model\Command;
 use FlowUI\Model\Event;
-use FlowUI\Model\Handler;
-use FlowUI\Model\Subscriber;
-use PhpParser\NodeTraverser;
-use PhpParser\ParserFactory;
-use ReflectionClass;
 
 class TestService
 {
     /**
-     * @var array
+     * @var CommandHandlerMap
      */
-    private $handlersMap;
+    private $commandHandlerMap;
 
     /**
-     * @var array
+     * @var EventSubscribersMap
      */
-    private $subscribersMap;
+    private $eventSubscribersMap;
 
     /**
-     * @param array $handlersMap
-     * @param array $subscribersMap
+     * @param CommandHandlerMap $commandHandlerMap
+     * @param EventSubscribersMap $eventSubscribersMap
      */
-    public function __construct(array $handlersMap, array $subscribersMap)
+    public function __construct(CommandHandlerMap $commandHandlerMap, EventSubscribersMap $eventSubscribersMap)
     {
-        $this->handlersMap = $handlersMap;
-        $this->subscribersMap = $subscribersMap;
+        $this->commandHandlerMap = $commandHandlerMap;
+        $this->eventSubscribersMap = $eventSubscribersMap;
     }
 
     public function build()
     {
-        $commands = $events = $handlers = $subscribers = [];
-
-        foreach ($this->handlersMap as $commandId => $handlerData) {
-            $command = new Command($commandId);
-            $handlers[] = new Handler($handlerData['id'], $handlerData['class'], $command);
-            $commands[$command->getId()] = $command;
-        }
-
-        foreach ($this->subscribersMap as $eventId => $eventSubscribers) {
-            $event = new Event($eventId);
-
-            $newSubscribers = array_map(
-                function($subscriber) use ($event) {
-                    return new Subscriber($subscriber['id'], $subscriber['class'], $event);
-                },
-                $eventSubscribers
-            );
-
-            $subscribers = array_merge($subscribers, $newSubscribers);
-
-            $events[$event->getId()] = $event;
-        }
+        $commands = $this->commandHandlerMap->getCommands();
+        $handlers = $this->commandHandlerMap->getHandlers();
+        $events = $this->eventSubscribersMap->getEvents();
+        $subscribers = $this->eventSubscribersMap->getSubscribers();
 
         /** @var Command $command */
         foreach ($commands as $command) {

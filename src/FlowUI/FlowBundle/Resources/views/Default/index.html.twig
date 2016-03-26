@@ -6,8 +6,18 @@
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
 
     <style>
+        html, body {
+            height: 100%;
+        }
+
         body {
             background-color: #eee;
+        }
+
+        .canvas {
+            width: 100%;
+            height: 100%;
+            margin-top: 50px;
         }
 
         .node {
@@ -26,33 +36,103 @@
             font: 14px helvetica;
             pointer-events: none;
         }
+
+        .legend ul {
+            padding: 0;
+        }
+
+        .legend li {
+            display: inline-block;
+            width: 100%;
+            color: white;
+            padding: 10px 20px;
+        }
+
+        .ui-autocomplete {
+            z-index: 10000;
+        }
+
+        #validation-list span {
+            margin: 0 5px;
+            vertical-align: text-top;
+        }
+
+        #validation-list .validation-item {
+            display: inline-block;
+            padding: 5px 10px;
+            width: 500px;
+        }
+
+        #validation-list .glyphicon-ban-circle {
+            color: #d9534f;
+        }
+
+        #validation-list .glyphicon-exclamation-sign {
+            color: #f0ad4e;
+        }
+
+        #validation-list .glyphicon-info-sign {
+            color: #5bc0de;
+        }
+
+        .find-node {
+            cursor: pointer;
+        }
+
+        .scrollable-menu {
+            height: auto;
+            max-height: 300px;
+            overflow-x: hidden;
+        }
+
     </style>
 {% endblock %}
 
 {% block body %}
-    <div class="well clearfix">
-        <div class="legend pull-left">
-            <span class="label" data-type="command">Command</span>
-            <span class="label" data-type="handler">Handler</span>
-            <span class="label" data-type="event">Event</span>
-            <span class="label" data-type="subscriber">Subscriber</span>
-        </div>
-        <div class="ui-widget pull-right">
-            <form class="search-form">
-                <input id="search" />
-                <button type="submit">Locate</button>
-            </form>
-        </div>
-    </div>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Flow</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="legend">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Legend <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li data-type="command">Command</li>
+                            <li data-type="handler">Handler</li>
+                            <li data-type="event">Event</li>
+                            <li data-type="subscriber">Subscriber</li>
+                        </ul>
+                    </li>
+                    <li class="validator">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Validation errors <span class="caret"></span></a>
+                        <ul id="validation-list" class="dropdown-menu scrollable-menu"></ul>
+                    </li>
+                </ul>
 
-    <div class="well">
-        <ul id="warnings"></ul>
-    </div>
+                <ul class="nav navbar-nav navbar-right">
+                    <form class="navbar-form navbar-left search-form" role="search">
+                        <input type="text" class="form-control" placeholder="Introduce node id" id="search" />
+                        <button type="submit" class="btn btn-default">Find</button>
+                    </form>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
 {% endblock %}
 
 {% block javascripts %}
 
     <script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
     <script src="//d3js.org/d3.v3.min.js"></script>
     <script>
@@ -63,7 +143,7 @@
         var color = d3.scale.category20();
 
         // legend
-        $('.legend .label').each(function() {
+        $('.legend li').each(function() {
             var type = $(this).data('type');
 
             this.style.backgroundColor = color(type);
@@ -76,8 +156,7 @@
                 .size([width, height]);
 
         var svg = d3.select("body").append("svg")
-                .attr("width", width)
-                .attr("height", height);
+                .attr("class", "canvas");
 
         d3.json('{{ url('flow_ui_flow_get_data') }}', function(error, data) {
             if (error) throw error;
@@ -207,9 +286,8 @@
             .style("stroke", "#4679BD")
             .style("opacity", "0.6");
 
-        function searchNode() {
+        function searchNode(selectedVal) {
             //find the node
-            var selectedVal = document.getElementById('search').value;
             var node = svg.selectAll(".node");
             if (selectedVal == "none") {
                 node.style("stroke", "white").style("stroke-width", "1");
@@ -221,23 +299,41 @@
                 var link = svg.selectAll(".link")
                 link.style("opacity", "0");
                 d3.selectAll(".node, .link").transition()
-                    .duration(5000)
+                    .duration(2000)
                     .style("opacity", 1);
             }
     }
 
-        function displayValidatorErrors(warnings){
-            warnings.forEach(function(warning) {
-                $('#warnings').append(
-                    '<li class="warning severity-' +  warning.severity +
-                    '" data-node-id="'+ warning.nodeId + '">' + warning.message + '</li>'
+        function displayValidatorErrors(items){
+            var iconMap = {
+                'error': 'ban-circle',
+                'warning': 'exclamation-sign',
+                'notice': 'info-sign'
+            };
+            items.forEach(function(item) {
+                $('#validation-list').append(
+                    '<li class="validation-item">' +
+                    '<span class="glyphicon glyphicon-' + iconMap[item.severity] + '" aria-hidden="true"></span>' +
+                    item.message + '<span data-node-id="'+ item.nodeId + '" class="find-node glyphicon glyphicon-eye-open" aria-hidden="true"></span></li>'
                 );
             });
         }
 
         $(document).on('submit', '.search-form', function(e) {
             e.preventDefault();
-            searchNode();
+            var selectedVal = document.getElementById('search').value;
+            searchNode(selectedVal);
+        })
+
+        $(document).on('submit', '.search-form', function(e) {
+            e.preventDefault();
+            var selectedVal = document.getElementById('search').value;
+            searchNode(selectedVal);
+        })
+
+        $(document).on('click', '.validation-item .find-node', function() {
+            var nodeId = $(this).data('node-id');
+            searchNode(nodeId);
         })
 
     </script>

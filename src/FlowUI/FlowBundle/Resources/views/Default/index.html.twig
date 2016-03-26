@@ -44,6 +44,10 @@
             </form>
         </div>
     </div>
+
+    <div class="well">
+        <ul id="warnings"></ul>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
@@ -75,33 +79,33 @@
                 .attr("width", width)
                 .attr("height", height);
 
-        d3.json('{{ url('flow_ui_flow_get_data') }}', function(error, graph) {
+        d3.json('{{ url('flow_ui_flow_get_data') }}', function(error, data) {
             if (error) throw error;
 
+            var graph = data.network;
+
             force
-                    .nodes(graph.nodes)
-                    .links(graph.links)
-                    .start();
+                .nodes(graph.nodes)
+                .links(graph.links)
+                .start();
 
             var link = svg.selectAll(".link")
-                    .data(graph.links)
-                    .enter().append("line")
-                    .attr("class", "link")
-                    .attr("marker-end", "url(#end)");
+                .data(graph.links)
+                .enter().append("line")
+                .attr("class", "link")
+                .attr("marker-end", "url(#end)");
 
             var node = svg.selectAll(".node")
-                    .data(graph.nodes)
-                    .enter().append("g")
-                    .attr("class", "node")
-                    .attr("id", function (d) { return d.id; })
-                    .call(force.drag)
-                    .on('dblclick', connectedNodes); // show neighboring nodes
+                .data(graph.nodes)
+                .enter().append("g")
+                .attr("class", "node")
+                .attr("id", function (d) { return d.id; })
+                .call(force.drag)
+                .on('dblclick', connectedNodes); // show neighboring nodes
 
             node.append("circle")
-                    .attr("r", 8)
-                    .style("fill", function (d) {
-                        return color(d.type);
-                    });
+                .attr("r", 8)
+                .style("fill", function (d) { return color(d.type); });
 
             node.append("text")
                     .attr("dx", 10)
@@ -110,26 +114,20 @@
 
             force.on("tick", function() {
                 link.attr("x1", function(d) { return d.source.x; })
-                        .attr("y1", function(d) { return d.source.y; })
-                        .attr("x2", function(d) { return d.target.x; })
-                        .attr("y2", function(d) { return d.target.y; });
+                    .attr("y1", function(d) { return d.source.y; })
+                    .attr("x2", function(d) { return d.target.x; })
+                    .attr("y2", function(d) { return d.target.y; });
 
                 node.attr("cx", function(d) { return d.x; })
-                        .attr("cy", function(d) { return d.y; });
+                    .attr("cy", function(d) { return d.y; });
 
-                d3.selectAll("circle").attr("cx", function (d) {
-                    return d.x;
-                })
-                        .attr("cy", function (d) {
-                            return d.y;
-                        });
+                d3.selectAll("circle")
+                    .attr("cx", function (d) { return d.x; })
+                    .attr("cy", function (d) { return d.y; });
 
-                d3.selectAll("text").attr("x", function (d) {
-                    return d.x;
-                })
-                        .attr("y", function (d) {
-                            return d.y;
-                        });
+                d3.selectAll("text")
+                    .attr("x", function (d) { return d.x; })
+                    .attr("y", function (d) { return d.y; });
             });
 
             // show neighboring nodes
@@ -141,6 +139,7 @@
             for (i = 0; i < graph.nodes.length; i++) {
                 linkedByIndex[i + "," + i] = 1;
             }
+
             graph.links.forEach(function (d) {
                 linkedByIndex[d.source.index + "," + d.target.index] = 1;
             });
@@ -187,23 +186,26 @@
                 source: optArray
             });
 
+            if (data.validator.status == 'invalid') {
+                displayValidatorErrors(data.validator.errors);
+            }
         });
 
         // arrow
         svg.append("svg:defs").selectAll("marker")
-                .data(["end"])
-                .enter().append("marker")
-                .attr("id", String)
-                .attr("viewBox", "0 -5 12 12")
-                .attr("refX", 25)
-                .attr("refY", -1.5)
-                .attr("markerWidth", 7)
-                .attr("markerHeight", 7)
-                .attr("orient", "auto")
-                .append("path")
-                .attr("d", "M0,-5L10,0L0,5")
-                .style("stroke", "#4679BD")
-                .style("opacity", "0.6");
+            .data(["end"])
+            .enter().append("marker")
+            .attr("id", String)
+            .attr("viewBox", "0 -5 12 12")
+            .attr("refX", 25)
+            .attr("refY", -1.5)
+            .attr("markerWidth", 7)
+            .attr("markerHeight", 7)
+            .attr("orient", "auto")
+            .append("path")
+            .attr("d", "M0,-5L10,0L0,5")
+            .style("stroke", "#4679BD")
+            .style("opacity", "0.6");
 
         function searchNode() {
             //find the node
@@ -219,9 +221,18 @@
                 var link = svg.selectAll(".link")
                 link.style("opacity", "0");
                 d3.selectAll(".node, .link").transition()
-                        .duration(5000)
-                        .style("opacity", 1);
+                    .duration(5000)
+                    .style("opacity", 1);
             }
+    }
+
+        function displayValidatorErrors(warnings){
+            warnings.forEach(function(warning) {
+                $('#warnings').append(
+                    '<li class="warning severity-' +  warning.severity +
+                    '" data-node-id="'+ warning.nodeId + '">' + warning.message + '</li>'
+                );
+            });
         }
 
         $(document).on('submit', '.search-form', function(e) {

@@ -65,25 +65,32 @@ class Network
         $this->createNode($node);
         $this->createLink($node, $parent);
 
-        if ($node instanceof Command) {
-            if ($this->config['display_handlers']) {
-                $this->addNode($node->getHandler(), $node);
-            } else {
-                $this->addNodes($node->getHandler()->getMessages(), $node);
-            }
-        } elseif ($node instanceof Event) {
-            if ($this->config['display_subscribers']) {
-                $this->addNodes($node->getSubscribers(), $node);
-            } else {
-                array_map(
-                    function($subscriber) use ($node) {
-                        $this->addNodes($subscriber->getMessages(), $node);
-                    },
-                    $node->getSubscribers()
-                );
-            }
-        } elseif ($node instanceof Handler || $node instanceof Subscriber) {
-            $this->addNodes($node->getMessages(), $node);
+        switch ($node->getType())
+        {
+            case Node::TYPE_COMMAND:
+                if ($this->config['display_handlers']) {
+                    $this->addNode($node->getHandler(), $node);
+                } else {
+                    $this->addNodes($node->getHandler()->getMessages(), $node);
+                }
+                break;
+
+            case Node::TYPE_EVENT:
+                if ($this->config['display_subscribers']) {
+                    $this->addNodes($node->getSubscribers(), $node);
+                } else {
+                    array_map(
+                        function($subscriber) use ($node) {
+                            $this->addNodes($subscriber->getMessages(), $node);
+                        },
+                        $node->getSubscribers()
+                    );
+                }
+                break;
+
+            case Node::TYPE_HANDLER:
+            case Node::TYPE_SUBSCRIBER:
+                $this->addNodes($node->getMessages(), $node);
         }
     }
 

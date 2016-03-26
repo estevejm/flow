@@ -23,8 +23,14 @@ class EventWithoutSubscriber implements Constraint
      */
     public function validate(Node $node)
     {
-        if (count($node->getSubscribers()) > 0) {
-            return [new Violation($node, 'Event without any subscriber.', Violation::NOTICE)];
+        if (count($node->getSubscribers()) === 0) {
+            return [
+                new Violation(
+                    $node,
+                    sprintf('There is no subscribers for the event \'%s\'', $node->getId()),
+                    Violation::NOTICE
+                )
+            ];
         }
 
         return [];

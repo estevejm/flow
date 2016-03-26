@@ -2,8 +2,8 @@
 
 {% block stylesheets %}
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="{{ asset('bundles/flowuiflow/lib/bootstrap/3.3.6/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/flowuiflow/lib/jquery/ui/1.11.0/themes/smoothness/jquery-ui.css') }}">
 
     <style>
         html, body {
@@ -98,7 +98,6 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Flow</a>
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
@@ -131,10 +130,11 @@
 
 {% block javascripts %}
 
-    <script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
-    <script src="//d3js.org/d3.v3.min.js"></script>
+    <script src="{{ asset('bundles/flowuiflow/lib/jquery/jquery-2.2.2.min.js') }}"></script>
+    <script src="{{ asset('bundles/flowuiflow/lib/bootstrap/3.3.6/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('bundles/flowuiflow/lib/jquery/ui/1.11.0/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('bundles/flowuiflow/lib/d3.v3.min.js') }}"></script>
+
     <script>
 
         var width = 1200,
@@ -302,7 +302,7 @@
                     .duration(2000)
                     .style("opacity", 1);
             }
-    }
+        }
 
         function displayValidatorErrors(items){
             var iconMap = {
@@ -323,18 +323,18 @@
             e.preventDefault();
             var selectedVal = document.getElementById('search').value;
             searchNode(selectedVal);
-        })
+        });
 
         $(document).on('submit', '.search-form', function(e) {
             e.preventDefault();
             var selectedVal = document.getElementById('search').value;
             searchNode(selectedVal);
-        })
+        });
 
         $(document).on('click', '.validation-item .find-node', function() {
             var nodeId = $(this).data('node-id');
             searchNode(nodeId);
-        })
+        });
 
     </script>
 {% endblock %}

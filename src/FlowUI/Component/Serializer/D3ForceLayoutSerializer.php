@@ -32,6 +32,14 @@ class D3ForceLayoutSerializer
     private $config;
 
     /**
+     * @var array
+     */
+    private $configMap = [
+        Node::TYPE_HANDLER    => 'serialize_handlers',
+        Node::TYPE_SUBSCRIBER => 'serialize_subscribers',
+    ];
+
+    /**
      * @param $config
      */
     public function __construct($config)
@@ -98,22 +106,29 @@ class D3ForceLayoutSerializer
                 break;
 
             case Node::TYPE_HANDLER:
-                if ($this->config['serialize_handlers']) {
-                    $this->addNode($node, $parent);
-                    $this->processNodes($node->getMessages(), $node);
-                } else {
-                    $this->processNodes($node->getMessages(), $parent);
-                }
-                break;
-
             case Node::TYPE_SUBSCRIBER:
-                if ($this->config['serialize_subscribers']) {
+                if ($this->isSerializable($node)) {
                     $this->addNode($node, $parent);
                     $this->processNodes($node->getMessages(), $node);
                 } else {
                     $this->processNodes($node->getMessages(), $parent);
                 }
         }
+    }
+
+    /**
+     * @param Node $node
+     * @return boolean
+     */
+    private function isSerializable(Node $node)
+    {
+        if (!isset($this->configMap[$node->getType()])) {
+            return true;
+        }
+
+        $configKey = $this->configMap[$node->getType()];
+
+        return $this->config[$configKey];
     }
 
     /**

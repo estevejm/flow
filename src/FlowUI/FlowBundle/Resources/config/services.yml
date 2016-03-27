@@ -4,8 +4,8 @@ parameters:
         display_subscribers: true
 
 services:
-    flow.network.builder:
-        class: FlowUI\Component\Network\Builder
+    flow.network.factory:
+        class: FlowUI\Component\Network\Factory
         arguments:
             - '@flow.network.command_handler_map'
             - '@flow.network.event_subscribers_map'

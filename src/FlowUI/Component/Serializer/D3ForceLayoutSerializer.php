@@ -76,6 +76,8 @@ class D3ForceLayoutSerializer
             return;
         }
 
+        // todo: restrict creation based on configuration
+
         $this->assignIndex($node);
         $this->createNode($node);
         $this->createLink($node, $parent);

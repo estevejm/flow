@@ -6,7 +6,7 @@ use FlowUI\Component\Parser\Parser;
 use FlowUI\Model\Node\Command;
 use FlowUI\Model\Node\Event;
 
-class Builder
+class Factory
 {
     /**
      * @var CommandHandlerMap
@@ -28,7 +28,7 @@ class Builder
         $this->eventSubscribersMap = $eventSubscribersMap;
     }
 
-    public function build()
+    public function create()
     {
         $commands = $this->commandHandlerMap->getCommands();
         $handlers = $this->commandHandlerMap->getHandlers();

@@ -19,7 +19,7 @@ class D3ForceLayoutSerializer
     /**
      * @var array
      */
-    private $index = [];
+    private $indexMap = [];
 
     /**
      * @var int
@@ -40,13 +40,13 @@ class D3ForceLayoutSerializer
         $this->config = $config;
     }
 
-
     /**
      * @param Node[] $nodes
      * @return array
      */
     public function serialize(array $nodes)
     {
+        $this->init();
         $this->addNodes($nodes);
 
         return [
@@ -55,12 +55,21 @@ class D3ForceLayoutSerializer
         ];
     }
 
+    private function init()
+    {
+        $this->nodes = [];
+        $this->links = [];
+        $this->indexMap = [];
+        $this->count = 0;
+    }
+
     /**
      * @param Node[] $nodes
      * @param Node $parent
      */
-    private function addNodes(array $nodes, Node $parent = null) {
-        foreach($nodes as $node) {
+    private function addNodes(array $nodes, Node $parent = null)
+    {
+        foreach ($nodes as $node) {
             $this->addNode($node, $parent);
         }
     }
@@ -146,7 +155,7 @@ class D3ForceLayoutSerializer
             throw new \Exception("Node with index already assigned");
         }
 
-        $this->index[$node->getId()] = $this->count++;
+        $this->indexMap[$node->getId()] = $this->count++;
     }
 
     /**
@@ -155,7 +164,7 @@ class D3ForceLayoutSerializer
      */
     private function hasIndexAssigned(Node $node)
     {
-        return isset($this->index[$node->getId()]);
+        return isset($this->indexMap[$node->getId()]);
     }
 
     /**
@@ -164,7 +173,7 @@ class D3ForceLayoutSerializer
      */
     private function getIndex(Node $node)
     {
-        return $this->index[$node->getId()];
+        return $this->indexMap[$node->getId()];
     }
 
     /**

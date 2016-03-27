@@ -13,7 +13,7 @@ class FlowUIFlowBundle extends Bundle
     {
         $container->addCompilerPass(
             new RegisterHandlers(
-                'flow.network.command_handler_map',
+                'flow.network.factory',
                 'command_handler',
                 'handles'
             )
@@ -21,7 +21,7 @@ class FlowUIFlowBundle extends Bundle
 
         $container->addCompilerPass(
             new RegisterSubscribers(
-                'flow.network.event_subscribers_map',
+                'flow.network.factory',
                 'event_subscriber',
                 'subscribes_to'
             )

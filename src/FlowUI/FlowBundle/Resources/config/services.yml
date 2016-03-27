@@ -7,8 +7,17 @@ services:
     flow.network.factory:
         class: FlowUI\Component\Network\Factory
         arguments:
-            - '@flow.network.command_handler_map'
-            - '@flow.network.event_subscribers_map'
+            - [] # registerHandlers compiler pass
+            - [] # registerSubscribers compiler pass
+            - '@flow.parser'
+
+    flow.parser:
+        class: FlowUI\Component\Parser\Parser
+
+    flow.serializer:
+        class: FlowUI\Component\Serializer\D3ForceLayoutSerializer
+        arguments:
+            - '%serializer.config%'
 
     flow.validator:
         class: FlowUI\Component\Validator\Validator
@@ -22,18 +31,3 @@ services:
     flow.validator.constraint.event_without_subscriber:
         class: FlowUI\Component\Validator\Constraint\EventWithoutSubscriber
         public: false
-
-    flow.network.command_handler_map:
-        class: FlowUI\Component\Network\CommandHandlerMap
-        arguments:
-            - [] # registerHandlers compiler pass
-
-    flow.network.event_subscribers_map:
-        class: FlowUI\Component\Network\EventSubscribersMap
-        arguments:
-            - [] # registerSubscribers compiler pass
-
-    flow.serializer:
-        class: FlowUI\Component\Serializer\D3ForceLayoutSerializer
-        arguments:
-            - '%serializer.config%'

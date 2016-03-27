@@ -61,6 +61,6 @@ class RegisterSubscribers implements CompilerPassInterface
             }
         }
 
-        $definition->replaceArgument(0, $handlers);
+        $definition->replaceArgument(1, $handlers);
     }
 }

@@ -5,27 +5,36 @@ namespace FlowUI\Component\Network;
 use FlowUI\Component\Parser\Parser;
 use FlowUI\Model\Node\Command;
 use FlowUI\Model\Node\Event;
+use FlowUI\Model\Node\Handler;
+use FlowUI\Model\Node\Subscriber;
 
 class Factory
 {
     /**
-     * @var CommandHandlerMap
+     * @var array
      */
     private $commandHandlerMap;
 
     /**
-     * @var EventSubscribersMap
+     * @var array
      */
     private $eventSubscribersMap;
 
     /**
-     * @param CommandHandlerMap $commandHandlerMap
-     * @param EventSubscribersMap $eventSubscribersMap
+     * @var $parser
      */
-    public function __construct(CommandHandlerMap $commandHandlerMap, EventSubscribersMap $eventSubscribersMap)
+    private $parser;
+
+    /**
+     * @param array $commandHandlerMap
+     * @param array $eventSubscribersMap
+     * @param Parser $parser
+     */
+    public function __construct(array $commandHandlerMap, array $eventSubscribersMap, Parser $parser)
     {
         $this->commandHandlerMap = $commandHandlerMap;
         $this->eventSubscribersMap = $eventSubscribersMap;
+        $this->parser = $parser;
     }
 
     /**
@@ -33,10 +42,26 @@ class Factory
      */
     public function create()
     {
-        $commands = $this->commandHandlerMap->getCommands();
-        $handlers = $this->commandHandlerMap->getHandlers();
-        $events = $this->eventSubscribersMap->getEvents();
-        $subscribers = $this->eventSubscribersMap->getSubscribers();
+        $commands = [];
+        $handlers = [];
+        $events = [];
+        $subscribers = [];
+
+        foreach ($this->commandHandlerMap as $commandId => $handlerData) {
+            $command = new Command($commandId);
+            $handlers[$handlerData['id']] = new Handler($handlerData['id'], $handlerData['class'], $command);
+            $commands[$command->getId()] = $command;
+        }
+
+        foreach ($this->eventSubscribersMap as $eventId => $eventSubscribers) {
+            $event = new Event($eventId);
+
+            foreach ($eventSubscribers as $subscriber) {
+                $subscribers[$subscriber['id']] = new Subscriber($subscriber['id'], $subscriber['class'], $event);
+            }
+
+            $events[$event->getId()] = $event;
+        }
 
         foreach ($handlers as $handler) {
             $messages = $this->getMessagesUsedInClass($handler->getClassName());
@@ -80,6 +105,6 @@ class Factory
      * @return array
      */
     private function getMessagesUsedInClass($className) {
-        return (new Parser())->parse($className);
+        return $this->parser->parse($className);
     }
 }

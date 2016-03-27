@@ -2,15 +2,28 @@
 
 namespace FlowUI\Model\Node;
 
-interface MessagePublisher
+use FlowUI\Model\Node;
+
+class MessagePublisher extends Node
 {
+    /**
+     * @var Message[]
+     */
+    private $messages = [];
+
     /**
      * @return Message[]
      */
-    public function getMessages();
+    public function getMessages()
+    {
+        return $this->messages;
+    }
 
     /**
      * @param Message $message
      */
-    public function addMessage(Message $message);
+    public function addMessage(Message $message)
+    {
+        $this->messages[] = $message;
+    }
 }

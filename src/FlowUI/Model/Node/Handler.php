@@ -4,10 +4,8 @@ namespace FlowUI\Model\Node;
 
 use FlowUI\Model\Node;
 
-class Handler extends Node implements MessagePublisher
+class Handler extends MessagePublisher
 {
-    use CanPublishMessages;
-
     /**
      * @param string $id
      * @param string $className

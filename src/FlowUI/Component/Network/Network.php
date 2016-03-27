@@ -3,86 +3,29 @@
 namespace FlowUI\Component\Network;
 
 use FlowUI\Model\Node;
-use FlowUI\Model\Node\Command;
-use FlowUI\Model\Node\Event;
-use FlowUI\Model\Node\Handler;
-use FlowUI\Model\Node\Subscriber;
 
-class Network
+class Network implements NetworkInterface
 {
     /**
-     * @var Command[]
+     * @var Node[]
      */
-    private $commands;
+    private $nodes;
 
     /**
-     * @var Handler[]
+     * @param Node[] $nodes
      */
-    private $handlers;
-
-    /**
-     * @var Event[]
-     */
-    private $events;
-
-    /**
-     * @var Subscriber[]
-     */
-    private $subscribers;
-
-    /**
-     * @param Command[] $commands
-     * @param Handler[] $handlers
-     * @param Event[] $events
-     * @param Subscriber[] $subscribers
-     */
-    public function __construct(array $commands, array $handlers, array $events, array $subscribers)
+    public function __construct(array $nodes)
     {
-        // todo: assert all of proper instance
+        // todo: assert all node instance
 
-        $this->commands = $commands;
-        $this->handlers = $handlers;
-        $this->events = $events;
-        $this->subscribers = $subscribers;
+        $this->nodes = $nodes;
     }
 
     /**
-     * @return Command[]
-     */
-    public function getCommands()
-    {
-        return $this->commands;
-    }
-
-    /**
-     * @return Handler[]
-     */
-    public function getHandlers()
-    {
-        return $this->handlers;
-    }
-
-    /**
-     * @return Event[]
-     */
-    public function getEvents()
-    {
-        return $this->events;
-    }
-
-    /**
-     * @return Subscriber[]
-     */
-    public function getSubscribers()
-    {
-        return $this->subscribers;
-    }
-
-    /**
-     * @return Node[]
+     * {@inheritdoc}
      */
     public function getNodes()
     {
-        return array_merge($this->getCommands(), $this->getHandlers(), $this->getEvents(), $this->getSubscribers());
+        return $this->nodes;
     }
 }

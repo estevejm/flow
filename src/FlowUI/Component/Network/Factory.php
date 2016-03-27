@@ -3,10 +3,6 @@
 namespace FlowUI\Component\Network;
 
 use FlowUI\Component\Parser\Parser;
-use FlowUI\Model\Node\Command;
-use FlowUI\Model\Node\Event;
-use FlowUI\Model\Node\Handler;
-use FlowUI\Model\Node\Subscriber;
 
 class Factory
 {
@@ -29,69 +25,43 @@ class Factory
      */
     public function create(Map $map)
     {
-        $commands = [];
-        $handlers = [];
-        $events = [];
-        $subscribers = [];
-
+        $blueprint = new Blueprint();
+        
         foreach ($map->getCommandHandlerMap() as $commandId => $handlerData) {
-            $command = new Command($commandId);
-            $handlers[$handlerData['id']] = new Handler($handlerData['id'], $handlerData['class'], $command);
-            $commands[$command->getId()] = $command;
+            $blueprint->addCommand($commandId);
+            $blueprint->addHandler($handlerData['id'], $handlerData['class'], $blueprint->getCommand($commandId));
         }
 
         foreach ($map->getEventSubscribersMap() as $eventId => $eventSubscribers) {
-            $event = new Event($eventId);
-
+            $blueprint->addEvent($eventId);
             foreach ($eventSubscribers as $subscriber) {
-                $subscribers[$subscriber['id']] = new Subscriber($subscriber['id'], $subscriber['class'], $event);
-            }
-
-            $events[$event->getId()] = $event;
-        }
-
-        foreach ($handlers as $handler) {
-            $messages = $this->getMessagesUsedInClass($handler->getClassName());
-
-            foreach ($messages as $messageId) {
-                if (!empty($commands[$messageId])) {
-                    $handler->addMessage($commands[$messageId]);
-                    continue;
-                }
-
-                if (empty($events[$messageId])) {
-                    $events[$messageId] = new Event($messageId);
-                }
-
-                $handler->addMessage($events[$messageId]);
+                $blueprint->addSubscriber($subscriber['id'], $subscriber['class'], $blueprint->getEvent($eventId));
             }
         }
 
-        foreach ($subscribers as $subscriber) {
-            $messages = $this->getMessagesUsedInClass($subscriber->getClassName());
-
-            foreach ($messages as $messageId) {
-                if (!empty($commands[$messageId])) {
-                    $subscriber->addMessage($commands[$messageId]);
-                    continue;
-                }
-
-                if (empty($events[$messageId])) {
-                    $events[$messageId] = new Event($messageId);
-                }
-
-                $subscriber->addMessage($events[$messageId]);
-            }
+        foreach ($blueprint->getHandlers() as $handler) {
+            $messageIds = $this->getIdsOfMessagesInClass($handler->getClassName());
+            $blueprint->addHandlerMessages($handler, $messageIds);
         }
 
-        return new Network($commands, $handlers, $events, $subscribers);
+        foreach ($blueprint->getSubscribers() as $subscriber) {
+            $messageIds = $this->getIdsOfMessagesInClass($subscriber->getClassName());
+            $blueprint->addSubscriberMessages($subscriber, $messageIds);
+        }
+
+        return new Network(
+            $blueprint->getCommands(),
+            $blueprint->getHandlers(),
+            $blueprint->getEvents(),
+            $blueprint->getSubscribers()
+        );
     }
 
     /**
      * @param string $className
      * @return array
      */
-    private function getMessagesUsedInClass($className) {
+    private function getIdsOfMessagesInClass($className) {
         return $this->parser->parse($className);
     }
 }

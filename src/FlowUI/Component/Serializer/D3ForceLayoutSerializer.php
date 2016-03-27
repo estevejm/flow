@@ -167,20 +167,25 @@ class D3ForceLayoutSerializer
 
     /**
      * @param Node $node
+     * @return int
+     * @throws \Exception
+     */
+    private function getIndex(Node $node)
+    {
+        if (!$this->hasIndexAssigned($node)) {
+            throw new \Exception("Node with index not assigned");
+        }
+
+        return $this->indexMap[$node->getId()];
+    }
+
+    /**
+     * @param Node $node
      * @return bool
      */
     private function hasIndexAssigned(Node $node)
     {
         return isset($this->indexMap[$node->getId()]);
-    }
-
-    /**
-     * @param Node $node
-     * @return int
-     */
-    private function getIndex(Node $node)
-    {
-        return $this->indexMap[$node->getId()];
     }
 }
  

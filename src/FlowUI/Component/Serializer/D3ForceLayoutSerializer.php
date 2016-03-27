@@ -47,7 +47,7 @@ class D3ForceLayoutSerializer
     public function serialize(array $nodes)
     {
         $this->init();
-        $this->addNodes($nodes);
+        $this->processNodes($nodes);
 
         return [
             'nodes' => $this->nodes,
@@ -67,10 +67,10 @@ class D3ForceLayoutSerializer
      * @param Node[] $nodes
      * @param Node $parent
      */
-    private function addNodes(array $nodes, Node $parent = null)
+    private function processNodes(array $nodes, Node $parent = null)
     {
         foreach ($nodes as $node) {
-            $this->addNode($node, $parent);
+            $this->processNode($node, $parent);
         }
     }
 
@@ -78,7 +78,7 @@ class D3ForceLayoutSerializer
      * @param Node $node
      * @param Node $parent
      */
-    private function addNode(Node $node, Node $parent = null)
+    private function processNode(Node $node, Node $parent = null)
     {
         if ($this->hasIndexAssigned($node)) {
             $this->serializeLink($node, $parent);
@@ -88,44 +88,43 @@ class D3ForceLayoutSerializer
         switch ($node->getType())
         {
             case Node::TYPE_COMMAND:
-                $this->assignIndex($node);
-                $this->serializeNode($node);
-                $this->serializeLink($node, $parent);
-
-                $this->addNode($node->getHandler(), $node);
+                $this->addNode($node, $parent);
+                $this->processNode($node->getHandler(), $node);
                 break;
 
             case Node::TYPE_EVENT:
-                $this->assignIndex($node);
-                $this->serializeNode($node);
-                $this->serializeLink($node, $parent);
-
-                $this->addNodes($node->getSubscribers(), $node);
+                $this->addNode($node, $parent);
+                $this->processNodes($node->getSubscribers(), $node);
                 break;
 
             case Node::TYPE_HANDLER:
                 if ($this->config['serialize_handlers']) {
-                    $this->assignIndex($node);
-                    $this->serializeNode($node);
-                    $this->serializeLink($node, $parent);
-
-                    $this->addNodes($node->getMessages(), $node);
+                    $this->addNode($node, $parent);
+                    $this->processNodes($node->getMessages(), $node);
                 } else {
-                    $this->addNodes($node->getMessages(), $parent);
+                    $this->processNodes($node->getMessages(), $parent);
                 }
                 break;
 
             case Node::TYPE_SUBSCRIBER:
                 if ($this->config['serialize_subscribers']) {
-                    $this->assignIndex($node);
-                    $this->serializeNode($node);
-                    $this->serializeLink($node, $parent);
-
-                    $this->addNodes($node->getMessages(), $node);
+                    $this->addNode($node, $parent);
+                    $this->processNodes($node->getMessages(), $node);
                 } else {
-                    $this->addNodes($node->getMessages(), $parent);
+                    $this->processNodes($node->getMessages(), $parent);
                 }
         }
+    }
+
+    /**
+     * @param Node $node
+     * @param Node $parent
+     */
+    private function addNode(Node $node, Node $parent = null)
+    {
+        $this->assignIndex($node);
+        $this->serializeNode($node);
+        $this->serializeLink($node, $parent);
     }
 
     /**

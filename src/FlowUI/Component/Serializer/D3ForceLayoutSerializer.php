@@ -80,43 +80,66 @@ class D3ForceLayoutSerializer
      */
     private function addNode(Node $node, Node $parent = null)
     {
-        if ($this->hasIndexAssigned($node)) {
-            $this->serializeLink($node, $parent);
-            return;
-        }
-
-        // todo: restrict creation based on configuration
-
-        $this->assignIndex($node);
-        $this->serializeNode($node);
-        $this->serializeLink($node, $parent);
-
         switch ($node->getType())
         {
             case Node::TYPE_COMMAND:
-                if ($this->config['display_handlers']) {
-                    $this->addNode($node->getHandler(), $node);
-                } else {
-                    $this->addNodes($node->getHandler()->getMessages(), $node);
+                if ($this->hasIndexAssigned($node)) {
+                    $this->serializeLink($node, $parent);
+                    return;
                 }
+
+                $this->assignIndex($node);
+                $this->serializeNode($node);
+                $this->serializeLink($node, $parent);
+
+                $this->addNode($node->getHandler(), $node);
                 break;
 
             case Node::TYPE_EVENT:
-                if ($this->config['display_subscribers']) {
-                    $this->addNodes($node->getSubscribers(), $node);
-                } else {
-                    array_map(
-                        function($subscriber) use ($node) {
-                            $this->addNodes($subscriber->getMessages(), $node);
-                        },
-                        $node->getSubscribers()
-                    );
+                if ($this->hasIndexAssigned($node)) {
+                    $this->serializeLink($node, $parent);
+                    return;
                 }
+
+                $this->assignIndex($node);
+                $this->serializeNode($node);
+                $this->serializeLink($node, $parent);
+
+                $this->addNodes($node->getSubscribers(), $node);
                 break;
 
             case Node::TYPE_HANDLER:
+                if ($this->config['display_handlers']) {
+                    if ($this->hasIndexAssigned($node)) {
+                        $this->serializeLink($node, $parent);
+                        return;
+                    }
+
+                    $this->assignIndex($node);
+                    $this->serializeNode($node);
+                    $this->serializeLink($node, $parent);
+
+                    $this->addNodes($node->getMessages(), $node);
+                } else {
+                    $this->addNodes($node->getMessages(), $parent);
+                }
+                break;
+
             case Node::TYPE_SUBSCRIBER:
-                $this->addNodes($node->getMessages(), $node);
+                if ($this->config['display_subscribers']) {
+                    if ($this->hasIndexAssigned($node)) {
+                        $this->serializeLink($node, $parent);
+                        return;
+                    }
+
+                    $this->assignIndex($node);
+                    $this->serializeNode($node);
+                    $this->serializeLink($node, $parent);
+
+                    $this->addNodes($node->getMessages(), $node);
+                } else {
+                    $this->addNodes($node->getMessages(), $parent);
+                }
         }
     }
 

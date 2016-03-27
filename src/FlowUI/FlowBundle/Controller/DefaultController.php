@@ -2,8 +2,8 @@
 
 namespace FlowUI\FlowBundle\Controller;
 
+use FlowUI\Component\Network\Network;
 use FlowUI\Component\Validator\Violation;
-use FlowUI\Model\Network;
 use FlowUI\Model\Node;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,11 +17,11 @@ class DefaultController extends Controller
 
     public function getDataAction()
     {
-        /** @var Node[] $nodes */
-        $nodes = $this->get('flow.network.factory')->create();
+        /** @var Network $network */
+        $network = $this->get('flow.network.factory')->create();
 
         /** @var Violation[] $violations */
-        $violations = $this->get('flow.validator')->validate($nodes);
+        $violations = $this->get('flow.validator')->validate($network);
 
         $errors = [];
 
@@ -34,7 +34,7 @@ class DefaultController extends Controller
         }
 
         return new JsonResponse([
-            'network' => $this->get('flow.serializer')->serialize($nodes),
+            'network' => $this->get('flow.serializer')->serialize($network),
             'validator' => [
                 'status' => count($violations) == 0 ? 'valid' : 'invalid',
                 'errors' => $errors

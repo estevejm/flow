@@ -2,6 +2,7 @@
 
 namespace FlowUI\Component\Validator;
 
+use FlowUI\Component\Network\Network;
 use FlowUI\Model\Node;
 
 class Validator
@@ -21,13 +22,13 @@ class Validator
     }
 
     /**
-     * @param Node[] $nodes
+     * @param Network $network
      * @return Violation[]
      */
-    public function validate(array $nodes)
+    public function validate(Network $network)
     {
         $violations = [];
-        foreach ($nodes as $node) {
+        foreach ($network->getNodes() as $node) {
             foreach ($this->constraints as $constraint) {
                 if ($constraint->supportNode($node)) {
                     $violations = array_merge($violations, $constraint->validate($node));
@@ -38,4 +39,3 @@ class Validator
         return $violations;
     }
 }
- 

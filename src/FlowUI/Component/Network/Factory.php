@@ -28,6 +28,9 @@ class Factory
         $this->eventSubscribersMap = $eventSubscribersMap;
     }
 
+    /**
+     * @return Network
+     */
     public function create()
     {
         $commands = $this->commandHandlerMap->getCommands();
@@ -78,7 +81,7 @@ class Factory
 
         }
 
-        return array_merge($commands, $handlers, $events, $subscribers);
+        return new Network($commands, $handlers, $events, $subscribers);
     }
 
     /**

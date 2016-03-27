@@ -2,6 +2,7 @@
 
 namespace FlowUI\Component\Serializer;
 
+use FlowUI\Component\Network\Network;
 use FlowUI\Model\Node;
 
 class D3ForceLayoutSerializer
@@ -49,13 +50,13 @@ class D3ForceLayoutSerializer
     }
 
     /**
-     * @param Node[] $nodes
+     * @param Network $network
      * @return array
      */
-    public function serialize(array $nodes)
+    public function serialize(Network $network)
     {
         $this->init();
-        $this->processNodes($nodes);
+        $this->processNodes($network->getNodes());
 
         return [
             'nodes' => $this->nodes,

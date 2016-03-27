@@ -109,7 +109,7 @@ class D3ForceLayoutSerializer
                 break;
 
             case Node::TYPE_HANDLER:
-                if ($this->config['display_handlers']) {
+                if ($this->config['serialize_handlers']) {
                     if ($this->hasIndexAssigned($node)) {
                         $this->serializeLink($node, $parent);
                         return;
@@ -126,7 +126,7 @@ class D3ForceLayoutSerializer
                 break;
 
             case Node::TYPE_SUBSCRIBER:
-                if ($this->config['display_subscribers']) {
+                if ($this->config['serialize_subscribers']) {
                     if ($this->hasIndexAssigned($node)) {
                         $this->serializeLink($node, $parent);
                         return;

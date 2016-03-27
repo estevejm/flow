@@ -1,7 +1,7 @@
 parameters:
     serializer.config:
-        display_handlers: true
-        display_subscribers: true
+        serialize_handlers: true
+        serialize_subscribers: true
 
 services:
     flow.network.factory:

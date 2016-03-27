@@ -80,14 +80,14 @@ class D3ForceLayoutSerializer
      */
     private function addNode(Node $node, Node $parent = null)
     {
+        if ($this->hasIndexAssigned($node)) {
+            $this->serializeLink($node, $parent);
+            return;
+        }
+
         switch ($node->getType())
         {
             case Node::TYPE_COMMAND:
-                if ($this->hasIndexAssigned($node)) {
-                    $this->serializeLink($node, $parent);
-                    return;
-                }
-
                 $this->assignIndex($node);
                 $this->serializeNode($node);
                 $this->serializeLink($node, $parent);
@@ -96,11 +96,6 @@ class D3ForceLayoutSerializer
                 break;
 
             case Node::TYPE_EVENT:
-                if ($this->hasIndexAssigned($node)) {
-                    $this->serializeLink($node, $parent);
-                    return;
-                }
-
                 $this->assignIndex($node);
                 $this->serializeNode($node);
                 $this->serializeLink($node, $parent);
@@ -110,11 +105,6 @@ class D3ForceLayoutSerializer
 
             case Node::TYPE_HANDLER:
                 if ($this->config['serialize_handlers']) {
-                    if ($this->hasIndexAssigned($node)) {
-                        $this->serializeLink($node, $parent);
-                        return;
-                    }
-
                     $this->assignIndex($node);
                     $this->serializeNode($node);
                     $this->serializeLink($node, $parent);
@@ -127,11 +117,6 @@ class D3ForceLayoutSerializer
 
             case Node::TYPE_SUBSCRIBER:
                 if ($this->config['serialize_subscribers']) {
-                    if ($this->hasIndexAssigned($node)) {
-                        $this->serializeLink($node, $parent);
-                        return;
-                    }
-
                     $this->assignIndex($node);
                     $this->serializeNode($node);
                     $this->serializeLink($node, $parent);

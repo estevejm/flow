@@ -31,16 +31,11 @@ class Factory
     {
         $blueprint = new Blueprint();
 
-        // todo: move $publisherMessagesMap build process to compiler pass
-
-        $publisherMessagesMap = [];
         foreach ($map->getCommandHandlerMap() as $commandId => $handlerData) {
             $blueprint->addCommand(new Command($commandId));
             $blueprint->addMessagePublisher(
                 new Handler($handlerData['id'], $handlerData['class'], $blueprint->getCommand($commandId))
             );
-
-            $publisherMessagesMap[$handlerData['id']] = $this->getIdsOfMessagesInClass($handlerData['class']);
         }
 
         foreach ($map->getEventSubscribersMap() as $eventId => $eventSubscribers) {
@@ -49,12 +44,10 @@ class Factory
                 $blueprint->addMessagePublisher(
                     new Subscriber($subscriberData['id'], $subscriberData['class'], $blueprint->getEvent($eventId))
                 );
-
-                $publisherMessagesMap[$subscriberData['id']] = $this->getIdsOfMessagesInClass($subscriberData['class']);
             }
         }
 
-        foreach($publisherMessagesMap as $messagePublisherId => $messageIds) {
+        foreach($this->getPublisherMessagesMap($map) as $messagePublisherId => $messageIds) {
             $messagePublisher = $blueprint->getMessagePublisher($messagePublisherId);
             foreach ($messageIds as $messageId) {
                 if ($blueprint->hasCommand($messageId)) {
@@ -72,6 +65,27 @@ class Factory
         }
 
         return new Network($blueprint->getNodes());
+    }
+
+    /**
+     * @param Map $map
+     * @return array
+     */
+    private function getPublisherMessagesMap(Map $map)
+    {
+        $publisherMessagesMap = [];
+
+        foreach ($map->getCommandHandlerMap() as $commandId => $handlerData) {
+            $publisherMessagesMap[$handlerData['id']] = $this->getIdsOfMessagesInClass($handlerData['class']);
+        }
+
+        foreach ($map->getEventSubscribersMap() as $eventId => $eventSubscribers) {
+            foreach ($eventSubscribers as $subscriberData) {
+                $publisherMessagesMap[$subscriberData['id']] = $this->getIdsOfMessagesInClass($subscriberData['class']);
+            }
+        }
+
+        return $publisherMessagesMap;
     }
 
     /**

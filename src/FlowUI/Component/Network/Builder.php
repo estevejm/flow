@@ -1,14 +1,12 @@
 <?php
 
-namespace FlowUI\FlowBundle\Service;
+namespace FlowUI\Component\Network;
 
-use FlowUI\Component\Network\CommandHandlerMap;
-use FlowUI\Component\Network\EventSubscribersMap;
 use FlowUI\Component\Parser\Parser;
 use FlowUI\Model\Node\Command;
 use FlowUI\Model\Node\Event;
 
-class TestService
+class Builder
 {
     /**
      * @var CommandHandlerMap

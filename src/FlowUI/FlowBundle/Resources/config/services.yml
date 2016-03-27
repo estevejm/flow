@@ -4,8 +4,8 @@ parameters:
         display_subscribers: true
 
 services:
-    test_service:
-        class: FlowUI\FlowBundle\Service\TestService
+    flow.network.builder:
+        class: FlowUI\Component\Network\Builder
         arguments:
             - '@flow.network.command_handler_map'
             - '@flow.network.event_subscribers_map'

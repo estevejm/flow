@@ -1,6 +1,9 @@
 <?php
 
-namespace FlowUI\Model;
+namespace FlowUI\Model\Node;
+
+use FlowUI\Model\CanTriggerMessages;
+use FlowUI\Model\Node;
 
 class Subscriber extends Node
 {

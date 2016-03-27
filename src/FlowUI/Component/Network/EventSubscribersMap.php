@@ -2,8 +2,8 @@
 
 namespace FlowUI\Component\Network;
 
-use FlowUI\Model\Event;
-use FlowUI\Model\Subscriber;
+use FlowUI\Model\Node\Event;
+use FlowUI\Model\Node\Subscriber;
 
 class EventSubscribersMap
 {

@@ -2,10 +2,12 @@
 
 namespace FlowUI\Model;
 
+use FlowUI\Model\Node\Message;
+
 trait CanTriggerMessages
 {
     /**
-     * @var Event[]
+     * @var Message[]
      */
     private $messages = [];
 

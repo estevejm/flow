@@ -2,8 +2,8 @@
 
 namespace FlowUI\Component\Network;
 
-use FlowUI\Model\Command;
-use FlowUI\Model\Handler;
+use FlowUI\Model\Node\Command;
+use FlowUI\Model\Node\Handler;
 
 class CommandHandlerMap
 {

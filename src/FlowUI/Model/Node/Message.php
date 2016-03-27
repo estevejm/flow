@@ -1,6 +1,6 @@
 <?php
 
-namespace FlowUI\Model;
+namespace FlowUI\Model\Node;
 
 interface Message 
 {

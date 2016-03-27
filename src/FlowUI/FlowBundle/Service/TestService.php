@@ -5,8 +5,8 @@ namespace FlowUI\FlowBundle\Service;
 use FlowUI\Component\Network\CommandHandlerMap;
 use FlowUI\Component\Network\EventSubscribersMap;
 use FlowUI\Component\Parser\Parser;
-use FlowUI\Model\Command;
-use FlowUI\Model\Event;
+use FlowUI\Model\Node\Command;
+use FlowUI\Model\Node\Event;
 
 class TestService
 {

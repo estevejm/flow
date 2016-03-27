@@ -1,3 +1,8 @@
+parameters:
+    serializer.config:
+        display_handlers: true
+        display_subscribers: true
+
 services:
     test_service:
         class: FlowUI\FlowBundle\Service\TestService
@@ -27,3 +32,8 @@ services:
         class: FlowUI\Component\Network\EventSubscribersMap
         arguments:
             - [] # registerSubscribers compiler pass
+
+    flow.serializer:
+        class: FlowUI\Component\Serializer\D3ForceLayoutSerializer
+        arguments:
+            - '%serializer.config%'

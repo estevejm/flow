@@ -4,7 +4,7 @@ namespace FlowUI\Component\Validator\Constraint;
 
 use FlowUI\Component\Validator\Constraint;
 use FlowUI\Component\Validator\Violation;
-use FlowUI\Model\Event;
+use FlowUI\Model\Node\Event;
 use FlowUI\Model\Node;
 
 class EventWithoutSubscriber implements Constraint

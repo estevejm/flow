@@ -4,8 +4,8 @@ namespace FlowUI\Component\Validator\Constraint;
 
 use FlowUI\Component\Validator\Constraint;
 use FlowUI\Component\Validator\Violation;
-use FlowUI\Model\Command;
-use FlowUI\Model\Handler;
+use FlowUI\Model\Node\Command;
+use FlowUI\Model\Node\Handler;
 use FlowUI\Model\Node;
 
 class HandlerTriggersCommand implements Constraint

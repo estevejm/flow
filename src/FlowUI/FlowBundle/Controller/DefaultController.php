@@ -22,8 +22,6 @@ class DefaultController extends Controller
         /** @var Violation[] $violations */
         $violations = $this->get('flow.validator')->validate($nodes);
 
-        $network = new Network($nodes);
-
         $errors = [];
 
         foreach ($violations as $violation) {
@@ -35,10 +33,7 @@ class DefaultController extends Controller
         }
 
         return new JsonResponse([
-            'network' => [
-                'nodes' => $network->getNodes(),
-                'links' => $network->getLinks(),
-            ],
+            'network' => $this->get('flow.serializer')->serialize($nodes),
             'validator' => [
                 'status' => count($violations) == 0 ? 'valid' : 'invalid',
                 'errors' => $errors

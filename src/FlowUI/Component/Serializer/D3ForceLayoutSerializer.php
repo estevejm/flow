@@ -50,8 +50,8 @@ class D3ForceLayoutSerializer
         $this->addNodes($nodes);
 
         return [
-            'nodes' => $this->getNodes(),
-            'links' => $this->getLinks(),
+            'nodes' => $this->nodes,
+            'links' => $this->links,
         ];
     }
 
@@ -81,15 +81,15 @@ class D3ForceLayoutSerializer
     private function addNode(Node $node, Node $parent = null)
     {
         if ($this->hasIndexAssigned($node)) {
-            $this->createLink($node, $parent);
+            $this->serializeLink($node, $parent);
             return;
         }
 
         // todo: restrict creation based on configuration
 
         $this->assignIndex($node);
-        $this->createNode($node);
-        $this->createLink($node, $parent);
+        $this->serializeNode($node);
+        $this->serializeLink($node, $parent);
 
         switch ($node->getType())
         {
@@ -123,7 +123,7 @@ class D3ForceLayoutSerializer
     /**
      * @param Node $node
      */
-    private function createNode(Node $node)
+    private function serializeNode(Node $node)
     {
         $this->nodes[$this->getIndex($node)] = [
             "id" => $node->getId(),
@@ -135,7 +135,7 @@ class D3ForceLayoutSerializer
      * @param Node $node
      * @param Node $parent
      */
-    private function createLink(Node $node, Node $parent = null)
+    private function serializeLink(Node $node, Node $parent = null)
     {
         if ($parent) {
             $this->links[] = [
@@ -174,22 +174,6 @@ class D3ForceLayoutSerializer
     private function getIndex(Node $node)
     {
         return $this->indexMap[$node->getId()];
-    }
-
-    /**
-     * @return array
-     */
-    public function getNodes()
-    {
-        return $this->nodes;
-    }
-
-    /**
-     * @return array
-     */
-    public function getLinks()
-    {
-        return $this->links;
     }
 }
  

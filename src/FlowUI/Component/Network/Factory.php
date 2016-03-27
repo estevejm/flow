@@ -11,49 +11,36 @@ use FlowUI\Model\Node\Subscriber;
 class Factory
 {
     /**
-     * @var array
-     */
-    private $commandHandlerMap;
-
-    /**
-     * @var array
-     */
-    private $eventSubscribersMap;
-
-    /**
      * @var $parser
      */
     private $parser;
 
     /**
-     * @param array $commandHandlerMap
-     * @param array $eventSubscribersMap
      * @param Parser $parser
      */
-    public function __construct(array $commandHandlerMap, array $eventSubscribersMap, Parser $parser)
+    public function __construct(Parser $parser)
     {
-        $this->commandHandlerMap = $commandHandlerMap;
-        $this->eventSubscribersMap = $eventSubscribersMap;
         $this->parser = $parser;
     }
 
     /**
+     * @param Map $map
      * @return Network
      */
-    public function create()
+    public function create(Map $map)
     {
         $commands = [];
         $handlers = [];
         $events = [];
         $subscribers = [];
 
-        foreach ($this->commandHandlerMap as $commandId => $handlerData) {
+        foreach ($map->getCommandHandlerMap() as $commandId => $handlerData) {
             $command = new Command($commandId);
             $handlers[$handlerData['id']] = new Handler($handlerData['id'], $handlerData['class'], $command);
             $commands[$command->getId()] = $command;
         }
 
-        foreach ($this->eventSubscribersMap as $eventId => $eventSubscribers) {
+        foreach ($map->getEventSubscribersMap() as $eventId => $eventSubscribers) {
             $event = new Event($eventId);
 
             foreach ($eventSubscribers as $subscriber) {

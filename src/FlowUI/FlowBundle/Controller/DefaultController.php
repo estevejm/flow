@@ -18,7 +18,7 @@ class DefaultController extends Controller
     public function getDataAction()
     {
         /** @var Network $network */
-        $network = $this->get('flow.network.factory')->create();
+        $network = $this->get('flow.network.factory')->create($this->get('flow.network.map'));
 
         /** @var Violation[] $violations */
         $violations = $this->get('flow.validator')->validate($network);

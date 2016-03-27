@@ -4,11 +4,15 @@ parameters:
         serialize_subscribers: true
 
 services:
-    flow.network.factory:
-        class: FlowUI\Component\Network\Factory
+    flow.network.map:
+        class: FlowUI\Component\Network\Map
         arguments:
             - [] # registerHandlers compiler pass
             - [] # registerSubscribers compiler pass
+
+    flow.network.factory:
+        class: FlowUI\Component\Network\Factory
+        arguments:
             - '@flow.parser'
 
     flow.parser:

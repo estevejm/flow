@@ -38,47 +38,38 @@ class Factory
         $events = $this->eventSubscribersMap->getEvents();
         $subscribers = $this->eventSubscribersMap->getSubscribers();
 
-        /** @var Command $command */
-        foreach ($commands as $command) {
-            $handler = $command->getHandler();
+        foreach ($handlers as $handler) {
             $messages = $this->getMessagesUsedInClass($handler->getClassName());
 
             foreach ($messages as $messageId) {
                 if (!empty($commands[$messageId])) {
                     $handler->addMessage($commands[$messageId]);
-                    //var_dump("warning: you're triggering a command inside a command handler!");
                     continue;
                 }
 
                 if (empty($events[$messageId])) {
                     $events[$messageId] = new Event($messageId);
                 }
+
                 $handler->addMessage($events[$messageId]);
             }
         }
 
-        /** @var Event $event */
-        foreach ($events as $event) {
-            foreach ($event->getSubscribers() as $subscriber) {
-                $messages = $this->getMessagesUsedInClass($subscriber->getClassName());
+        foreach ($subscribers as $subscriber) {
+            $messages = $this->getMessagesUsedInClass($subscriber->getClassName());
 
-                foreach ($messages as $messageId) {
-                    if (!empty($commands[$messageId])) {
-                        $subscriber->addMessage($commands[$messageId]);
-
-                        // if it's a command, it's not an event, moving on ( as we don't want to create an entry for a false event ...
-                        continue;
-                    }
-
-                    if (empty($events[$messageId])) {
-                        // ... here)
-                        $events[$messageId] = new Event($messageId);
-                    }
-
-                    $subscriber->addMessage($events[$messageId]);
+            foreach ($messages as $messageId) {
+                if (!empty($commands[$messageId])) {
+                    $subscriber->addMessage($commands[$messageId]);
+                    continue;
                 }
-            }
 
+                if (empty($events[$messageId])) {
+                    $events[$messageId] = new Event($messageId);
+                }
+
+                $subscriber->addMessage($events[$messageId]);
+            }
         }
 
         return new Network($commands, $handlers, $events, $subscribers);

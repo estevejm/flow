@@ -38,7 +38,7 @@ class CommandHandlerMap
     {
         foreach ($this->callableMap as $commandId => $handlerData) {
             $command = new Command($commandId);
-            $this->handlers[] = new Handler($handlerData['id'], $handlerData['class'], $command);
+            $this->handlers[$handlerData['id']] = new Handler($handlerData['id'], $handlerData['class'], $command);
             $this->commands[$command->getId()] = $command;
         }
     }

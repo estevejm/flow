@@ -39,14 +39,9 @@ class EventSubscribersMap
         foreach ($this->callableMap as $eventId => $eventSubscribers) {
             $event = new Event($eventId);
 
-            $newSubscribers = array_map(
-                function($subscriber) use ($event) {
-                    return new Subscriber($subscriber['id'], $subscriber['class'], $event);
-                },
-                $eventSubscribers
-            );
-
-            $this->subscribers = array_merge($this->subscribers, $newSubscribers);
+            foreach ($eventSubscribers as $subscriber) {
+                $this->subscribers[$subscriber['id']] = new Subscriber($subscriber['id'], $subscriber['class'], $event);
+            }
 
             $this->events[$event->getId()] = $event;
         }

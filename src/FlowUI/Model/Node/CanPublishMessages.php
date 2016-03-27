@@ -1,10 +1,8 @@
 <?php
 
-namespace FlowUI\Model;
+namespace FlowUI\Model\Node;
 
-use FlowUI\Model\Node\Message;
-
-trait CanTriggerMessages
+trait CanPublishMessages
 {
     /**
      * @var Message[]

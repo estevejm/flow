@@ -2,12 +2,11 @@
 
 namespace FlowUI\Model\Node;
 
-use FlowUI\Model\CanTriggerMessages;
 use FlowUI\Model\Node;
 
-class Handler extends Node
+class Handler extends Node implements MessagePublisher
 {
-    use CanTriggerMessages;
+    use CanPublishMessages;
 
     /**
      * @param string $id

@@ -3,8 +3,9 @@
 namespace Flow\Validator;
 
 use Flow\Network\Node;
+use JsonSerializable;
 
-class Violation
+class Violation implements JsonSerializable
 {
     const ERROR = 'error';
     const WARNING = 'warning';
@@ -59,6 +60,18 @@ class Violation
     public function getSeverity()
     {
         return $this->severity;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    function jsonSerialize()
+    {
+        return [
+            'nodeId' => $this->getNode()->getId(),
+            'message' => $this->getMessage(),
+            'severity' => $this->getSeverity(),
+        ];
     }
 }
  

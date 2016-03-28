@@ -23,23 +23,9 @@ class DefaultController extends Controller
         /** @var Validation $validation */
         $validation = $this->get('flow.validator')->validate($network);
 
-        $violations = [];
-
-        // todo: create validation serializer
-        foreach ($validation->getViolations() as $violation) {
-            $violations[] = [
-                'nodeId' => $violation->getNode()->getId(),
-                'message' => $violation->getMessage(),
-                'severity' => $violation->getSeverity(),
-            ];
-        }
-
         return new JsonResponse([
             'network' => $this->get('flow.serializer')->serialize($network),
-            'validation' => [
-                'status' => $validation->getStatus(),
-                'violations' => $violations
-            ]
+            'validation' => $validation
         ]);
     }
 }

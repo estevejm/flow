@@ -27,7 +27,7 @@ class EventWithoutSubscriber implements Constraint
             return [
                 new Violation(
                     $node,
-                    sprintf('There is no subscribers for the event \'%s\'', $node->getId()),
+                    sprintf('There is no subscribers for the event \'%s\'.', $node->getId()),
                     Violation::NOTICE
                 )
             ];

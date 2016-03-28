@@ -2,7 +2,9 @@
 
 namespace Flow\Validator;
 
-class Validation
+use JsonSerializable;
+
+class Validation implements JsonSerializable
 {
     const STATUS_VALID = 'valid';
     const STATUS_INVALID = 'invalid';
@@ -41,6 +43,17 @@ class Validation
     public function getViolations()
     {
         return $this->violations;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    function jsonSerialize()
+    {
+        return [
+            'status' => $this->status,
+            'violations' => $this->violations
+        ];
     }
 }
  

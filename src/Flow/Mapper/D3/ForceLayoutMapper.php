@@ -156,8 +156,16 @@ class ForceLayoutMapper
     private function mapLink(Node $node, Node $parent = null)
     {
         if ($parent) {
-            $this->links[] = new Link($this->nodes[$this->getIndex($parent)], $this->nodes[$this->getIndex($node)]);
+            $this->links[] = new Link($this->getD3Node($parent), $this->getD3Node($node));
         }
+    }
+
+    /**
+     * @param Node $node
+     */
+    private function getD3Node(Node $node)
+    {
+        return $this->nodes[$this->getIndex($node)];
     }
 
     /**

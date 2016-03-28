@@ -64,6 +64,8 @@ class Factory
 
         }
 
+        // todo: create middlewares to allow blueprint extension
+
         return new Network($blueprint->getNodes());
     }
 

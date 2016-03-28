@@ -2,12 +2,12 @@
 
 namespace Flow\Parser\Visitor;
 
+use Flow\Parser\DataCollectorNodeVisitor;
 use PhpParser\Node;
-use PhpParser\NodeVisitorAbstract;
 use ReflectionClass;
 use SimpleBus\Message\Name\NamedMessage;
 
-class MessagesUsedNodeVisitor extends NodeVisitorAbstract
+class MessagesUsedNodeVisitor extends DataCollectorNodeVisitor
 {
     /**
      * @var string
@@ -89,10 +89,11 @@ class MessagesUsedNodeVisitor extends NodeVisitorAbstract
 
         return;
     }
+
     /**
      * @return array
      */
-    public function getMessages()
+    public function getData()
     {
         return array_unique($this->messages);
     }

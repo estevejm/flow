@@ -3,38 +3,70 @@
 namespace Flow\Parser;
 
 use Exception;
-use Flow\Parser\Visitor\MessagesUsedNodeVisitor;
 use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor;
 use PhpParser\ParserFactory;
 use ReflectionClass;
 
 class Parser
 {
     /**
+     * @var ParserFactory
+     */
+    private $factory;
+
+    /**
+     * @var NodeTraverser
+     */
+    private $traverser;
+
+    /**
+     * @var DataCollectorNodeVisitor
+     */
+    private $visitor;
+
+    /**
+     * @param ParserFactory $factory
+     * @param NodeTraverser $traverser
+     */
+    public function __construct(ParserFactory $factory, NodeTraverser $traverser)
+    {
+        $this->factory = $factory;
+        $this->traverser = $traverser;
+    }
+
+    /**
+     * @param DataCollectorNodeVisitor $visitor
+     */
+    public function setVisitor(DataCollectorNodeVisitor $visitor)
+    {
+        if ($this->visitor instanceof DataCollectorNodeVisitor) {
+            $this->traverser->removeVisitor($this->visitor);
+        }
+
+        $this->visitor = $visitor;
+        $this->traverser->addVisitor($this->visitor);
+    }
+
+    /**
      * @param string $className
      * @return array
      */
-    public function parse($className) {
+    public function parse($className)
+    {
         if (!class_exists($className)) {
-            throw new \InvalidArgumentException("Invalid class $className.");
+            throw new \InvalidArgumentException("$className not defined.");
         }
-        $class = new ReflectionClass($className);
-        $fileName = $class->getFileName();
-        $code = file_get_contents($fileName);
 
-        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
-        $traverser = new NodeTraverser();
-
-        $visitor = new MessagesUsedNodeVisitor();
-        $traverser->addVisitor($visitor);
+        $parser = $this->getParser();
+        $sourceCode = $this->getSourceCode($className);
 
         try {
-            $stmts = $parser->parse($code);
-            $stmts = $traverser->traverse($stmts);
+            $nodes = $parser->parse($sourceCode);
 
-            //var_dump($stmts);
-            return $visitor->getMessages();
+            $this->traverser->traverse($nodes);
 
+            return $this->visitor->getData();
 
         } catch (Exception $e) {
             echo 'Parse Error: ', $e->getMessage();
@@ -42,5 +74,25 @@ class Parser
 
         return [];
     }
+
+    /**
+     * @return \PhpParser\Parser
+     */
+    private function getParser()
+    {
+        return $this->factory->create(ParserFactory::PREFER_PHP7);
+    }
+
+    /**
+     * @param string $className
+     * @return string
+     */
+    private function getSourceCode($className)
+    {
+        $class = new ReflectionClass($className);
+        $fileName = $class->getFileName();
+        $code = file_get_contents($fileName);
+
+        return $code;
+    }
 }
- 

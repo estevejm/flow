@@ -21,7 +21,7 @@ services:
     flow.network.factory:
         class: Flow\Network\Factory
         arguments:
-            - '@flow.parser'
+            - '@flow.parser.messages_used'
 
     flow.network.map:
         class: Flow\Network\Map
@@ -31,14 +31,36 @@ services:
             - [] # registerSubscribers compiler pass
 
     flow.parser:
-        public: false
         class: Flow\Parser\Parser
+        abstract: true
+        arguments:
+            - '@flow.vendor.php_parser.factory'
+            - '@flow.vendor.php_parser.node_traverser'
+
+    flow.parser.messages_used:
+        parent: flow.parser
+        calls:
+            - [setVisitor, ['@flow.parser.visitor.messages_used']]
+
+    flow.parser.visitor.messages_used:
+        class: Flow\Parser\Visitor\MessagesUsedNodeVisitor
+        public: false
+
+    flow.vendor.php_parser.factory:
+        class: PhpParser\ParserFactory
+        public: false
+
+    flow.vendor.php_parser.node_traverser:
+        class: PhpParser\NodeTraverser
+        public: false
 
     flow.validator:
         class: Flow\Validator\Validator
         arguments:
             - ['@flow.validator.constraint.handler_triggers_command', '@flow.validator.constraint.event_without_subscriber']
-    # todo service discovery
+
+    # todo: service discovery
+
     flow.validator.constraint.handler_triggers_command:
         class: Flow\Validator\Constraint\HandlerTriggersCommand
         public: false

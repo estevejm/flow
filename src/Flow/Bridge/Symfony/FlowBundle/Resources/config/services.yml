@@ -50,6 +50,12 @@ services:
     flow.collector.source_code_reader:
         class: Flow\Collector\Reader\SourceCodeReader
         public: false
+        arguments:
+            - '@flow.collector.file_reader'
+
+    flow.collector.file_reader:
+        class: Flow\Collector\Reader\FileReader
+        public: false
 
     flow.vendor.php_parser.factory:
         class: PhpParser\ParserFactory

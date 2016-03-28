@@ -8,6 +8,19 @@ use ReflectionClass;
 class SourceCodeReader
 {
     /**
+     * @var FileReader
+     */
+    private $fileReader;
+
+    /**
+     * @param FileReader $fileReader
+     */
+    public function __construct(FileReader $fileReader)
+    {
+        $this->fileReader = $fileReader;
+    }
+
+    /**
      * @param string $className
      * @return string
      */
@@ -15,9 +28,8 @@ class SourceCodeReader
     {
         Assertion::classExists($className);
 
-        $class = new ReflectionClass($className);
-        $fileName = $class->getFileName();
+        $filename = (new ReflectionClass($className))->getFileName();
 
-        return file_get_contents($fileName); // todo: check filesystem abstraction
+        return $this->fileReader->read($filename);
     }
 }

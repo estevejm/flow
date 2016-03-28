@@ -1,9 +1,9 @@
 <?php
 
-namespace FlowUI\FlowBundle;
+namespace FlowUI\Bridge\Symfony\FlowBundle;
 
-use FlowUI\FlowBundle\DependencyInjection\Compiler\RegisterHandlers;
-use FlowUI\FlowBundle\DependencyInjection\Compiler\RegisterSubscribers;
+use FlowUI\Bridge\Symfony\FlowBundle\DependencyInjection\Compiler\RegisterHandlers;
+use FlowUI\Bridge\Symfony\FlowBundle\DependencyInjection\Compiler\RegisterSubscribers;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

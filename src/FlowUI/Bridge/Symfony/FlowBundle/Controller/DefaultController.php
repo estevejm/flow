@@ -1,6 +1,6 @@
 <?php
 
-namespace FlowUI\FlowBundle\Controller;
+namespace FlowUI\Bridge\Symfony\FlowBundle\Controller;
 
 use FlowUI\Component\Network\Network;
 use FlowUI\Component\Validator\Violation;

@@ -1,6 +1,6 @@
 <?php
 
-namespace FlowUI\FlowBundle\Tests\Controller;
+namespace FlowUI\Bridge\Symfony\FlowBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 

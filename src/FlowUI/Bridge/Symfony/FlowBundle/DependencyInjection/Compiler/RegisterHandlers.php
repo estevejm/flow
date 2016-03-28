@@ -1,6 +1,6 @@
 <?php
 
-namespace FlowUI\FlowBundle\DependencyInjection\Compiler;
+namespace FlowUI\Bridge\Symfony\FlowBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

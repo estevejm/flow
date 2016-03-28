@@ -1,6 +1,6 @@
 <?php
 
-namespace FlowUI\FlowBundle\DependencyInjection;
+namespace FlowUI\Bridge\Symfony\FlowBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;

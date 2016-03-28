@@ -51,8 +51,8 @@ class Validation implements JsonSerializable
     function jsonSerialize()
     {
         return [
-            'status' => $this->status,
-            'violations' => $this->violations
+            'status' => $this->getStatus(),
+            'violations' => $this->getViolations()
         ];
     }
 }

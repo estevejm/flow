@@ -1,9 +1,17 @@
 parameters:
-    serializer.config:
-        serialize_handlers: true
-        serialize_subscribers: true
+    mapper.config:
+        map_handlers: true
+        map_subscribers: true
 
 services:
+    flow.mapper:
+        alias: 'flow.mapper.d3.force_layout_mapper'
+
+    flow.mapper.d3.force_layout_mapper:
+        class: Flow\Mapper\D3\ForceLayoutMapper
+        arguments:
+            - '%mapper.config%'
+
     flow.network:
         class: Flow\Network\Network
         factory: ['@flow.network.factory', 'create']
@@ -25,11 +33,6 @@ services:
     flow.parser:
         public: false
         class: Flow\Parser\Parser
-
-    flow.serializer:
-        class: Flow\Serializer\D3ForceLayoutSerializer
-        arguments:
-            - '%serializer.config%'
 
     flow.validator:
         class: Flow\Validator\Validator

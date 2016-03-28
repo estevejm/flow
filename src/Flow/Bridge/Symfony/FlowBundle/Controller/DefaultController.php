@@ -3,8 +3,6 @@
 namespace Flow\Bridge\Symfony\FlowBundle\Controller;
 
 use Flow\Network\Network;
-use Flow\Validator\Validation;
-use Flow\Network\Node;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -20,12 +18,9 @@ class DefaultController extends Controller
         /** @var Network $network */
         $network = $this->get('flow.network');
 
-        /** @var Validation $validation */
-        $validation = $this->get('flow.validator')->validate($network);
-
         return new JsonResponse([
-            'network' => $this->get('flow.serializer')->serialize($network),
-            'validation' => $validation
+            'network'    => $this->get('flow.mapper')->map($network),
+            'validation' => $this->get('flow.validator')->validate($network),
         ]);
     }
 }

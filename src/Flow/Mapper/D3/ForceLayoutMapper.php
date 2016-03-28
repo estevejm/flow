@@ -1,11 +1,12 @@
 <?php
 
-namespace Flow\Serializer;
+namespace Flow\Mapper\D3;
 
 use Flow\Network\Network;
 use Flow\Network\Node;
+use Flow\Mapper\D3\Node as D3Node;
 
-class D3ForceLayoutSerializer
+class ForceLayoutMapper
 {
     /**
      * @var array
@@ -36,8 +37,8 @@ class D3ForceLayoutSerializer
      * @var array
      */
     private $configMap = [
-        Node::TYPE_HANDLER    => 'serialize_handlers',
-        Node::TYPE_SUBSCRIBER => 'serialize_subscribers',
+        Node::TYPE_HANDLER    => 'map_handlers',
+        Node::TYPE_SUBSCRIBER => 'map_subscribers',
     ];
 
     /**
@@ -53,15 +54,12 @@ class D3ForceLayoutSerializer
      * @param Network $network
      * @return array
      */
-    public function serialize(Network $network)
+    public function map(Network $network)
     {
         $this->init();
         $this->processNodes($network->getNodes());
 
-        return [
-            'nodes' => $this->nodes,
-            'links' => $this->links,
-        ];
+        return new Layout($this->nodes, $this->links);
     }
 
     private function init()
@@ -148,10 +146,7 @@ class D3ForceLayoutSerializer
      */
     private function serializeNode(Node $node)
     {
-        $this->nodes[$this->getIndex($node)] = [
-            "id" => $node->getId(),
-            "type" => $node->getType(),
-        ];
+        $this->nodes[$this->getIndex($node)] = new D3Node($this->getIndex($node), $node->getId(), $node->getType());
     }
 
     /**
@@ -161,10 +156,7 @@ class D3ForceLayoutSerializer
     private function serializeLink(Node $node, Node $parent = null)
     {
         if ($parent) {
-            $this->links[] = [
-                "source" => $this->getIndex($parent),
-                "target" => $this->getIndex($node),
-            ];
+            $this->links[] = new Link($this->nodes[$this->getIndex($parent)], $this->nodes[$this->getIndex($node)]);
         }
     }
 

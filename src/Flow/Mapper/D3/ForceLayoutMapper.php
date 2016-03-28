@@ -88,7 +88,7 @@ class ForceLayoutMapper
     private function processNode(Node $node, Node $parent = null)
     {
         if ($this->hasIndexAssigned($node)) {
-            $this->serializeLink($node, $parent);
+            $this->mapLink($node, $parent);
             return;
         }
 
@@ -106,7 +106,7 @@ class ForceLayoutMapper
 
             case Node::TYPE_HANDLER:
             case Node::TYPE_SUBSCRIBER:
-                if ($this->isSerializable($node)) {
+                if ($this->hasMappingEnabled($node)) {
                     $this->addNode($node, $parent);
                     $this->processNodes($node->getMessages(), $node);
                 } else {
@@ -119,7 +119,7 @@ class ForceLayoutMapper
      * @param Node $node
      * @return boolean
      */
-    private function isSerializable(Node $node)
+    private function hasMappingEnabled(Node $node)
     {
         if (!isset($this->configMap[$node->getType()])) {
             return true;
@@ -137,14 +137,14 @@ class ForceLayoutMapper
     private function addNode(Node $node, Node $parent = null)
     {
         $this->assignIndex($node);
-        $this->serializeNode($node);
-        $this->serializeLink($node, $parent);
+        $this->mapNode($node);
+        $this->mapLink($node, $parent);
     }
 
     /**
      * @param Node $node
      */
-    private function serializeNode(Node $node)
+    private function mapNode(Node $node)
     {
         $this->nodes[$this->getIndex($node)] = new D3Node($this->getIndex($node), $node->getId(), $node->getType());
     }
@@ -153,7 +153,7 @@ class ForceLayoutMapper
      * @param Node $node
      * @param Node $parent
      */
-    private function serializeLink(Node $node, Node $parent = null)
+    private function mapLink(Node $node, Node $parent = null)
     {
         if ($parent) {
             $this->links[] = new Link($this->nodes[$this->getIndex($parent)], $this->nodes[$this->getIndex($node)]);

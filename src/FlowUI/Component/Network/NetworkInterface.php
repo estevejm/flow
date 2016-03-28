@@ -2,7 +2,7 @@
 
 namespace FlowUI\Component\Network;
 
-use FlowUI\Model\Node;
+use FlowUI\Component\Network\Node;
 
 interface NetworkInterface
 {

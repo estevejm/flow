@@ -2,7 +2,7 @@
 
 namespace FlowUI\Component\Validator;
 
-use FlowUI\Model\Node;
+use FlowUI\Component\Network\Node;
 
 class Violation
 {

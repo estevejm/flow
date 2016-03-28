@@ -3,7 +3,7 @@
 namespace FlowUI\Component\Serializer;
 
 use FlowUI\Component\Network\Network;
-use FlowUI\Model\Node;
+use FlowUI\Component\Network\Node;
 
 class D3ForceLayoutSerializer
 {

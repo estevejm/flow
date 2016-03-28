@@ -3,10 +3,10 @@
 namespace FlowUI\Component\Network;
 
 use FlowUI\Component\Parser\Parser;
-use FlowUI\Model\Node\Command;
-use FlowUI\Model\Node\Event;
-use FlowUI\Model\Node\Handler;
-use FlowUI\Model\Node\Subscriber;
+use FlowUI\Component\Network\Node\Command;
+use FlowUI\Component\Network\Node\Event;
+use FlowUI\Component\Network\Node\Handler;
+use FlowUI\Component\Network\Node\Subscriber;
 
 class Factory
 {

@@ -2,10 +2,10 @@
 
 namespace FlowUI\Component\Network;
 
-use FlowUI\Model\Node;
-use FlowUI\Model\Node\Command;
-use FlowUI\Model\Node\Event;
-use FlowUI\Model\Node\MessagePublisher;
+use FlowUI\Component\Network\Node;
+use FlowUI\Component\Network\Node\Command;
+use FlowUI\Component\Network\Node\Event;
+use FlowUI\Component\Network\Node\MessagePublisher;
 
 class Blueprint implements NetworkInterface
 {

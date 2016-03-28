@@ -1,6 +1,6 @@
 <?php
 
-namespace FlowUI\Model;
+namespace FlowUI\Component\Network;
 
 abstract class Node
 {

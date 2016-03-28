@@ -4,7 +4,7 @@ namespace FlowUI\Bridge\Symfony\FlowBundle\Controller;
 
 use FlowUI\Component\Network\Network;
 use FlowUI\Component\Validator\Violation;
-use FlowUI\Model\Node;
+use FlowUI\Component\Network\Node;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 

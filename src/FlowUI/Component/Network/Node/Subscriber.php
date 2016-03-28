@@ -1,8 +1,8 @@
 <?php
 
-namespace FlowUI\Model\Node;
+namespace FlowUI\Component\Network\Node;
 
-use FlowUI\Model\Node;
+use FlowUI\Component\Network\Node;
 
 class Subscriber extends MessagePublisher
 {

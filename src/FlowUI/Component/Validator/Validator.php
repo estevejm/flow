@@ -3,7 +3,7 @@
 namespace FlowUI\Component\Validator;
 
 use FlowUI\Component\Network\Network;
-use FlowUI\Model\Node;
+use FlowUI\Component\Network\Node;
 
 class Validator
 {

@@ -4,6 +4,7 @@ namespace Flow\Bridge\Symfony\FlowBundle;
 
 use Flow\Bridge\Symfony\FlowBundle\DependencyInjection\Compiler\RegisterHandlers;
 use Flow\Bridge\Symfony\FlowBundle\DependencyInjection\Compiler\RegisterSubscribers;
+use Flow\Bridge\Symfony\FlowBundle\DependencyInjection\Compiler\ValidatorConstraintPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -26,5 +27,7 @@ class FlowFlowBundle extends Bundle
                 'subscribes_to'
             )
         );
+
+        $container->addCompilerPass(new ValidatorConstraintPass());
     }
 }

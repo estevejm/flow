@@ -67,15 +67,15 @@ services:
 
     flow.validator:
         class: Flow\Validator\Validator
-        arguments:
-            - ['@flow.validator.constraint.handler_triggers_command', '@flow.validator.constraint.event_without_subscriber']
-
-    # todo: service discovery
 
     flow.validator.constraint.handler_triggers_command:
         class: Flow\Validator\Constraint\HandlerTriggersCommand
         public: false
+        tags:
+            - { name: flow.validator_constraint }
 
     flow.validator.constraint.event_without_subscriber:
         class: Flow\Validator\Constraint\EventWithoutSubscriber
         public: false
+        tags:
+            - { name: flow.validator_constraint }

@@ -2,6 +2,8 @@
 
 namespace Flow\Network;
 
+use Assert\Assertion;
+
 abstract class Node
 {
     const TYPE_COMMAND = 'command';
@@ -31,11 +33,13 @@ abstract class Node
      */
     public function __construct($id, $className, $type)
     {
-        if (!is_null($className) && !class_exists($className)) {
-            throw new \InvalidArgumentException("Invalid class $className.");
+        Assertion::string($id);
+        Assertion::string($type);
+
+        if (!is_null($className)) {
+            Assertion::classExists($className);
         }
 
-        // todo: assert string
         $this->id = $id;
         $this->type = $type;
         $this->className = $className;

@@ -2,6 +2,7 @@
 
 namespace Flow\Mapper\D3;
 
+use Assert\Assertion;
 use JsonSerializable;
 
 class Node implements JsonSerializable
@@ -28,7 +29,11 @@ class Node implements JsonSerializable
      */
     public function __construct($index, $id, $type)
     {
-        // todo: assertions
+        Assertion::integer($index);
+        Assertion::greaterOrEqualThan($index, 0);
+        Assertion::string($id);
+        Assertion::string($type);
+
         $this->index = $index;
         $this->id = $id;
         $this->type = $type;

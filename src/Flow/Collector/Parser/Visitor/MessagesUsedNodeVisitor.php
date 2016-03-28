@@ -39,6 +39,7 @@ class MessagesUsedNodeVisitor extends DataCollectorNodeVisitor
      */
     public function enterNode(Node $node)
     {
+        // todo: refactor this
         if ($node instanceof Node\Stmt\Namespace_) {
             $this->namespace = $node->name->toString();
         } elseif ($node instanceof Node\Stmt\Use_) {

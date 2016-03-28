@@ -2,6 +2,7 @@
 
 namespace Flow\Validator;
 
+use Assert\Assertion;
 use Flow\Network\Network;
 use Flow\Network\Node;
 
@@ -17,7 +18,8 @@ class Validator
      */
     public function __construct(array $constraints)
     {
-        // todo: assert array of constraints
+        Assertion::allIsInstanceOf($constraints, Constraint::class);
+
         $this->constraints = $constraints;
     }
 

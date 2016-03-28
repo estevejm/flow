@@ -2,6 +2,7 @@
 
 namespace Flow\Mapper\D3;
 
+use Assert\Assertion;
 use JsonSerializable;
 
 class Layout implements JsonSerializable
@@ -22,7 +23,9 @@ class Layout implements JsonSerializable
      */
     public function __construct(array $nodes, array $links)
     {
-        // todo: assertions
+        Assertion::allIsInstanceOf($nodes, Node::class);
+        Assertion::allIsInstanceOf($links, Link::class);
+
         $this->nodes = $nodes;
         $this->links = $links;
     }

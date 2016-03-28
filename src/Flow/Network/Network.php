@@ -2,6 +2,7 @@
 
 namespace Flow\Network;
 
+use Assert\Assertion;
 use Flow\Network\Node;
 
 class Network implements NetworkInterface
@@ -16,7 +17,7 @@ class Network implements NetworkInterface
      */
     public function __construct(array $nodes)
     {
-        // todo: assert all node instance
+        Assertion::allIsInstanceOf($nodes, Node::class);
 
         $this->nodes = $nodes;
     }

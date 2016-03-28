@@ -2,12 +2,16 @@
 
 namespace Flow\Mapper\D3;
 
+use Assert\Assertion;
 use Flow\Network\Network;
 use Flow\Network\Node;
 use Flow\Mapper\D3\Node as D3Node;
 
 class ForceLayoutMapper
 {
+    const MAP_HANDLERS = 'map_handlers';
+    const MAP_SUBSCRIBERS = 'map_subscribers';
+
     /**
      * @var array
      */
@@ -37,8 +41,8 @@ class ForceLayoutMapper
      * @var array
      */
     private $configMap = [
-        Node::TYPE_HANDLER    => 'map_handlers',
-        Node::TYPE_SUBSCRIBER => 'map_subscribers',
+        Node::TYPE_HANDLER    => self::MAP_HANDLERS,
+        Node::TYPE_SUBSCRIBER => self::MAP_SUBSCRIBERS,
     ];
 
     /**
@@ -46,7 +50,9 @@ class ForceLayoutMapper
      */
     public function __construct($config)
     {
-        // todo: assert array keys
+        Assertion::keyExists($config, self::MAP_HANDLERS);
+        Assertion::keyExists($config, self::MAP_SUBSCRIBERS);
+
         $this->config = $config;
     }
 

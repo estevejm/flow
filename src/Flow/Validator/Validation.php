@@ -2,6 +2,7 @@
 
 namespace Flow\Validator;
 
+use Assert\Assertion;
 use JsonSerializable;
 
 class Validation implements JsonSerializable
@@ -24,7 +25,8 @@ class Validation implements JsonSerializable
      */
     public function __construct(array $violations)
     {
-        // todo: assert all instance of violation
+        Assertion::allIsInstanceOf($violations, Violation::class);
+
         $this->violations = $violations;
         $this->status = count($violations) === 0 ? self::STATUS_VALID : self::STATUS_INVALID;
     }

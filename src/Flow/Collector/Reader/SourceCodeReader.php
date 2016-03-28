@@ -2,6 +2,7 @@
 
 namespace Flow\Collector\Reader;
 
+use Assert\Assertion;
 use ReflectionClass;
 
 class SourceCodeReader
@@ -12,7 +13,8 @@ class SourceCodeReader
      */
     public function read($className)
     {
-        // todo: check class name ??
+        Assertion::classExists($className);
+
         $class = new ReflectionClass($className);
         $fileName = $class->getFileName();
 

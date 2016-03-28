@@ -24,7 +24,10 @@ class MessagesUsedNodeVisitor extends DataCollectorNodeVisitor
      */
     private $messages;
 
-    public function __construct()
+    /**
+     * {@inheritdoc}
+     */
+    public function beforeTraverse(array $nodes)
     {
         $this->namespace = '';
         $this->uses = [];
@@ -34,7 +37,8 @@ class MessagesUsedNodeVisitor extends DataCollectorNodeVisitor
     /**
      * {@inheritdoc}
      */
-    public function enterNode(Node $node) {
+    public function enterNode(Node $node)
+    {
         if ($node instanceof Node\Stmt\Namespace_) {
             $this->namespace = $node->name->toString();
         } elseif ($node instanceof Node\Stmt\Use_) {
@@ -78,7 +82,8 @@ class MessagesUsedNodeVisitor extends DataCollectorNodeVisitor
      * @param $className
      * @return mixed
      */
-    private function getMessageIdOfClass($className){
+    private function getMessageIdOfClass($className)
+    {
         if (!class_exists($className)) {
             throw new \InvalidArgumentException("Invalid class $className.");
         }

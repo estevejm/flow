@@ -1,5 +1,5 @@
 flow_ui_flow:
-    resource: "@FlowUIFlowBundle/Resources/config/routing.yml"
+    resource: "@FlowFlowBundle/Resources/config/routing.yml"
     prefix:   /flow/
 
 sample:

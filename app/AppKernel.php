@@ -18,7 +18,7 @@ class AppKernel extends Kernel
             new SimpleBus\SymfonyBridge\SimpleBusCommandBusBundle(),
             new SimpleBus\SymfonyBridge\SimpleBusEventBusBundle(),
             new SampleBundle\SampleBundle(),
-            new FlowUI\Bridge\Symfony\FlowBundle\FlowUIFlowBundle(),
+            new Flow\Bridge\Symfony\FlowBundle\FlowFlowBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

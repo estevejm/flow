@@ -1,0 +1,45 @@
+parameters:
+    serializer.config:
+        serialize_handlers: true
+        serialize_subscribers: true
+
+services:
+    flow.network:
+        class: Flow\Network\Network
+        factory: ['@flow.network.factory', 'create']
+        arguments:
+            - '@flow.network.map'
+
+    flow.network.factory:
+        class: Flow\Network\Factory
+        arguments:
+            - '@flow.parser'
+
+    flow.network.map:
+        class: Flow\Network\Map
+        public: false
+        arguments:
+            - [] # registerHandlers compiler pass
+            - [] # registerSubscribers compiler pass
+
+    flow.parser:
+        public: false
+        class: Flow\Parser\Parser
+
+    flow.serializer:
+        class: Flow\Serializer\D3ForceLayoutSerializer
+        arguments:
+            - '%serializer.config%'
+
+    flow.validator:
+        class: Flow\Validator\Validator
+        arguments:
+            - ['@flow.validator.constraint.handler_triggers_command', '@flow.validator.constraint.event_without_subscriber']
+    # todo service discovery
+    flow.validator.constraint.handler_triggers_command:
+        class: Flow\Validator\Constraint\HandlerTriggersCommand
+        public: false
+
+    flow.validator.constraint.event_without_subscriber:
+        class: Flow\Validator\Constraint\EventWithoutSubscriber
+        public: false

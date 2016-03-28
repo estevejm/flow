@@ -1,0 +1,7 @@
+flow_homepage:
+    path:     /
+    defaults: { _controller: FlowFlowBundle:Default:index }
+
+flow_get_data:
+    path:     /data
+    defaults: { _controller: FlowFlowBundle:Default:getData }

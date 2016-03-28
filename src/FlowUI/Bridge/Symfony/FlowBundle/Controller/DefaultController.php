@@ -25,6 +25,7 @@ class DefaultController extends Controller
 
         $errors = [];
 
+        // todo: create validation serializer
         foreach ($violations as $violation) {
             $errors[] = [
                 'nodeId' => $violation->getNode()->getId(),

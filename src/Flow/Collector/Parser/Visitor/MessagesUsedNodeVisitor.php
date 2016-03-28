@@ -1,8 +1,8 @@
 <?php
 
-namespace Flow\Parser\Visitor;
+namespace Flow\Collector\Parser\Visitor;
 
-use Flow\Parser\DataCollectorNodeVisitor;
+use Flow\Collector\Parser\DataCollectorNodeVisitor;
 use PhpParser\Node;
 use ReflectionClass;
 use SimpleBus\Message\Name\NamedMessage;

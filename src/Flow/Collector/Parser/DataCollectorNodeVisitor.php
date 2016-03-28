@@ -1,6 +1,6 @@
 <?php
 
-namespace Flow\Parser;
+namespace Flow\Collector\Parser;
 
 use PhpParser\NodeVisitorAbstract;
 

@@ -2,7 +2,7 @@
 
 namespace Flow\Network;
 
-use Flow\Parser\Parser;
+use Flow\Collector\Collector;
 use Flow\Network\Node\Command;
 use Flow\Network\Node\Event;
 use Flow\Network\Node\Handler;
@@ -11,16 +11,16 @@ use Flow\Network\Node\Subscriber;
 class Factory
 {
     /**
-     * @var $parser
+     * @var Collector $messagesUsedCollector
      */
-    private $parser;
+    private $messagesUsedCollector;
 
     /**
-     * @param Parser $parser
+     * @param Collector $messagesUsedCollector
      */
-    public function __construct(Parser $parser)
+    public function __construct(Collector $messagesUsedCollector)
     {
-        $this->parser = $parser;
+        $this->messagesUsedCollector = $messagesUsedCollector;
     }
 
     /**
@@ -77,24 +77,16 @@ class Factory
     {
         $publisherMessagesMap = [];
 
-        foreach ($map->getCommandHandlerMap() as $commandId => $handlerData) {
-            $publisherMessagesMap[$handlerData['id']] = $this->getIdsOfMessagesInClass($handlerData['class']);
+        foreach ($map->getCommandHandlerMap() as $commandId => $handler) {
+            $publisherMessagesMap[$handler['id']] = $this->messagesUsedCollector->collect($handler['class']);
         }
 
-        foreach ($map->getEventSubscribersMap() as $eventId => $eventSubscribers) {
-            foreach ($eventSubscribers as $subscriberData) {
-                $publisherMessagesMap[$subscriberData['id']] = $this->getIdsOfMessagesInClass($subscriberData['class']);
+        foreach ($map->getEventSubscribersMap() as $eventId => $subscriberCollection) {
+            foreach ($subscriberCollection as $subscriber) {
+                $publisherMessagesMap[$subscriber['id']] = $this->messagesUsedCollector->collect($subscriber['class']);
             }
         }
 
         return $publisherMessagesMap;
-    }
-
-    /**
-     * @param string $className
-     * @return array
-     */
-    private function getIdsOfMessagesInClass($className) {
-        return $this->parser->parse($className);
     }
 }

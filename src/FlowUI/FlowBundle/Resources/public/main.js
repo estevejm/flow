@@ -128,6 +128,8 @@ d3.json(url.getData, function(error, data) {
 
     if (data.validator.status == 'invalid') {
         displayValidatorErrors(data.validator.errors);
+    } else {
+        displayValidationSuccess();
     }
 });
 
@@ -171,6 +173,9 @@ function displayValidatorErrors(items){
         'warning': 'exclamation-sign',
         'notice': 'info-sign'
     };
+
+    $('.validator.error .counter').text(items.length);
+
     items.forEach(function(item) {
         $('#validation-list').append(
             '<li class="validation-item">' +
@@ -178,6 +183,13 @@ function displayValidatorErrors(items){
             item.message + '<span data-node-id="'+ item.nodeId + '" class="find-node glyphicon glyphicon-eye-open" aria-hidden="true"></span></li>'
         );
     });
+
+    $('.validator.error').show();
+}
+
+function displayValidationSuccess()
+{
+    $('.validator.success').show();
 }
 
 $(document).on('submit', '.search-form', function(e) {

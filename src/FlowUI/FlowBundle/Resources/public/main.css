@@ -55,6 +55,27 @@ body {
     width: 700px;
 }
 
+.nav>li.validator {
+    display: none;
+}
+
+.validator.success a {
+    cursor: default;
+}
+
+.validator.success a:focus,
+.validator.success a:hover, {
+    color: #777 !important;
+}
+
+.validator.success .counter {
+    background-color: #5cb85c;
+}
+
+.validator.error .counter {
+    background-color: #f0ad4e;
+}
+
 #validation-list .glyphicon-ban-circle {
     color: #d9534f;
 }

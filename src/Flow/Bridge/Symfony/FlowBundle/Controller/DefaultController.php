@@ -5,15 +5,22 @@ namespace Flow\Bridge\Symfony\FlowBundle\Controller;
 use Flow\Network\Network;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
+    /**
+     * @return Response
+     */
     public function indexAction()
     {
         return $this->render('FlowFlowBundle:Default:index.html.twig');
     }
 
-    public function getDataAction()
+    /**
+     * @return JsonResponse
+     */
+    public function dataAction()
     {
         /** @var Network $network */
         $network = $this->get('flow.network');

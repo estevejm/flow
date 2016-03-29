@@ -2,17 +2,21 @@
 
 namespace Flow\Bridge\Symfony\FlowBundle\DependencyInjection\Compiler;
 
+use Flow\Bridge\Symfony\FlowBundle\DependencyInjection\Compiler\Util\TaggedServicesCollector;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 
 class SetEventSubscriberMapPass implements CompilerPassInterface
 {
+    use TaggedServicesCollector;
+
     private $tag;
     private $keyAttribute;
 
     /**
-     * @param string  $tag                  The tag name of message subscriber services
-     * @param string  $keyAttribute         The name of the tag attribute that contains the name of the subscriber
+     * @param string  $tag
+     * @param string  $keyAttribute
      */
     public function __construct($tag, $keyAttribute)
     {
@@ -25,30 +29,21 @@ class SetEventSubscriberMapPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $handlers = array();
+        $subscribers = [];
 
-        foreach ($container->findTaggedServiceIds($this->tag) as $serviceId => $tags) {
-            foreach ($tags as $tagAttributes) {
-                if (!isset($tagAttributes[$this->keyAttribute])) {
-                    throw new \InvalidArgumentException(
-                        sprintf(
-                            'The attribute "%s" of tag "%s" of service "%s" is mandatory',
-                            $this->keyAttribute,
-                            $this->tag,
-                            $serviceId
-                        )
-                    );
-                }
-
-                $key = $tagAttributes[$this->keyAttribute];
-
-                $handlers[ltrim($key, '\\')][] = [
+        $this->collect(
+            $container,
+            $this->tag,
+            $this->keyAttribute,
+            function ($key, $serviceId, Definition $definition) use (&$subscribers)
+            {
+                $subscribers[$key][] = [
                     'id' => $serviceId,
-                    'class' => $container->findDefinition($serviceId)->getClass()
+                    'class' => $definition->getClass()
                 ];
             }
-        }
+        );
 
-        $container->setParameter('flow.map.events_subscribers', $handlers);
+        $container->setParameter('flow.map.events_subscribers', $subscribers);
     }
 }

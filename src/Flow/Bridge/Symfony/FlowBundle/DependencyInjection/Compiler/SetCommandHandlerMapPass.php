@@ -2,11 +2,15 @@
 
 namespace Flow\Bridge\Symfony\FlowBundle\DependencyInjection\Compiler;
 
+use Flow\Bridge\Symfony\FlowBundle\DependencyInjection\Compiler\Util\TaggedServicesCollector;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 
 class SetCommandHandlerMapPass implements CompilerPassInterface
 {
+    use TaggedServicesCollector;
+
     private $tag;
     private $keyAttribute;
 
@@ -25,29 +29,20 @@ class SetCommandHandlerMapPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $handlers = array();
+        $handlers = [];
 
-        foreach ($container->findTaggedServiceIds($this->tag) as $serviceId => $tags) {
-            foreach ($tags as $tagAttributes) {
-                if (!isset($tagAttributes[$this->keyAttribute])) {
-                    throw new \InvalidArgumentException(
-                        sprintf(
-                            'The attribute "%s" of tag "%s" of service "%s" is mandatory',
-                            $this->keyAttribute,
-                            $this->tag,
-                            $serviceId
-                        )
-                    );
-                }
-
-                $key = $tagAttributes[$this->keyAttribute];
-
-                $handlers[ltrim($key, '\\')] = [
+        $this->collect(
+            $container,
+            $this->tag,
+            $this->keyAttribute,
+            function ($key, $serviceId, Definition $definition) use (&$handlers)
+            {
+                $handlers[$key] = [
                     'id' => $serviceId,
-                    'class' => $container->findDefinition($serviceId)->getClass()
+                    'class' => $definition->getClass()
                 ];
             }
-        }
+        );
 
         $container->setParameter('flow.map.command_handler', $handlers);
     }

@@ -1,26 +1,26 @@
-{% extends 'FlowFlowBundle:Layout:base.html.twig' %}
+{% extends 'EJMFlowBundle:Layout:base.html.twig' %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('bundles/flowflow/lib/bootstrap/3.3.6/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('bundles/flowflow/lib/jquery/ui/1.11.0/themes/smoothness/jquery-ui.css') }}">
-    <link rel="stylesheet" href="{{ asset('bundles/flowflow/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/ejmflow/lib/bootstrap/3.3.6/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/ejmflow/lib/jquery/ui/1.11.0/themes/smoothness/jquery-ui.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/ejmflow/main.css') }}">
 {% endblock %}
 
 {% block body %}
-    {% include 'FlowFlowBundle:Partial:navbar.html.twig' %}
+    {% include 'EJMFlowBundle:Partial:navbar.html.twig' %}
 {% endblock %}
 
 {% block javascripts %}
     <script>
         var url = {};
         // todo: generate url in controller
-        url.getData = '{{ url('flow_data') }}';
+        url.getData = '{{ url('ejm_flow_data') }}';
     </script>
 
-    <script src="{{ asset('bundles/flowflow/lib/jquery/jquery-2.2.2.min.js') }}"></script>
-    <script src="{{ asset('bundles/flowflow/lib/bootstrap/3.3.6/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('bundles/flowflow/lib/jquery/ui/1.11.0/jquery-ui.min.js') }}"></script>
-    <script src="{{ asset('bundles/flowflow/lib/d3.v3.min.js') }}"></script>
-    <script src="{{ asset('bundles/flowflow/main.js') }}"></script>
+    <script src="{{ asset('bundles/ejmflow/lib/jquery/jquery-2.2.2.min.js') }}"></script>
+    <script src="{{ asset('bundles/ejmflow/lib/bootstrap/3.3.6/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('bundles/ejmflow/lib/jquery/ui/1.11.0/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('bundles/ejmflow/lib/d3.v3.min.js') }}"></script>
+    <script src="{{ asset('bundles/ejmflow/main.js') }}"></script>
 
 {% endblock %}

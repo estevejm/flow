@@ -14,7 +14,7 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('FlowFlowBundle:Default:index.html.twig');
+        return $this->render('EJMFlowBundle:Default:index.html.twig');
     }
 
     /**

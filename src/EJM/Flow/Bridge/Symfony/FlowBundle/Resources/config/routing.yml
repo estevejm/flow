@@ -1,7 +1,7 @@
-flow_index:
+ejm_flow_index:
     path:     /
-    defaults: { _controller: FlowFlowBundle:Default:index }
+    defaults: { _controller: EJMFlowBundle:Default:index }
 
-flow_data:
+ejm_flow_data:
     path:     /data
-    defaults: { _controller: FlowFlowBundle:Default:data }
+    defaults: { _controller: EJMFlowBundle:Default:data }

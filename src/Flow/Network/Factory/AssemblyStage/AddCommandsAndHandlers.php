@@ -1,13 +1,13 @@
 <?php
 
-namespace Flow\Network\Factory\Step;
+namespace Flow\Network\Factory\AssemblyStage;
 
 use Flow\Network\Blueprint;
-use Flow\Network\Factory\Step;
+use Flow\Network\Factory\AssemblyStage;
 use Flow\Network\Node\Command;
 use Flow\Network\Node\Handler;
 
-class AddCommandsAndHandlers implements Step
+class AddCommandsAndHandlers implements AssemblyStage
 {
     /**
      * @var array

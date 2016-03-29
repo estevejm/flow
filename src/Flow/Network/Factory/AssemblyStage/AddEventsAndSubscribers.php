@@ -1,13 +1,13 @@
 <?php
 
-namespace Flow\Network\Factory\Step;
+namespace Flow\Network\Factory\AssemblyStage;
 
 use Flow\Network\Blueprint;
-use Flow\Network\Factory\Step;
+use Flow\Network\Factory\AssemblyStage;
 use Flow\Network\Node\Event;
 use Flow\Network\Node\Subscriber;
 
-class AddEventsAndSubscribers implements Step
+class AddEventsAndSubscribers implements AssemblyStage
 {
     /**
      * @var array

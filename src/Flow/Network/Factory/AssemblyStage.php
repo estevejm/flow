@@ -4,10 +4,7 @@ namespace Flow\Network\Factory;
 
 use Flow\Network\Blueprint;
 
-/**
- * Todo: rename to AssemblyStep
- */
-interface Step
+interface AssemblyStage
 {
     /**
      * @param Blueprint $blueprint

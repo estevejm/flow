@@ -1,13 +1,13 @@
 <?php
 
-namespace Flow\Network\Factory\Step;
+namespace Flow\Network\Factory\AssemblyStage;
 
 use Flow\Collector\Collector;
 use Flow\Network\Blueprint;
-use Flow\Network\Factory\Step;
+use Flow\Network\Factory\AssemblyStage;
 use Flow\Network\Node\Event;
 
-class AddPublishedMessages implements Step
+class AddPublishedMessages implements AssemblyStage
 {
     /**
      * @var Collector $messagesUsedCollector

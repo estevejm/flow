@@ -2,21 +2,21 @@
 
 namespace Flow\Network;
 
-use Flow\Network\Factory\Step;
+use Flow\Network\Factory\AssemblyStage;
 
 class Factory
 {
     /**
-     * @var Step[]
+     * @var AssemblyStage[]
      */
-    private $steps = [];
+    private $stages = [];
 
     /**
-     * @param Step $step
+     * @param AssemblyStage $stage
      */
-    public function addStep(Step $step)
+    public function addAssemblyStage(AssemblyStage $stage)
     {
-        $this->steps[] = $step;
+        $this->stages[] = $stage;
     }
 
     /**
@@ -26,8 +26,8 @@ class Factory
     {
         $blueprint = new Blueprint();
 
-        foreach ($this->steps as $step) {
-            $step->assemble($blueprint);
+        foreach ($this->stages as $stage) {
+            $stage->assemble($blueprint);
         }
 
         return new Network($blueprint->getNodes());

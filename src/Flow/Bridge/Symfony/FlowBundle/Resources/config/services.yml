@@ -20,24 +20,24 @@ services:
         class: Flow\Network\Factory
         public: false
         calls:
-            - [addStep, ['@flow.network.factory.step.add_commands_and_handlers']]
-            - [addStep, ['@flow.network.factory.step.add_events_and_subscribers']]
-            - [addStep, ['@flow.network.factory.step.add_published_messages']]
+            - [addAssemblyStage, ['@flow.network.factory.stage.add_commands_and_handlers']]
+            - [addAssemblyStage, ['@flow.network.factory.stage.add_events_and_subscribers']]
+            - [addAssemblyStage, ['@flow.network.factory.stage.add_published_messages']]
 
-    flow.network.factory.step.add_commands_and_handlers:
-        class: Flow\Network\Factory\Step\AddCommandsAndHandlers
+    flow.network.factory.stage.add_commands_and_handlers:
+        class: Flow\Network\Factory\AssemblyStage\AddCommandsAndHandlers
         public: false
         arguments:
             - '%flow.map.command_handler%' # registerHandlers compiler pass
 
-    flow.network.factory.step.add_events_and_subscribers:
-        class: Flow\Network\Factory\Step\AddEventsAndSubscribers
+    flow.network.factory.stage.add_events_and_subscribers:
+        class: Flow\Network\Factory\AssemblyStage\AddEventsAndSubscribers
         public: false
         arguments:
             - '%flow.map.events_subscribers%' # registerSubscribers compiler pass
 
-    flow.network.factory.step.add_published_messages:
-        class: Flow\Network\Factory\Step\AddPublishedMessages
+    flow.network.factory.stage.add_published_messages:
+        class: Flow\Network\Factory\AssemblyStage\AddPublishedMessages
         public: false
         arguments:
             - '@flow.collector.messages_used'

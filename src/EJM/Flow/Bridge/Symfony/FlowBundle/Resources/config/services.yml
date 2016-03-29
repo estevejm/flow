@@ -1,0 +1,95 @@
+parameters:
+    mapper.config:
+        map_handlers: true
+        map_subscribers: true
+
+services:
+    flow.mapper:
+        alias: 'flow.mapper.d3.force_layout_mapper'
+
+    flow.mapper.d3.force_layout_mapper:
+        class: EJM\Flow\Mapper\D3\ForceLayoutMapper
+        arguments:
+            - '%mapper.config%'
+
+    flow.network:
+        class: EJM\Flow\Network\Network
+        factory: ['@flow.network.factory', 'create']
+
+    flow.network.factory:
+        class: EJM\Flow\Network\Factory
+        public: false
+
+    flow.network.factory.stage.add_commands_and_handlers:
+        class: EJM\Flow\Network\Factory\AssemblyStage\AddCommandsAndHandlers
+        public: false
+        arguments:
+            - '%flow.map.command_handler%' # defined in registerHandlers compiler pass
+        tags:
+            - { name: flow.assembly_stage }
+
+    flow.network.factory.stage.add_events_and_subscribers:
+        class: EJM\Flow\Network\Factory\AssemblyStage\AddEventsAndSubscribers
+        public: false
+        arguments:
+            - '%flow.map.events_subscribers%' # defined in registerSubscribers compiler pass
+        tags:
+            - { name: flow.assembly_stage }
+
+    flow.network.factory.stage.add_published_messages:
+        class: EJM\Flow\Network\Factory\AssemblyStage\AddPublishedMessages
+        public: false
+        arguments:
+            - '@flow.collector.messages_used'
+        tags:
+            - { name: flow.assembly_stage }
+
+    flow.collector:
+        class: EJM\Flow\Collector\Collector
+        abstract: true
+        arguments:
+            - '@flow.vendor.php_parser.factory'
+            - '@flow.vendor.php_parser.node_traverser'
+            - '@flow.collector.source_code_reader'
+
+    flow.collector.messages_used:
+        parent: flow.collector
+        calls:
+            - [setVisitor, ['@flow.collector.visitor.messages_used']]
+
+    flow.collector.visitor.messages_used:
+        class: EJM\Flow\Collector\Parser\Visitor\MessagesUsedNodeVisitor
+        public: false
+
+    flow.collector.source_code_reader:
+        class: EJM\Flow\Collector\Reader\SourceCodeReader
+        public: false
+        arguments:
+            - '@flow.collector.file_reader'
+
+    flow.collector.file_reader:
+        class: EJM\Flow\Collector\Reader\FileReader
+        public: false
+
+    flow.vendor.php_parser.factory:
+        class: PhpParser\ParserFactory
+        public: false
+
+    flow.vendor.php_parser.node_traverser:
+        class: PhpParser\NodeTraverser
+        public: false
+
+    flow.validator:
+        class: EJM\Flow\Validator\Validator
+
+    flow.validator.constraint.handler_triggers_command:
+        class: EJM\Flow\Validator\Constraint\HandlerTriggersCommand
+        public: false
+        tags:
+            - { name: flow.validator_constraint }
+
+    flow.validator.constraint.event_without_subscriber:
+        class: EJM\Flow\Validator\Constraint\EventWithoutSubscriber
+        public: false
+        tags:
+            - { name: flow.validator_constraint }

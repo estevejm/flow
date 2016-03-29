@@ -25,6 +25,14 @@ class Blueprint implements NetworkInterface
     private $messagePublishers;
 
     /**
+     * {@inheritdoc}
+     */
+    public function getNodes()
+    {
+        return array_merge($this->commands, $this->events, $this->messagePublishers);
+    }
+
+    /**
      * @param Command $command
      */
     public function addCommand(Command $command)
@@ -33,11 +41,11 @@ class Blueprint implements NetworkInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return Command[]
      */
-    public function getNodes()
+    public function getCommands()
     {
-        return array_merge($this->commands, $this->events, $this->messagePublishers);
+        return $this->commands;
     }
 
     /**
@@ -73,6 +81,14 @@ class Blueprint implements NetworkInterface
     }
 
     /**
+     * @return Event[]
+     */
+    public function getEvents()
+    {
+        return $this->events;
+    }
+
+    /**
      * @param string $id
      * @throws \Exception
      * @return Event
@@ -102,6 +118,14 @@ class Blueprint implements NetworkInterface
     public function addMessagePublisher(MessagePublisher $messagePublisher)
     {
         $this->messagePublishers[$messagePublisher->getId()] = $messagePublisher;
+    }
+
+    /**
+     * @return MessagePublisher[]
+     */
+    public function getMessagePublishers()
+    {
+        return $this->messagePublishers;
     }
 
     /**

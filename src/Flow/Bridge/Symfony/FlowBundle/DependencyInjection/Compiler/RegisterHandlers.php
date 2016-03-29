@@ -31,12 +31,6 @@ class RegisterHandlers implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->has($this->serviceId)) {
-            return;
-        }
-
-        $definition = $container->findDefinition($this->serviceId);
-
         $handlers = array();
 
         foreach ($container->findTaggedServiceIds($this->tag) as $serviceId => $tags) {
@@ -61,6 +55,6 @@ class RegisterHandlers implements CompilerPassInterface
             }
         }
 
-        $definition->replaceArgument(0, $handlers);
+        $container->setParameter('flow.map.command_handler', $handlers);
     }
 }

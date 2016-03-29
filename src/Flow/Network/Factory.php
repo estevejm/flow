@@ -2,91 +2,34 @@
 
 namespace Flow\Network;
 
-use Flow\Collector\Collector;
-use Flow\Network\Node\Command;
-use Flow\Network\Node\Event;
-use Flow\Network\Node\Handler;
-use Flow\Network\Node\Subscriber;
+use Flow\Network\Factory\Step;
 
 class Factory
 {
     /**
-     * @var Collector $messagesUsedCollector
+     * @var Step[]
      */
-    private $messagesUsedCollector;
+    private $steps = [];
 
     /**
-     * @param Collector $messagesUsedCollector
+     * @param Step $step
      */
-    public function __construct(Collector $messagesUsedCollector)
+    public function addStep(Step $step)
     {
-        $this->messagesUsedCollector = $messagesUsedCollector;
+        $this->steps[] = $step;
     }
 
     /**
-     * @param Map $map
      * @return Network
      */
-    public function create(Map $map)
+    public function create()
     {
         $blueprint = new Blueprint();
 
-        foreach ($map->getCommandHandlerMap() as $commandId => $handlerData) {
-            $blueprint->addCommand(new Command($commandId));
-            $blueprint->addMessagePublisher(
-                new Handler($handlerData['id'], $handlerData['class'], $blueprint->getCommand($commandId))
-            );
+        foreach ($this->steps as $step) {
+            $step->assemble($blueprint);
         }
-
-        foreach ($map->getEventSubscribersMap() as $eventId => $eventSubscribers) {
-            $blueprint->addEvent(new Event($eventId));
-            foreach ($eventSubscribers as $subscriberData) {
-                $blueprint->addMessagePublisher(
-                    new Subscriber($subscriberData['id'], $subscriberData['class'], $blueprint->getEvent($eventId))
-                );
-            }
-        }
-
-        foreach($this->getPublisherMessagesMap($map) as $messagePublisherId => $messageIds) {
-            $messagePublisher = $blueprint->getMessagePublisher($messagePublisherId);
-            foreach ($messageIds as $messageId) {
-                if ($blueprint->hasCommand($messageId)) {
-                    $messagePublisher->addMessage($blueprint->getCommand($messageId));
-                    continue;
-                }
-
-                if (!$blueprint->hasEvent($messageId)) {
-                    $blueprint->addEvent(new Event($messageId));
-                }
-
-                $messagePublisher->addMessage($blueprint->getEvent($messageId));
-            }
-
-        }
-
-        // todo: create middlewares to allow blueprint extension
 
         return new Network($blueprint->getNodes());
-    }
-
-    /**
-     * @param Map $map
-     * @return array
-     */
-    private function getPublisherMessagesMap(Map $map)
-    {
-        $publisherMessagesMap = [];
-
-        foreach ($map->getCommandHandlerMap() as $commandId => $handler) {
-            $publisherMessagesMap[$handler['id']] = $this->messagesUsedCollector->collect($handler['class']);
-        }
-
-        foreach ($map->getEventSubscribersMap() as $eventId => $subscriberCollection) {
-            foreach ($subscriberCollection as $subscriber) {
-                $publisherMessagesMap[$subscriber['id']] = $this->messagesUsedCollector->collect($subscriber['class']);
-            }
-        }
-
-        return $publisherMessagesMap;
     }
 }

@@ -5,7 +5,7 @@ namespace Flow\Bridge\Symfony\FlowBundle\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class RegisterHandlers implements CompilerPassInterface
+class SetCommandHandlerMapPass implements CompilerPassInterface
 {
     private $tag;
     private $keyAttribute;

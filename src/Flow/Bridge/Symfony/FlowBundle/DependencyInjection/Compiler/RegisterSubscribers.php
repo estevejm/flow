@@ -7,18 +7,15 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class RegisterSubscribers implements CompilerPassInterface
 {
-    private $serviceId;
     private $tag;
     private $keyAttribute;
 
     /**
-     * @param string  $serviceId            The service id of the MessageSubscriberCollection
      * @param string  $tag                  The tag name of message subscriber services
      * @param string  $keyAttribute         The name of the tag attribute that contains the name of the subscriber
      */
-    public function __construct($serviceId, $tag, $keyAttribute)
+    public function __construct($tag, $keyAttribute)
     {
-        $this->serviceId = $serviceId;
         $this->tag = $tag;
         $this->keyAttribute = $keyAttribute;
     }

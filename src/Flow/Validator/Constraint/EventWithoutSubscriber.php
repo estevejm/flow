@@ -12,7 +12,7 @@ class EventWithoutSubscriber implements Constraint
     /**
      * {@inheritdoc
      */
-    public function supportNode(Node $node)
+    public function supportsNode(Node $node)
     {
         return $node instanceof Event;
     }

@@ -30,7 +30,7 @@ class Validator
 
         foreach ($network->getNodes() as $node) {
             foreach ($this->constraints as $constraint) {
-                if ($constraint->supportNode($node)) {
+                if ($constraint->supportsNode($node)) {
                     $violations = array_merge($violations, $constraint->validate($node));
                 }
             }

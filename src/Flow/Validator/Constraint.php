@@ -10,7 +10,7 @@ interface Constraint
      * @param Node $node
      * @return boolean
      */
-    public function supportNode(Node $node);
+    public function supportsNode(Node $node);
 
     /**
      * @param Node $node

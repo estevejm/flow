@@ -24,9 +24,6 @@ class RegisterHandlers implements CompilerPassInterface
     }
 
     /**
-     * Search for message handler services and provide them as a constructor argument to the message handler map
-     * service.
-     *
      * @param ContainerBuilder $container
      */
     public function process(ContainerBuilder $container)

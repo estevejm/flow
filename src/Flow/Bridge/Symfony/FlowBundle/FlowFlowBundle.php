@@ -2,6 +2,7 @@
 
 namespace Flow\Bridge\Symfony\FlowBundle;
 
+use Flow\Bridge\Symfony\FlowBundle\DependencyInjection\Compiler\AssemblyStagePass;
 use Flow\Bridge\Symfony\FlowBundle\DependencyInjection\Compiler\RegisterHandlers;
 use Flow\Bridge\Symfony\FlowBundle\DependencyInjection\Compiler\RegisterSubscribers;
 use Flow\Bridge\Symfony\FlowBundle\DependencyInjection\Compiler\ValidatorConstraintPass;
@@ -29,5 +30,6 @@ class FlowFlowBundle extends Bundle
         );
 
         $container->addCompilerPass(new ValidatorConstraintPass());
+        $container->addCompilerPass(new AssemblyStagePass());
     }
 }

@@ -24,9 +24,6 @@ class RegisterSubscribers implements CompilerPassInterface
     }
 
     /**
-     * Search for message subscriber services and provide them as a constructor argument to the message subscriber
-     * collection service.
-     *
      * @param ContainerBuilder $container
      */
     public function process(ContainerBuilder $container)

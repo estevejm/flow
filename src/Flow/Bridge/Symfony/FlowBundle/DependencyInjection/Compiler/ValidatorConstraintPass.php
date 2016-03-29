@@ -10,9 +10,6 @@ class ValidatorConstraintPass implements CompilerPassInterface
     const VALIDATOR_SERVICE_ID = 'flow.validator';
 
     /**
-     * Search for message handler services and provide them as a constructor argument to the message handler map
-     * service.
-     *
      * @param ContainerBuilder $container
      */
     public function process(ContainerBuilder $container)

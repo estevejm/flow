@@ -19,28 +19,30 @@ services:
     flow.network.factory:
         class: Flow\Network\Factory
         public: false
-        calls:
-            - [addAssemblyStage, ['@flow.network.factory.stage.add_commands_and_handlers']]
-            - [addAssemblyStage, ['@flow.network.factory.stage.add_events_and_subscribers']]
-            - [addAssemblyStage, ['@flow.network.factory.stage.add_published_messages']]
 
     flow.network.factory.stage.add_commands_and_handlers:
         class: Flow\Network\Factory\AssemblyStage\AddCommandsAndHandlers
         public: false
         arguments:
-            - '%flow.map.command_handler%' # registerHandlers compiler pass
+            - '%flow.map.command_handler%' # defined in registerHandlers compiler pass
+        tags:
+            - { name: flow.assembly_stage }
 
     flow.network.factory.stage.add_events_and_subscribers:
         class: Flow\Network\Factory\AssemblyStage\AddEventsAndSubscribers
         public: false
         arguments:
-            - '%flow.map.events_subscribers%' # registerSubscribers compiler pass
+            - '%flow.map.events_subscribers%' # defined in registerSubscribers compiler pass
+        tags:
+            - { name: flow.assembly_stage }
 
     flow.network.factory.stage.add_published_messages:
         class: Flow\Network\Factory\AssemblyStage\AddPublishedMessages
         public: false
         arguments:
             - '@flow.collector.messages_used'
+        tags:
+            - { name: flow.assembly_stage }
 
     flow.collector:
         class: Flow\Collector\Collector

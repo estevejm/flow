@@ -7,7 +7,6 @@ use EJM\Flow\Collector\Parser\DataCollectorNodeVisitor;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
 use PhpParser\Parser;
-use PhpParser\ParserFactory;
 
 class Collector
 {
@@ -32,13 +31,13 @@ class Collector
     private $visitor;
 
     /**
-     * @param ParserFactory $factory
+     * @param Parser $parser
      * @param NodeTraverser $traverser
      * @param SourceCodeReader $sorceCodeReader
      */
-    public function __construct(ParserFactory $factory, NodeTraverser $traverser, SourceCodeReader $sorceCodeReader)
+    public function __construct(Parser $parser, NodeTraverser $traverser, SourceCodeReader $sorceCodeReader)
     {
-        $this->parser = $factory->create(ParserFactory::PREFER_PHP7);
+        $this->parser = $parser;
         $this->traverser = $traverser;
         $this->sorceCodeReader = $sorceCodeReader;
     }

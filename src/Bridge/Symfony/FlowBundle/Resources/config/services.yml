@@ -48,7 +48,7 @@ services:
         class: EJM\Flow\Collector\Collector
         abstract: true
         arguments:
-            - '@flow.vendor.php_parser.factory'
+            - '@flow.vendor.php_parser'
             - '@flow.vendor.php_parser.node_traverser'
             - '@flow.collector.source_code_reader'
 
@@ -70,6 +70,13 @@ services:
     flow.collector.file_reader:
         class: EJM\Flow\Collector\Reader\FileReader
         public: false
+
+    flow.vendor.php_parser:
+        class: PhpParser\Parser
+        public: false
+        factory: ['@flow.vendor.php_parser.factory', create]
+        arguments:
+            - '1' # ParserFactory::PREFER_PHP7
 
     flow.vendor.php_parser.factory:
         class: PhpParser\ParserFactory

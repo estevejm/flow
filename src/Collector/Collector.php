@@ -2,6 +2,7 @@
 
 namespace EJM\Flow\Collector;
 
+use Assert\Assertion;
 use EJM\Flow\Collector\Reader\SourceCodeReader;
 use EJM\Flow\Collector\Parser\DataCollectorNodeVisitor;
 use PhpParser\NodeTraverser;
@@ -61,9 +62,8 @@ class Collector
      */
     public function collect($className)
     {
-        if (!class_exists($className)) {
-            throw new \InvalidArgumentException("$className not defined.");
-        }
+        Assertion::classExists($className);
+        Assertion::notNull($this->visitor);
 
         $sourceCode = $this->sorceCodeReader->read($className);
         $nodes = $this->parser->parse($sourceCode);

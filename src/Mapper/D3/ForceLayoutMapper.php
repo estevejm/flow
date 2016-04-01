@@ -4,8 +4,7 @@ namespace EJM\Flow\Mapper\D3;
 
 use Assert\Assertion;
 use EJM\Flow\Network\Network;
-use EJM\Flow\Network\Node;
-use EJM\Flow\Mapper\D3\Node as D3Node;
+use EJM\Flow\Network\Node as NetworkNode;
 
 class ForceLayoutMapper
 {
@@ -41,14 +40,14 @@ class ForceLayoutMapper
      * @var array
      */
     private $configMap = [
-        Node::TYPE_HANDLER    => self::MAP_HANDLERS,
-        Node::TYPE_SUBSCRIBER => self::MAP_SUBSCRIBERS,
+        NetworkNode::TYPE_HANDLER    => self::MAP_HANDLERS,
+        NetworkNode::TYPE_SUBSCRIBER => self::MAP_SUBSCRIBERS,
     ];
 
     /**
-     * @param $config
+     * @param array $config
      */
-    public function __construct($config)
+    public function __construct(array $config)
     {
         Assertion::keyExists($config, self::MAP_HANDLERS);
         Assertion::keyExists($config, self::MAP_SUBSCRIBERS);
@@ -58,7 +57,7 @@ class ForceLayoutMapper
 
     /**
      * @param Network $network
-     * @return array
+     * @return Layout
      */
     public function map(Network $network)
     {
@@ -77,10 +76,10 @@ class ForceLayoutMapper
     }
 
     /**
-     * @param Node[] $nodes
-     * @param Node $parent
+     * @param NetworkNode[] $nodes
+     * @param NetworkNode $parent
      */
-    private function processNodes(array $nodes, Node $parent = null)
+    private function processNodes(array $nodes, NetworkNode $parent = null)
     {
         foreach ($nodes as $node) {
             $this->processNode($node, $parent);
@@ -88,10 +87,10 @@ class ForceLayoutMapper
     }
 
     /**
-     * @param Node $node
-     * @param Node $parent
+     * @param NetworkNode $node
+     * @param NetworkNode $parent
      */
-    private function processNode(Node $node, Node $parent = null)
+    private function processNode(NetworkNode $node, NetworkNode $parent = null)
     {
         if ($this->hasIndexAssigned($node)) {
             $this->mapLink($node, $parent);
@@ -100,18 +99,18 @@ class ForceLayoutMapper
 
         switch ($node->getType())
         {
-            case Node::TYPE_COMMAND:
+            case NetworkNode::TYPE_COMMAND:
                 $this->addNode($node, $parent);
                 $this->processNode($node->getHandler(), $node);
                 break;
 
-            case Node::TYPE_EVENT:
+            case NetworkNode::TYPE_EVENT:
                 $this->addNode($node, $parent);
                 $this->processNodes($node->getSubscribers(), $node);
                 break;
 
-            case Node::TYPE_HANDLER:
-            case Node::TYPE_SUBSCRIBER:
+            case NetworkNode::TYPE_HANDLER:
+            case NetworkNode::TYPE_SUBSCRIBER:
                 if ($this->hasMappingEnabled($node)) {
                     $this->addNode($node, $parent);
                     $this->processNodes($node->getMessages(), $node);
@@ -122,10 +121,10 @@ class ForceLayoutMapper
     }
 
     /**
-     * @param Node $node
+     * @param NetworkNode $node
      * @return boolean
      */
-    private function hasMappingEnabled(Node $node)
+    private function hasMappingEnabled(NetworkNode $node)
     {
         if (!isset($this->configMap[$node->getType()])) {
             return true;
@@ -137,10 +136,10 @@ class ForceLayoutMapper
     }
 
     /**
-     * @param Node $node
-     * @param Node $parent
+     * @param NetworkNode $node
+     * @param NetworkNode $parent
      */
-    private function addNode(Node $node, Node $parent = null)
+    private function addNode(NetworkNode $node, NetworkNode $parent = null)
     {
         $this->assignIndex($node);
         $this->mapNode($node);
@@ -148,64 +147,64 @@ class ForceLayoutMapper
     }
 
     /**
-     * @param Node $node
+     * @param NetworkNode $node
      */
-    private function mapNode(Node $node)
+    private function mapNode(NetworkNode $node)
     {
-        $this->nodes[$this->getIndex($node)] = new D3Node($this->getIndex($node), $node->getId(), $node->getType());
+        $this->nodes[$this->getIndex($node)] = new Node($this->getIndex($node), $node->getId(), $node->getType());
     }
 
     /**
-     * @param Node $node
-     * @param Node $parent
+     * @param NetworkNode $node
+     * @param NetworkNode $parent
      */
-    private function mapLink(Node $node, Node $parent = null)
+    private function mapLink(NetworkNode $node, NetworkNode $parent = null)
     {
         if ($parent) {
-            $this->links[] = new Link($this->getD3Node($parent), $this->getD3Node($node));
+            $this->links[] = new Link($this->getNode($parent), $this->getNode($node));
         }
     }
 
     /**
-     * @param Node $node
+     * @param NetworkNode $node
      */
-    private function getD3Node(Node $node)
+    private function getNode(NetworkNode $node)
     {
         return $this->nodes[$this->getIndex($node)];
     }
 
     /**
-     * @param Node $node
+     * @param NetworkNode $node
      * @throws \Exception
      */
-    private function assignIndex(Node $node)
+    private function assignIndex(NetworkNode $node)
     {
         if ($this->hasIndexAssigned($node)) {
-            throw new \Exception("Node with index already assigned");
+            throw new \Exception("Network node with index already assigned");
         }
 
         $this->indexMap[$node->getId()] = $this->count++;
     }
 
     /**
-     * @param Node $node
+     * @param NetworkNode $node
      * @return int
      * @throws \Exception
      */
-    private function getIndex(Node $node)
+    private function getIndex(NetworkNode $node)
     {
         if (!$this->hasIndexAssigned($node)) {
-            throw new \Exception("Node with index not assigned");
+            throw new \Exception("Network node with index not assigned");
         }
 
         return $this->indexMap[$node->getId()];
     }
 
     /**
-     * @param Node $node
+     * @param NetworkNode $node
      * @return bool
      */
-    private function hasIndexAssigned(Node $node)
+    private function hasIndexAssigned(NetworkNode $node)
     {
         return isset($this->indexMap[$node->getId()]);
     }

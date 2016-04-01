@@ -47,8 +47,6 @@ class MessagesUsedNodeVisitor extends DataCollectorNodeVisitor
             $this->uses[$use->alias] = $use->name->toString();
         } elseif ($node instanceof Node\Expr\New_ || $node instanceof Node\Expr\StaticCall) {
             if ($node->class->isRelative()) {
-                // don't know how to reproduce
-                var_dump("relative class!");
                 $eventClass = $node->class->toString();
             } elseif ($node->class->isQualified()) {
                 $eventClass = $node->class->getFirst();

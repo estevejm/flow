@@ -22,7 +22,7 @@ class Blueprint implements NetworkInterface
     /**
      * @var MessagePublisher[]
      */
-    private $messagePublishers;
+    private $messagePublishers = [];
 
     /**
      * {@inheritdoc}

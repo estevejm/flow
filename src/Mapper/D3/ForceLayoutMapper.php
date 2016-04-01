@@ -126,10 +126,6 @@ class ForceLayoutMapper
      */
     private function hasMappingEnabled(NetworkNode $node)
     {
-        if (!isset($this->configMap[$node->getType()])) {
-            return true;
-        }
-
         $configKey = $this->configMap[$node->getType()];
 
         return $this->config[$configKey];
@@ -179,10 +175,6 @@ class ForceLayoutMapper
      */
     private function assignIndex(NetworkNode $node)
     {
-        if ($this->hasIndexAssigned($node)) {
-            throw new \Exception("Network node with index already assigned");
-        }
-
         $this->indexMap[$node->getId()] = $this->count++;
     }
 
@@ -193,10 +185,6 @@ class ForceLayoutMapper
      */
     private function getIndex(NetworkNode $node)
     {
-        if (!$this->hasIndexAssigned($node)) {
-            throw new \Exception("Network node with index not assigned");
-        }
-
         return $this->indexMap[$node->getId()];
     }
 

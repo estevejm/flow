@@ -36,7 +36,9 @@ class CollectorTest extends PHPUnit_Framework_TestCase
     {
         $this->parser = $this->getMock(Parser::class);
         $this->traverser = $this->getMock(NodeTraverser::class);
-        $this->reader = $this->getMockWithoutInvokingTheOriginalConstructor(SourceCodeReader::class);
+        $this->reader = $this->getMockBuilder(SourceCodeReader::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->collector = new Collector($this->parser, $this->traverser, $this->reader);
     }

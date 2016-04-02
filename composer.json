@@ -23,7 +23,8 @@
         "beberlei/assert": "^2.5"
     },
     "require-dev": {
-        "phpunit/phpunit": "^4.8"
+        "phpunit/phpunit": "^4.8",
+        "satooshi/php-coveralls": "~1.0"
     },
     "suggest": {
         "simple-bus/message-bus": "Message bus implementation that can be visualized with this library",

@@ -2,6 +2,7 @@
 
 namespace EJM\Flow\Network\Factory\AssemblyStage;
 
+use Assert;
 use EJM\Flow\Network\Blueprint;
 use EJM\Flow\Network\Factory\AssemblyStage;
 use EJM\Flow\Network\Node\Command;
@@ -19,7 +20,16 @@ class AddCommandsAndHandlers implements AssemblyStage
      */
     public function __construct(array $commandHandlerMap)
     {
-        // todo: assert map format
+        foreach ($commandHandlerMap as $command => $handler) {
+            Assert\that($command)->string();
+            Assert\that($handler)
+                ->isArray()
+                ->keyExists('id')
+                ->keyExists('class')
+                ->all()
+                ->string();
+        }
+
         $this->commandHandlerMap = $commandHandlerMap;
     }
 

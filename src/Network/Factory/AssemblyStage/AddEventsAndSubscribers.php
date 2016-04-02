@@ -2,6 +2,7 @@
 
 namespace EJM\Flow\Network\Factory\AssemblyStage;
 
+use Assert;
 use EJM\Flow\Network\Blueprint;
 use EJM\Flow\Network\Factory\AssemblyStage;
 use EJM\Flow\Network\Node\Event;
@@ -19,7 +20,14 @@ class AddEventsAndSubscribers implements AssemblyStage
      */
     public function __construct(array $commandHandlerMap)
     {
-        // todo: assert map format
+        foreach ($commandHandlerMap as $event => $subscribers) {
+            Assert\that($event)->string();
+            Assert\that($subscribers)->isArray();
+            foreach ($subscribers as $subscriber) {
+                Assert\that($subscriber)->isArray()->keyExists('id')->keyExists('class');
+            }
+        }
+
         $this->eventSubscribersMap = $commandHandlerMap;
     }
 

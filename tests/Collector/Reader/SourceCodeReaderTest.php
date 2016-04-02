@@ -2,7 +2,6 @@
 
 namespace EJM\Flow\Tests\Collector\Reader;
 
-use EJM\Flow\Collector\Reader\FileReader;
 use EJM\Flow\Collector\Reader\SourceCodeReader;
 use PHPUnit_Framework_TestCase;
 use ReflectionClass;
@@ -11,16 +10,17 @@ class SourceCodeReaderTest extends PHPUnit_Framework_TestCase
 {
     public function testRead()
     {
-        $expectedFilename = (new ReflectionClass(self::class))->getFileName();
+        $className = get_class($this);
+        $expectedFilename = (new ReflectionClass($className))->getFileName();
 
-        $fileReader = $this->getMock(FileReader::class);
+        $fileReader = $this->getFileReaderMock();
 
         $fileReader->expects($this->once())
             ->method('read')
             ->with($expectedFilename);
 
         $sourceCodeReader = new SourceCodeReader($fileReader);
-        $sourceCodeReader->read(self::class);
+        $sourceCodeReader->read($className);
     }
 
     /**
@@ -28,12 +28,20 @@ class SourceCodeReaderTest extends PHPUnit_Framework_TestCase
      */
     public function testReadWithUnexistingClass()
     {
-        $fileReader = $this->getMock(FileReader::class);
+        $fileReader = $this->getFileReaderMock();
 
         $fileReader->expects($this->never())
             ->method('read');
 
         $sourceCodeReader = new SourceCodeReader($fileReader);
         $sourceCodeReader->read('\Unexisting\Class');
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getFileReaderMock()
+    {
+        return $this->getMock('\EJM\Flow\Collector\Reader\FileReader');
     }
 }

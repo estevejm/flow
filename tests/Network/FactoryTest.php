@@ -2,7 +2,6 @@
 
 namespace EJM\Flow\Tests\Network;
 
-use EJM\Flow\Network\Blueprint;
 use EJM\Flow\Network\Factory;
 use EJM\Flow\Network\Factory\AssemblyStage;
 use EJM\Flow\Network\Network;
@@ -29,11 +28,11 @@ class FactoryTest extends PHPUnit_Framework_TestCase
      */
     private function getAssemblyStageMock()
     {
-        $stage = $this->getMock(AssemblyStage::class);
+        $stage = $this->getMock('\EJM\Flow\Network\Factory\AssemblyStage');
 
         $stage->expects($this->once())
             ->method('assemble')
-            ->with($this->isInstanceOf(Blueprint::class));
+            ->with($this->isInstanceOf('\EJM\Flow\Network\Blueprint'));
 
         return $stage;
     }

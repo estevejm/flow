@@ -17,7 +17,7 @@ class Network implements NetworkInterface
      */
     public function __construct(array $nodes)
     {
-        Assertion::allIsInstanceOf($nodes, Node::class);
+        Assertion::allIsInstanceOf($nodes, '\EJM\Flow\Network\Node');
 
         $this->nodes = $nodes;
     }

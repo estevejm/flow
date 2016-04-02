@@ -35,11 +35,12 @@ class ForceLayoutMapperTest extends \PHPUnit_Framework_TestCase
 
     public function mapDataProvider()
     {
+        $className = get_class($this);
         $command1 = new Command('command_1');
-        $handler1 = new Handler('handler_1', self::class, $command1);
+        $handler1 = new Handler('handler_1', $className, $command1);
         $event1 = new Event('event_1');
-        $subscriber1 = new Subscriber('subscriber_1', self::class, $event1);
-        $subscriber2 = new Subscriber('subscriber_2', self::class, $event1);
+        $subscriber1 = new Subscriber('subscriber_1', $className, $event1);
+        $subscriber2 = new Subscriber('subscriber_2', $className, $event1);
 
         $handler1->addMessage($event1);
         $subscriber2->addMessage($command1);

@@ -57,7 +57,7 @@ class Blueprint implements NetworkInterface
     {
         if (!$this->hasCommand($id))
         {
-            $this->throwNotFoundException(Command::class, $id);
+            $this->throwNotFoundException('\EJM\Flow\Network\Node\Command', $id);
         }
 
         return $this->commands[$id];
@@ -97,7 +97,7 @@ class Blueprint implements NetworkInterface
     {
         if (!$this->hasEvent($id))
         {
-            $this->throwNotFoundException(Event::class, $id);
+            $this->throwNotFoundException('\EJM\Flow\Network\Node\Event', $id);
         }
 
         return $this->events[$id];
@@ -137,7 +137,7 @@ class Blueprint implements NetworkInterface
     {
         if (!$this->hasMessagePublisher($id))
         {
-            $this->throwNotFoundException(MessagePublisher::class, $id);
+            $this->throwNotFoundException('\EJM\Flow\Network\Node\MessagePublisher', $id);
         }
 
         return $this->messagePublishers[$id];

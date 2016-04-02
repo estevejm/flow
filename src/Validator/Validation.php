@@ -25,7 +25,7 @@ class Validation implements JsonSerializable
      */
     public function __construct(array $violations)
     {
-        Assertion::allIsInstanceOf($violations, Violation::class);
+        Assertion::allIsInstanceOf($violations, '\EJM\Flow\Validator\Violation');
 
         $this->violations = $violations;
         $this->status = count($violations) === 0 ? self::STATUS_VALID : self::STATUS_INVALID;

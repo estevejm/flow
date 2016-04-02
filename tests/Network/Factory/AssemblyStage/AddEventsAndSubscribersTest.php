@@ -27,12 +27,14 @@ class AddEventsAndSubscribersTest extends PHPUnit_Framework_TestCase
 
     public function assemblyStageMapProvider()
     {
+        $className = get_class($this);
+        
         $event1 = new Event('event_1');
-        $subscriber1 = new Subscriber('subscriber_1', self::class, $event1);
+        $subscriber1 = new Subscriber('subscriber_1', $className, $event1);
 
         $event2 = new Event('event_2');
-        $subscriber2 = new Subscriber('subscriber_2', self::class, $event2);
-        $subscriber3 = new Subscriber('subscriber_3', self::class, $event2);
+        $subscriber2 = new Subscriber('subscriber_2', $className, $event2);
+        $subscriber3 = new Subscriber('subscriber_3', $className, $event2);
 
         return [
             'empty map' => [
@@ -45,7 +47,7 @@ class AddEventsAndSubscribersTest extends PHPUnit_Framework_TestCase
                     'event_1' => [
                         [
                             'id' => 'subscriber_1',
-                            'class' => self::class,
+                            'class' => $className,
                         ]
                     ]
                 ],
@@ -61,17 +63,17 @@ class AddEventsAndSubscribersTest extends PHPUnit_Framework_TestCase
                     'event_1' => [
                         [
                             'id' => 'subscriber_1',
-                            'class' => self::class,
+                            'class' => $className,
                         ],
                     ],
                     'event_2' => [
                         [
                             'id' => 'subscriber_2',
-                            'class' => self::class,
+                            'class' => $className,
                         ],
                         [
                             'id' => 'subscriber_3',
-                            'class' => self::class,
+                            'class' => $className,
                         ],
                     ],
                 ],

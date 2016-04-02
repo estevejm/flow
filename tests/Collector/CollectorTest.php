@@ -3,9 +3,6 @@
 namespace EJM\Flow\Tests\Collector;
 
 use EJM\Flow\Collector\Collector;
-use EJM\Flow\Collector\Parser\DataCollectorNodeVisitor;
-use EJM\Flow\Collector\Reader\SourceCodeReader;
-use PhpParser\NodeTraverser;
 use PhpParser\Parser;
 use PHPUnit_Framework_MockObject_MockObject;
 use PHPUnit_Framework_TestCase;
@@ -34,9 +31,9 @@ class CollectorTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->parser = $this->getMock(Parser::class);
-        $this->traverser = $this->getMock(NodeTraverser::class);
-        $this->reader = $this->getMockBuilder(SourceCodeReader::class)
+        $this->parser = $this->getMock('\PhpParser\Parser');
+        $this->traverser = $this->getMock('\PhpParser\NodeTraverser');
+        $this->reader = $this->getMockBuilder('\EJM\Flow\Collector\Reader\SourceCodeReader')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -45,8 +42,8 @@ class CollectorTest extends PHPUnit_Framework_TestCase
 
     public function testSetVisitor()
     {
-        $firstVisitor = $this->getMock(DataCollectorNodeVisitor::class);
-        $secondVisitor = $this->getMock(DataCollectorNodeVisitor::class);
+        $firstVisitor = $this->getVisitorMock();
+        $secondVisitor = $this->getVisitorMock();
 
         $this->traverser->expects($this->at(0))
             ->method('addVisitor')
@@ -66,12 +63,12 @@ class CollectorTest extends PHPUnit_Framework_TestCase
 
     public function testCollectWithExistingClass()
     {
-        $className = self::class;
+        $className = get_class($this);
         $sourceCode = '<?php class Test {}';
         $nodes = ['node1', 'node2'];
         $expectedData = 'some useful data';
 
-        $visitor = $this->getMock(DataCollectorNodeVisitor::class);
+        $visitor = $this->getVisitorMock();
 
         $this->collector->setVisitor($visitor);
 
@@ -103,7 +100,7 @@ class CollectorTest extends PHPUnit_Framework_TestCase
      */
     public function testCollectWithUnexistingClass()
     {
-        $visitor = $this->getMock(DataCollectorNodeVisitor::class);
+        $visitor = $this->getVisitorMock();
 
         $this->collector->setVisitor($visitor);
 
@@ -121,6 +118,14 @@ class CollectorTest extends PHPUnit_Framework_TestCase
         $this->reader->expects($this->never())
             ->method('read');
 
-        $this->collector->collect(self::class);
+        $this->collector->collect(get_class($this));
+    }
+
+    /**
+     * @return PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getVisitorMock()
+    {
+        return $this->getMock('\EJM\Flow\Collector\Parser\DataCollectorNodeVisitor');
     }
 }

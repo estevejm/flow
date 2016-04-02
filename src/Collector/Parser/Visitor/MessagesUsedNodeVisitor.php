@@ -5,7 +5,6 @@ namespace EJM\Flow\Collector\Parser\Visitor;
 use EJM\Flow\Collector\Parser\DataCollectorNodeVisitor;
 use PhpParser\Node;
 use ReflectionClass;
-use SimpleBus\Message\Name\NamedMessage;
 
 class MessagesUsedNodeVisitor extends DataCollectorNodeVisitor
 {
@@ -87,7 +86,7 @@ class MessagesUsedNodeVisitor extends DataCollectorNodeVisitor
             throw new \InvalidArgumentException("Invalid class $className.");
         }
         $class = new ReflectionClass($className);
-        if ($class->implementsInterface(NamedMessage::class)) {
+        if ($class->implementsInterface('\SimpleBus\Message\Name\NamedMessage')) {
             return call_user_func([$className, 'messageName']);
         }
 

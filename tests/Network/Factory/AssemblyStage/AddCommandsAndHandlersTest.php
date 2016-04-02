@@ -27,11 +27,13 @@ class AddCommandsAndHandlersTest extends PHPUnit_Framework_TestCase
 
     public function assemblyStageMapProvider()
     {
+        $className = get_class($this);
+        
         $command1 = new Command('command_1');
-        $handler1 = new Handler('command_handler_1', self::class, $command1);
+        $handler1 = new Handler('command_handler_1', $className, $command1);
 
         $command2 = new Command('command_2');
-        $handler2 = new Handler('command_handler_2', self::class, $command2);
+        $handler2 = new Handler('command_handler_2', $className, $command2);
 
         $command3 = new Command('command_3');
         $command3->setHandler($handler2);
@@ -46,7 +48,7 @@ class AddCommandsAndHandlersTest extends PHPUnit_Framework_TestCase
                 'map' => [
                     'command_1' => [
                         'id' => 'command_handler_1',
-                        'class' => self::class,
+                        'class' => $className,
                     ]
                 ],
                 'commands' => [
@@ -60,15 +62,15 @@ class AddCommandsAndHandlersTest extends PHPUnit_Framework_TestCase
                 'map' => [
                     'command_1' => [
                         'id' => 'command_handler_1',
-                        'class' => self::class,
+                        'class' => $className,
                     ],
                     'command_2' => [
                         'id' => 'command_handler_2',
-                        'class' => self::class,
+                        'class' => $className,
                     ],
                     'command_3' => [
                         'id' => 'command_handler_2',
-                        'class' => self::class,
+                        'class' => $className,
                     ],
                 ],
                 'commands' => [

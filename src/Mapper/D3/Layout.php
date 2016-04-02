@@ -23,8 +23,8 @@ class Layout implements JsonSerializable
      */
     public function __construct(array $nodes, array $links)
     {
-        Assertion::allIsInstanceOf($nodes, Node::class);
-        Assertion::allIsInstanceOf($links, Link::class);
+        Assertion::allIsInstanceOf($nodes, '\EJM\Flow\Mapper\D3\Node');
+        Assertion::allIsInstanceOf($links, '\EJM\Flow\Mapper\D3\Link');
 
         $this->nodes = $nodes;
         $this->links = $links;

@@ -30,10 +30,10 @@ class AddCommandsAndHandlersTest extends PHPUnit_Framework_TestCase
         $className = get_class($this);
         
         $command1 = new Command('command_1');
-        $handler1 = new Handler('command_handler_1', $className, $command1);
+        $handler1 = new Handler('handler_1', $className, $command1);
 
         $command2 = new Command('command_2');
-        $handler2 = new Handler('command_handler_2', $className, $command2);
+        $handler2 = new Handler('handler_2', $className, $command2);
 
         $command3 = new Command('command_3');
         $command3->setHandler($handler2);
@@ -47,7 +47,7 @@ class AddCommandsAndHandlersTest extends PHPUnit_Framework_TestCase
             'basic map' => [
                 'map' => [
                     'command_1' => [
-                        'id' => 'command_handler_1',
+                        'id' => 'handler_1',
                         'class' => $className,
                     ]
                 ],
@@ -55,21 +55,21 @@ class AddCommandsAndHandlersTest extends PHPUnit_Framework_TestCase
                     'command_1' => $command1,
                 ],
                 'handlers' => [
-                    'command_handler_1' => $handler1,
+                    'handler_1' => $handler1,
                 ],
             ],
             'complex map' => [
                 'map' => [
                     'command_1' => [
-                        'id' => 'command_handler_1',
+                        'id' => 'handler_1',
                         'class' => $className,
                     ],
                     'command_2' => [
-                        'id' => 'command_handler_2',
+                        'id' => 'handler_2',
                         'class' => $className,
                     ],
                     'command_3' => [
-                        'id' => 'command_handler_2',
+                        'id' => 'handler_2',
                         'class' => $className,
                     ],
                 ],
@@ -79,8 +79,8 @@ class AddCommandsAndHandlersTest extends PHPUnit_Framework_TestCase
                     'command_3' => $command3,
                 ],
                 'handlers' => [
-                    'command_handler_1' => $handler1,
-                    'command_handler_2' => $handler2,
+                    'handler_1' => $handler1,
+                    'handler_2' => $handler2,
                 ],
             ],
         ];

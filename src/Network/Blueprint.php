@@ -34,10 +34,13 @@ class Blueprint implements NetworkInterface
 
     /**
      * @param Command $command
+     * @return $this
      */
     public function addCommand(Command $command)
     {
         $this->commands[$command->getId()] = $command;
+
+        return $this;
     }
 
     /**
@@ -74,10 +77,13 @@ class Blueprint implements NetworkInterface
 
     /**
      * @param Event $event
+     * @return $this
      */
     public function addEvent(Event $event)
     {
         $this->events[$event->getId()] = $event;
+
+        return $this;
     }
 
     /**
@@ -114,10 +120,13 @@ class Blueprint implements NetworkInterface
 
     /**
      * @param MessagePublisher $messagePublisher
+     * @return $this
      */
     public function addMessagePublisher(MessagePublisher $messagePublisher)
     {
         $this->messagePublishers[$messagePublisher->getId()] = $messagePublisher;
+
+        return $this;
     }
 
     /**

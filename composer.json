@@ -20,8 +20,10 @@
         "php": ">=5.5.9",
         "symfony/framework-bundle": "~2.3|~3.0",
         "nikic/php-parser": "^2.0",
-        "beberlei/assert": "^2.5",
-        "phpunit/phpunit": "^5.2"
+        "beberlei/assert": "^2.5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.8"
     },
     "suggest": {
         "simple-bus/message-bus": "Message bus implementation that can be visualized with this library",

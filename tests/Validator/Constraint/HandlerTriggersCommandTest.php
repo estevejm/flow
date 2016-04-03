@@ -6,17 +6,17 @@ use EJM\Flow\Network\Node\Command;
 use EJM\Flow\Network\Node\Event;
 use EJM\Flow\Network\Node\Handler;
 use EJM\Flow\Network\Node\Subscriber;
-use EJM\Flow\Validator\Constraint\EventWithoutSubscriber;
+use EJM\Flow\Validator\Constraint\HandlerTriggersCommand;
 use PHPUnit_Framework_TestCase;
 
-class EventWithoutSubscriberTest extends PHPUnit_Framework_TestCase
+class HandlerTriggersCommandTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider supportsNodeDataProvider
      */
     public function testSupportsNode($node, $expected)
     {
-        $constraint = new EventWithoutSubscriber();
+        $constraint = new HandlerTriggersCommand();
         $this->assertEquals($expected, $constraint->supportsNode($node));
     }
 
@@ -29,11 +29,11 @@ class EventWithoutSubscriberTest extends PHPUnit_Framework_TestCase
             ],
             'handler' => [
                 'node' => new Handler('handler_1', '\EJM\Flow\Network\Node\Handler', new Command('command_1')),
-                'expected' => false,
+                'expected' => true,
             ],
             'event' => [
                 'node' => new Event('event_1'),
-                'expected' => true,
+                'expected' => false,
             ],
             'subscriber' => [
                 'node' => new Subscriber('subscriber_1', '\EJM\Flow\Network\Node\Subscriber', new Event('event_1')),
@@ -44,24 +44,24 @@ class EventWithoutSubscriberTest extends PHPUnit_Framework_TestCase
 
     public function testValidateWithInvalidEvent()
     {
-        $event = new Event('event_1');
+        $handler = new Handler('handler_1', '\EJM\Flow\Network\Node\Handler', new Command('command_1'));
+        $handler->addMessage(new Command('command_2'))->addMessage(new Event('event_1'));
 
-        $constraint = new EventWithoutSubscriber();
-        $violations = $constraint->validate($event);
+        $constraint = new HandlerTriggersCommand();
+        $violations = $constraint->validate($handler);
 
         $this->assertCount(1, $violations);
-        $this->assertEquals($event, $violations[0]->getNode());
+        $this->assertEquals($handler, $violations[0]->getNode());
     }
 
     public function testValidateWithValidEvent()
     {
-        $event = new Event('event_1');
-        $event->addSubscriber(new Subscriber('subscriber_1', '\EJM\Flow\Network\Node\Subscriber', $event));
+        $handler = new Handler('handler_1', '\EJM\Flow\Network\Node\Handler', new Command('command_1'));
+        $handler->addMessage(new Event('event_1'));
 
-        $constraint = new EventWithoutSubscriber();
-        $violations = $constraint->validate($event);
+        $constraint = new HandlerTriggersCommand();
+        $violations = $constraint->validate($handler);
 
         $this->assertEmpty($violations);
     }
 }
- 

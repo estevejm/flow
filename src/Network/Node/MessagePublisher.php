@@ -21,9 +21,12 @@ class MessagePublisher extends Node
 
     /**
      * @param Message $message
+     * @return $this
      */
     public function addMessage(Message $message)
     {
         $this->messages[] = $message;
+
+        return $this;
     }
 }

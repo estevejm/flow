@@ -17,12 +17,12 @@ class Validator
      */
     public function addConstraint(Constraint $constraint)
     {
-        $this->constraints[get_class($constraint)] = $constraint;
+        $this->constraints[] = $constraint;
     }
 
     /**
      * @param Network $network
-     * @return Violation[]
+     * @return Validation
      */
     public function validate(Network $network)
     {

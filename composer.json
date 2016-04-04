@@ -18,12 +18,13 @@
     },
     "require": {
         "php": ">=5.4",
-        "symfony/framework-bundle": "~2.3|~3.0",
         "nikic/php-parser": "^2.0",
-        "beberlei/assert": "^2.5"
+        "beberlei/assert": "^2.5",
+        "symfony/framework-bundle": "~2.3|~3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^4.8",
+        "symfony/expression-language": "~2.3|~3.0",
         "satooshi/php-coveralls": "~1.0"
     },
     "suggest": {

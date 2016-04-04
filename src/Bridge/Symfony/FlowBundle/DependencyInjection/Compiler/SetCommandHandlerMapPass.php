@@ -9,6 +9,8 @@ use Symfony\Component\DependencyInjection\Definition;
 
 class SetCommandHandlerMapPass implements CompilerPassInterface
 {
+    const PARAMETER_ID = 'flow.map.command_handler';
+
     use TaggedServicesCollector;
 
     private $tag;
@@ -44,6 +46,6 @@ class SetCommandHandlerMapPass implements CompilerPassInterface
             }
         );
 
-        $container->setParameter('flow.map.command_handler', $handlers);
+        $container->setParameter(self::PARAMETER_ID, $handlers);
     }
 }

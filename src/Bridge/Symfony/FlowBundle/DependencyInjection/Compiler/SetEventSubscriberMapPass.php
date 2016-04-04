@@ -9,6 +9,8 @@ use Symfony\Component\DependencyInjection\Definition;
 
 class SetEventSubscriberMapPass implements CompilerPassInterface
 {
+    const PARAMETER_ID = 'flow.map.events_subscribers';
+
     use TaggedServicesCollector;
 
     private $tag;
@@ -44,6 +46,6 @@ class SetEventSubscriberMapPass implements CompilerPassInterface
             }
         );
 
-        $container->setParameter('flow.map.events_subscribers', $subscribers);
+        $container->setParameter(self::PARAMETER_ID, $subscribers);
     }
 }

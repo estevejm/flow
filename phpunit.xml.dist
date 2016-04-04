@@ -28,6 +28,7 @@
             <directory>src</directory>
             <exclude>
                 <directory>src/Bridge/Symfony/FlowBundle/Resources</directory>
+                <directory>src/Bridge/Symfony/FlowBundle/Tests</directory>
             </exclude>
         </whitelist>
     </filter>

@@ -22,15 +22,15 @@ class ValidatorConstraintPassTest extends PHPUnit_Framework_TestCase
 
     public function testProcess()
     {
-        $factoryService = $this->getDefinitionMock();
+        $validatorService = $this->getDefinitionMock();
         $taggedService1 = $this->getDefinitionMock();
         $taggedService2 = $this->getDefinitionMock();
 
-        $factoryService->expects($this->at(0))
+        $validatorService->expects($this->at(0))
             ->method('addMethodCall')
             ->with('addConstraint', [$taggedService1]);
 
-        $factoryService->expects($this->at(1))
+        $validatorService->expects($this->at(1))
             ->method('addMethodCall')
             ->with('addConstraint', [$taggedService2]);
 
@@ -44,7 +44,7 @@ class ValidatorConstraintPassTest extends PHPUnit_Framework_TestCase
         $container->expects($this->exactly(3))
             ->method('findDefinition')
             ->will($this->returnValueMap([
-                [ValidatorConstraintPass::VALIDATOR_SERVICE_ID, $factoryService],
+                [ValidatorConstraintPass::VALIDATOR_SERVICE_ID, $validatorService],
                 [self::SERVICE_1_ID, $taggedService1],
                 [self::SERVICE_2_ID, $taggedService2],
             ]));
@@ -59,7 +59,7 @@ class ValidatorConstraintPassTest extends PHPUnit_Framework_TestCase
         $this->compilerPass->process($container);
     }
 
-    public function testProcessWhenFactoryNotDefined()
+    public function testProcessWhenValidatorNotDefined()
     {
         $container = $this->getContainerBuilderMock();
 

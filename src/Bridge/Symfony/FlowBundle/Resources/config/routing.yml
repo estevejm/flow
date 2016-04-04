@@ -2,6 +2,10 @@ ejm_flow_index:
     path:     /
     defaults: { _controller: EJMFlowBundle:Default:index }
 
-ejm_flow_data:
-    path:     /data
-    defaults: { _controller: EJMFlowBundle:Default:data }
+ejm_flow_data_graph:
+    path:     /graph
+    defaults: { _controller: EJMFlowBundle:Data:graph }
+
+ejm_flow_data_validation:
+    path:     /validation
+    defaults: { _controller: EJMFlowBundle:Data:validation }

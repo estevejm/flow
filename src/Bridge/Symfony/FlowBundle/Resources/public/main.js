@@ -19,10 +19,8 @@ var force = d3.layout.force()
 var svg = d3.select("body").append("svg")
     .attr("class", "canvas");
 
-d3.json(url.getData, function(error, data) {
+d3.json(url.graph, function(error, graph) {
     if (error) throw error;
-
-    var graph = data.network;
 
     force
         .nodes(graph.nodes)
@@ -125,9 +123,11 @@ d3.json(url.getData, function(error, data) {
     $("#search").autocomplete({
         source: optArray
     });
+});
 
-    if (data.validation.status == 'invalid') {
-        displayValidatorErrors(data.validation.violations);
+$.get(url.validation, function(validation) {
+    if (validation.status == 'invalid') {
+        displayValidatorErrors(validation.violations);
     } else {
         displayValidationSuccess();
     }

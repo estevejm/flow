@@ -13,8 +13,8 @@
 {% block javascripts %}
     <script>
         var url = {};
-        // todo: generate url in controller
-        url.getData = '{{ url('ejm_flow_data') }}';
+        url.graph = '{{ url('ejm_flow_data_graph') }}';
+        url.validation = '{{ url('ejm_flow_data_validation') }}';
     </script>
 
     <script src="{{ asset('bundles/ejmflow/lib/jquery/jquery-2.2.2.min.js') }}"></script>

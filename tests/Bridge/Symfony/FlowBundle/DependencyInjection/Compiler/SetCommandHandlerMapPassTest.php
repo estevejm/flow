@@ -1,6 +1,6 @@
 <?php
 
-namespace EJM\Flow\Bridge\Symfony\FlowBundle\Tests\DependencyInjection\Compiler;
+namespace EJM\Flow\Tests\Bridge\Symfony\FlowBundle\DependencyInjection\Compiler;
 
 use EJM\Flow\Bridge\Symfony\FlowBundle\DependencyInjection\Compiler\SetCommandHandlerMapPass;
 use PHPUnit_Framework_TestCase;

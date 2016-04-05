@@ -44,7 +44,7 @@ class MessagesUsedNodeVisitor extends DataCollectorNodeVisitor
         } elseif ($node instanceof Node\Stmt\Use_) {
             $use = $node->uses[0];
             $this->uses[$use->alias] = $use->name->toString();
-        } elseif ($node instanceof Node\Expr\New_ || $node instanceof Node\Expr\StaticCall) {
+        } elseif ($node instanceof Node\Expr\New_) {
             if ($node->class->isRelative()) {
                 $eventClass = $node->class->toString();
             } elseif ($node->class->isQualified()) {

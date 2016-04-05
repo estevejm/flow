@@ -1,6 +1,6 @@
 <?php
 
-namespace EJM\Flow\Tests\Validator;
+namespace EJM\Flow\Tests\Unit\Validator;
 
 use EJM\Flow\Network\Network;
 use EJM\Flow\Network\Node\Command;

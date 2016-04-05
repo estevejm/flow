@@ -1,6 +1,6 @@
 <?php
 
-namespace EJM\Flow\Tests\Mapper\D3;
+namespace EJM\Flow\Tests\Unit\Mapper\D3;
 
 use EJM\Flow\Mapper\D3\ForceLayoutMapper;
 use EJM\Flow\Mapper\D3\Layout;

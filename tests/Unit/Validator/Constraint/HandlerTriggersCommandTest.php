@@ -1,6 +1,6 @@
 <?php
 
-namespace EJM\Flow\Tests\Validator\Constraint;
+namespace EJM\Flow\Tests\Unit\Validator\Constraint;
 
 use EJM\Flow\Network\Node\Command;
 use EJM\Flow\Network\Node\Event;

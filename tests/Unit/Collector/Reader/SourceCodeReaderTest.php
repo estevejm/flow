@@ -1,6 +1,6 @@
 <?php
 
-namespace EJM\Flow\Tests\Collector\Reader;
+namespace EJM\Flow\Tests\Unit\Collector\Reader;
 
 use EJM\Flow\Collector\Reader\SourceCodeReader;
 use PHPUnit_Framework_TestCase;

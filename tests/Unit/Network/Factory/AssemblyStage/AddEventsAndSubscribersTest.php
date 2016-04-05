@@ -1,6 +1,6 @@
 <?php
 
-namespace EJM\Flow\Tests\Network\Factory\AssemblyStage;
+namespace EJM\Flow\Tests\Unit\Network\Factory\AssemblyStage;
 
 use EJM\Flow\Network\Blueprint;
 use EJM\Flow\Network\Factory\AssemblyStage\AddEventsAndSubscribers;

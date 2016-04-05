@@ -1,6 +1,6 @@
 <?php
 
-namespace EJM\Flow\Tests\Network;
+namespace EJM\Flow\Tests\Unit\Network;
 
 use EJM\Flow\Network\Factory;
 use EJM\Flow\Network\Factory\AssemblyStage;

@@ -1,6 +1,6 @@
 <?php
 
-namespace EJM\Flow\Tests\Bridge\Symfony\FlowBundle\DependencyInjection\Compiler;
+namespace EJM\Flow\Tests\Unit\Bridge\Symfony\FlowBundle\DependencyInjection\Compiler;
 
 use EJM\Flow\Bridge\Symfony\FlowBundle\DependencyInjection\Compiler\SetEventSubscriberMapPass;
 use PHPUnit_Framework_TestCase;

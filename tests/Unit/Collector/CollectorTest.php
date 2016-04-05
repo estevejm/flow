@@ -1,6 +1,6 @@
 <?php
 
-namespace EJM\Flow\Tests\Collector;
+namespace EJM\Flow\Tests\Unit\Collector;
 
 use EJM\Flow\Collector\Collector;
 use PhpParser\Parser;

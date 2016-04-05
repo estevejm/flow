@@ -1,0 +1,3 @@
+flow_ui_flow:
+    resource: "@EJMFlowBundle/Resources/config/routing.yml"
+    prefix:   /flow/

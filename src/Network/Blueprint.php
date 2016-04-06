@@ -6,6 +6,7 @@ use EJM\Flow\Network\Node;
 use EJM\Flow\Network\Node\Command;
 use EJM\Flow\Network\Node\Event;
 use EJM\Flow\Network\Node\MessagePublisher;
+use Network\Node\NodeNotFoundException;
 
 class Blueprint implements NetworkInterface
 {
@@ -60,7 +61,7 @@ class Blueprint implements NetworkInterface
     {
         if (!$this->hasCommand($id))
         {
-            $this->throwNotFoundException('\EJM\Flow\Network\Node\Command', $id);
+            throw new NodeNotFoundException('\EJM\Flow\Network\Node\Command', $id);
         }
 
         return $this->commands[$id];
@@ -103,7 +104,7 @@ class Blueprint implements NetworkInterface
     {
         if (!$this->hasEvent($id))
         {
-            $this->throwNotFoundException('\EJM\Flow\Network\Node\Event', $id);
+            throw new NodeNotFoundException('\EJM\Flow\Network\Node\Event', $id);
         }
 
         return $this->events[$id];
@@ -146,7 +147,7 @@ class Blueprint implements NetworkInterface
     {
         if (!$this->hasMessagePublisher($id))
         {
-            $this->throwNotFoundException('\EJM\Flow\Network\Node\MessagePublisher', $id);
+            throw new NodeNotFoundException('\EJM\Flow\Network\Node\MessagePublisher', $id);
         }
 
         return $this->messagePublishers[$id];
@@ -159,15 +160,5 @@ class Blueprint implements NetworkInterface
     public function hasMessagePublisher($id)
     {
         return isset($this->messagePublishers[$id]);
-    }
-
-    /**
-     * @param string $class
-     * @param string $id
-     * @throws \Exception
-     */
-    private function throwNotFoundException($class, $id)
-    {
-        throw new \Exception(sprintf('Node of type %s with id \'%s\' not found', $class, $id));
     }
 }

@@ -3,6 +3,7 @@
 namespace EJM\Flow\Mapper\D3;
 
 use Assert\Assertion;
+use EJM\Flow\Common\Set;
 use EJM\Flow\Network\Network;
 use EJM\Flow\Network\Node as NetworkNode;
 
@@ -12,24 +13,24 @@ class ForceLayoutMapper
     const MAP_SUBSCRIBERS = 'map_subscribers';
 
     /**
-     * @var array
+     * @var Set
      */
-    private $nodes = [];
+    private $indexMap;
+
+    /**
+     * @var Set
+     */
+    private $nodes;
 
     /**
      * @var array
      */
-    private $links = [];
-
-    /**
-     * @var array
-     */
-    private $indexMap = [];
+    private $links;
 
     /**
      * @var int
      */
-    private $count = 0;
+    private $count;
 
     /**
      * @var array
@@ -64,14 +65,14 @@ class ForceLayoutMapper
         $this->init();
         $this->processNodes($network->getNodes());
 
-        return new Layout($this->nodes, $this->links);
+        return new Layout($this->nodes->getAll(), $this->links);
     }
 
     private function init()
     {
-        $this->nodes = [];
+        $this->indexMap = new Set();
+        $this->nodes = new Set();
         $this->links = [];
-        $this->indexMap = [];
         $this->count = 0;
     }
 
@@ -147,7 +148,10 @@ class ForceLayoutMapper
      */
     private function mapNode(NetworkNode $node)
     {
-        $this->nodes[$this->getIndex($node)] = new Node($this->getIndex($node), $node->getId(), $node->getType());
+        $index = $this->getIndex($node);
+        $node = new Node($this->getIndex($node), $node->getId(), $node->getType());
+
+        $this->nodes->add($index, $node);
     }
 
     /**
@@ -163,10 +167,11 @@ class ForceLayoutMapper
 
     /**
      * @param NetworkNode $node
+     * @return Node
      */
     private function getNode(NetworkNode $node)
     {
-        return $this->nodes[$this->getIndex($node)];
+        return $this->nodes->get($this->getIndex($node));
     }
 
     /**
@@ -174,7 +179,7 @@ class ForceLayoutMapper
      */
     private function assignIndex(NetworkNode $node)
     {
-        $this->indexMap[$node->getId()] = $this->count++;
+        $this->indexMap->add($node->getId(), $this->count++);
     }
 
     /**
@@ -183,7 +188,7 @@ class ForceLayoutMapper
      */
     private function getIndex(NetworkNode $node)
     {
-        return $this->indexMap[$node->getId()];
+        return $this->indexMap->get($node->getId());
     }
 
     /**
@@ -192,7 +197,7 @@ class ForceLayoutMapper
      */
     private function hasIndexAssigned(NetworkNode $node)
     {
-        return isset($this->indexMap[$node->getId()]);
+        return $this->indexMap->has($node->getId());
     }
 }
  

@@ -2,8 +2,6 @@
 
 namespace EJM\Flow\Common;
 
-use Network\Common\ElementNotFoundException;
-
 class Set
 {
     /**

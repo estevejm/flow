@@ -1,6 +1,6 @@
 <?php
 
-namespace Network\Common;
+namespace EJM\Flow\Common;
 
 use RuntimeException;
 

@@ -2,35 +2,46 @@
 
 namespace EJM\Flow\Network;
 
+use EJM\Flow\Common\Set;
 use EJM\Flow\Network\Node;
 use EJM\Flow\Network\Node\Command;
 use EJM\Flow\Network\Node\Event;
 use EJM\Flow\Network\Node\MessagePublisher;
-use Network\Node\NodeNotFoundException;
 
 class Blueprint implements NetworkInterface
 {
     /**
-     * @var Command[]
+     * @var Set
      */
-    private $commands = [];
+    private $commands;
 
     /**
-     * @var Event[]
+     * @var Set
      */
-    private $events = [];
+    private $events;
 
     /**
-     * @var MessagePublisher[]
+     * @var Set
      */
-    private $messagePublishers = [];
+    private $messagePublishers;
+
+    public function __construct()
+    {
+        $this->commands = new Set();
+        $this->events = new Set();
+        $this->messagePublishers = new Set();
+    }
 
     /**
      * {@inheritdoc}
      */
     public function getNodes()
     {
-        return array_merge($this->commands, $this->events, $this->messagePublishers);
+        return array_merge(
+            $this->commands->getAll(),
+            $this->events->getAll(),
+            $this->messagePublishers->getAll()
+        );
     }
 
     /**
@@ -39,7 +50,7 @@ class Blueprint implements NetworkInterface
      */
     public function addCommand(Command $command)
     {
-        $this->commands[$command->getId()] = $command;
+        $this->commands->add($command->getId(), $command);
 
         return $this;
     }
@@ -49,22 +60,16 @@ class Blueprint implements NetworkInterface
      */
     public function getCommands()
     {
-        return $this->commands;
+        return $this->commands->getAll();
     }
 
     /**
      * @param string $id
-     * @throws \Exception
      * @return Command
      */
     public function getCommand($id)
     {
-        if (!$this->hasCommand($id))
-        {
-            throw new NodeNotFoundException('\EJM\Flow\Network\Node\Command', $id);
-        }
-
-        return $this->commands[$id];
+        return $this->commands->get($id);
     }
 
     /**
@@ -73,7 +78,7 @@ class Blueprint implements NetworkInterface
      */
     public function hasCommand($id)
     {
-        return isset($this->commands[$id]);
+        return $this->commands->has($id);
     }
 
     /**
@@ -82,7 +87,7 @@ class Blueprint implements NetworkInterface
      */
     public function addEvent(Event $event)
     {
-        $this->events[$event->getId()] = $event;
+        $this->events->add($event->getId(), $event);
 
         return $this;
     }
@@ -92,22 +97,16 @@ class Blueprint implements NetworkInterface
      */
     public function getEvents()
     {
-        return $this->events;
+        return $this->events->getAll();
     }
 
     /**
      * @param string $id
-     * @throws \Exception
      * @return Event
      */
     public function getEvent($id)
     {
-        if (!$this->hasEvent($id))
-        {
-            throw new NodeNotFoundException('\EJM\Flow\Network\Node\Event', $id);
-        }
-
-        return $this->events[$id];
+        return $this->events->get($id);
     }
 
     /**
@@ -116,7 +115,7 @@ class Blueprint implements NetworkInterface
      */
     public function hasEvent($id)
     {
-        return isset($this->events[$id]);
+        return $this->events->has($id);
     }
 
     /**
@@ -125,7 +124,7 @@ class Blueprint implements NetworkInterface
      */
     public function addMessagePublisher(MessagePublisher $messagePublisher)
     {
-        $this->messagePublishers[$messagePublisher->getId()] = $messagePublisher;
+        $this->messagePublishers->add($messagePublisher->getId(), $messagePublisher);
 
         return $this;
     }
@@ -135,22 +134,16 @@ class Blueprint implements NetworkInterface
      */
     public function getMessagePublishers()
     {
-        return $this->messagePublishers;
+        return $this->messagePublishers->getAll();
     }
 
     /**
      * @param string $id
-     * @throws \Exception
      * @return MessagePublisher
      */
     public function getMessagePublisher($id)
     {
-        if (!$this->hasMessagePublisher($id))
-        {
-            throw new NodeNotFoundException('\EJM\Flow\Network\Node\MessagePublisher', $id);
-        }
-
-        return $this->messagePublishers[$id];
+        return $this->messagePublishers->get($id);
     }
 
     /**
@@ -159,6 +152,6 @@ class Blueprint implements NetworkInterface
      */
     public function hasMessagePublisher($id)
     {
-        return isset($this->messagePublishers[$id]);
+        return $this->messagePublishers->has($id);
     }
 }

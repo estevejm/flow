@@ -171,7 +171,6 @@ class ForceLayoutMapper
 
     /**
      * @param NetworkNode $node
-     * @throws \Exception
      */
     private function assignIndex(NetworkNode $node)
     {
@@ -181,7 +180,6 @@ class ForceLayoutMapper
     /**
      * @param NetworkNode $node
      * @return int
-     * @throws \Exception
      */
     private function getIndex(NetworkNode $node)
     {

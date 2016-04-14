@@ -20,6 +20,7 @@ var svg = d3.select("body").append("svg")
     .attr("class", "canvas");
 
 d3.json(url.graph, function(error, graph) {
+
     if (error) throw error;
 
     force

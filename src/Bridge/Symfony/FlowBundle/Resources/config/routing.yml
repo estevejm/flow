@@ -1,7 +1,3 @@
-ejm_flow_index:
-    path:     /
-    defaults: { _controller: EJMFlowBundle:Default:index }
-
 ejm_flow_data_graph:
     path:     /graph
     defaults: { _controller: EJMFlowBundle:Data:graph }

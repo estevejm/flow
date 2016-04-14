@@ -1,0 +1,26 @@
+{% extends 'EJMFlowUIBundle:Layout:base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('bundles/ejmflowui/lib/bootstrap/3.3.6/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/ejmflowui/lib/jquery/ui/1.11.0/themes/smoothness/jquery-ui.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/ejmflowui/main.css') }}">
+{% endblock %}
+
+{% block body %}
+    {% include 'EJMFlowUIBundle:Partial:navbar.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        var url = {};
+        url.graph = '{{ url('ejm_flow_data_graph') }}';
+        url.validation = '{{ url('ejm_flow_data_validation') }}';
+    </script>
+
+    <script src="{{ asset('bundles/ejmflowui/lib/jquery/jquery-2.2.2.min.js') }}"></script>
+    <script src="{{ asset('bundles/ejmflowui/lib/bootstrap/3.3.6/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('bundles/ejmflowui/lib/jquery/ui/1.11.0/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('bundles/ejmflowui/lib/d3.v3.min.js') }}"></script>
+    <script src="{{ asset('bundles/ejmflowui/main.js') }}"></script>
+
+{% endblock %}

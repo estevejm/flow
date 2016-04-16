@@ -1,33 +1,46 @@
 (function ($) {
-    $.get(url.validation, function(validation) {
-        if (validation.status == 'invalid') {
-            displayValidatorErrors(validation.violations);
-        } else {
-            displayValidationSuccess();
-        }
-    });
 
-    function displayValidatorErrors(items){
-        var iconMap = {
+    var STATUS_INVALID = 'invalid',
+        ICON_MAP = {
             'error': 'ban-circle',
             'warning': 'exclamation-sign',
             'notice': 'info-sign'
         };
 
-        $('#validator').addClass('error-validation').html('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Validation errors <span class="badge counter">' + items.length + '</span><span class="caret"></a><ul id="validation-list" class="dropdown-menu scrollable-menu"></ul>');
+    $.get(url.validation, show);
 
-        items.forEach(function(item) {
-            $('#validation-list').append(
-                '<li class="validation-item" data-node-id="'+ item.nodeId + '">' +
-                '<span class="glyphicon glyphicon-' + iconMap[item.severity] + '" aria-hidden="true"></span>' +
-                item.message + '</li>'
-            );
-        });
+    function show(validation) {
+        validation.status == STATUS_INVALID ? showViolations(validation.violations) : showSuccess();
     }
 
-    function displayValidationSuccess()
-    {
-        $('#validator').addClass('success-validation').html('<a href="#">Validation errors <span class="badge counter">0</span></a>');
+    function showViolations(items) {
+        $('#validator').addClass('error-validation').html('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Validation errors ' + getCounterHtml(items.length) + '<span class="caret"></a>' + getViolationListHtml(items));
+    }
+
+    function showSuccess() {
+        $('#validator').addClass('success-validation').html('<a href="#">Validation errors ' + getCounterHtml(0)+ '</a>');
+    }
+
+    function getCounterHtml(count) {
+        return '<span class="badge counter">' + count + '</span>';
+    }
+
+    function getViolationListHtml(items) {
+        var violations = '';
+
+        items.forEach(function(item) {
+            violations += getViolationItemHtml(item);
+        });
+
+        return '<ul id="validation-list" class="dropdown-menu scrollable-menu">' + violations + '</ul>';
+    }
+
+    function getViolationItemHtml(item) {
+        return '<li class="validation-item" data-node-id="'+ item.nodeId + '">' + getViolationIcon(item.severity) + item.message + '</li>';
+    }
+
+    function getViolationIcon(severity) {
+        return '<span class="glyphicon glyphicon-' + ICON_MAP[severity] + '" aria-hidden="true"></span>';
     }
 
 }(jQuery));

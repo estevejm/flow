@@ -1,4 +1,4 @@
-(function ($) {
+(function ($, url) {
 
     var STATUS_INVALID = 'invalid',
         ICON_MAP = {
@@ -43,4 +43,4 @@
         return '<span class="glyphicon glyphicon-' + ICON_MAP[severity] + '" aria-hidden="true"></span>';
     }
 
-}(jQuery));
+}(jQuery, flow.url));

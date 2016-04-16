@@ -92,3 +92,7 @@ body {
 .graph-container {
     margin: 20px;
 }
+
+#search-form {
+    display: none;
+}

@@ -81,39 +81,6 @@ d3.json(url.graph, function(error, graphs) {
     }
 });
 
-$.get(url.validation, function(validation) {
-    if (validation.status == 'invalid') {
-        displayValidatorErrors(validation.violations);
-    } else {
-        displayValidationSuccess();
-    }
-});
-
-function displayValidatorErrors(items){
-    var iconMap = {
-        'error': 'ban-circle',
-        'warning': 'exclamation-sign',
-        'notice': 'info-sign'
-    };
-
-    $('.validator.error .counter').text(items.length);
-
-    items.forEach(function(item) {
-        $('#validation-list').append(
-            '<li class="validation-item" data-node-id="'+ item.nodeId + '">' +
-            '<span class="glyphicon glyphicon-' + iconMap[item.severity] + '" aria-hidden="true"></span>' +
-            item.message + '</li>'
-        );
-    });
-
-    $('.validator.error').show();
-}
-
-function displayValidationSuccess()
-{
-    $('.validator.success').show();
-}
-
 function createGraph(id, graph)
 {
     var svg = d3.select("body")

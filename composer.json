@@ -1,5 +1,5 @@
 {
-    "name": "ejm/message-bus-flow",
+    "name": "ejm/flow",
     "license": "MIT",
     "type": "library",
     "description": "Library for build and visualize the network of messages flowing on a message bus",

@@ -1,15 +1,31 @@
 (function ($, d3, flow) {
 
-    function init(nodeIds) {
-        nodeIds = nodeIds.sort();
+    function init(graphs) {
 
         $("#search-form").show();
 
         $("#search-input").autocomplete({
-            source: nodeIds
+            source: getNodeIds(graphs)
         });
 
         setUpEvents();
+    }
+
+    function getNodeIds(graphs) {
+        var nodeIds = [];
+
+        for (id in graphs) {
+            if (graphs.hasOwnProperty(id)) {
+                var graph = graphs[id];
+
+                for (var i = 0; i < graph.nodes.length; i++) {
+                    nodeIds.push(graph.nodes[i].id);
+                }
+
+            }
+        }
+
+        return nodeIds.sort();
     }
 
     function setUpEvents() {
@@ -36,9 +52,8 @@
     }
 
     function temporaryFadeAllExcept(exceptionSelector) {
-        var svg = d3.selectAll('.graph-container > svg');
-        var nodes = svg.selectAll(".node:not(" + exceptionSelector + ")");
-        var links = svg.selectAll(".link");
+        var nodes = d3.selectAll(".node:not(" + exceptionSelector + ")");
+        var links = d3.selectAll(".link");
 
         nodes.style("opacity", "0");
         links.style("opacity", "0");

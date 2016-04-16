@@ -13,10 +13,20 @@ class DataController extends Controller
      */
     public function graphAction()
     {
-        /** @var Network $network */
         $network = $this->get('flow.network');
+        $networks = $this->get('flow.network.splitter')->split($network);
 
-        return new JsonResponse($this->get('flow.mapper')->map($network));
+        $result = array_map([$this, 'map'], $networks);
+
+        return new JsonResponse($result);
+    }
+
+    /**
+     * @param Network $network
+     * @return array
+     */
+    private function map(Network $network) {
+        return $this->get('flow.mapper')->map($network);
     }
 
     /**
@@ -24,7 +34,6 @@ class DataController extends Controller
      */
     public function validationAction()
     {
-        /** @var Network $network */
         $network = $this->get('flow.network');
 
         return new JsonResponse($this->get('flow.validator')->validate($network));

@@ -1,5 +1,10 @@
-var width = 1200,
-    height = 500;
+var width = window.innerWidth
+    || document.documentElement.clientWidth
+    || document.body.clientWidth;
+
+var height = window.innerHeight
+    || document.documentElement.clientHeight
+    || document.body.clientHeight;
 
 var color = d3.scale.category20();
 
@@ -11,17 +16,134 @@ $('.legend li').each(function() {
 });
 
 // end legend
-var force = d3.layout.force()
-    .charge(-1000)
-    .linkDistance(100)
-    .size([width, height]);
 
-var svg = d3.select("body").append("svg")
-    .attr("class", "canvas");
-
-d3.json(url.graph, function(error, graph) {
+d3.json(url.graph, function(error, graphs) {
 
     if (error) throw error;
+
+    var optArray = [];
+
+    for (id in graphs) {
+        if (graphs.hasOwnProperty(id)) {
+            var graph = graphs[id];
+            createGraph(id, graph);
+
+            for (var i = 0; i < graph.nodes.length; i++) {
+                optArray.push(graph.nodes[i].id);
+            }
+        }
+    }
+
+    optArray = optArray.sort();
+
+    $("#search").autocomplete({
+        source: optArray
+    });
+
+    $(document).on('submit', '.search-form', function(e) {
+        e.preventDefault();
+        var selectedVal = document.getElementById('search').value;
+        searchNode(selectedVal);
+    });
+
+    $(document).on('submit', '.search-form', function(e) {
+        e.preventDefault();
+        var selectedVal = document.getElementById('search').value;
+        searchNode(selectedVal);
+    });
+
+    $(document).on('click', '.validation-item .find-node', function() {
+        var nodeId = $(this).data('node-id');
+        searchNode(nodeId);
+    });
+
+    function searchNode(selectedVal) {
+        //find the node
+        var svg = d3.selectAll('.graph-container > svg');
+        var node = svg.selectAll(".node");
+        if (selectedVal == "none") {
+            node.style("stroke", "white").style("stroke-width", "1");
+        } else {
+            var selected = node.filter(function (d, i) {
+                return d.id != selectedVal;
+            });
+            selected.style("opacity", "0");
+            var link = svg.selectAll(".link")
+            link.style("opacity", "0");
+            d3.selectAll(".node, .link").transition()
+                .duration(2000)
+                .style("opacity", 1);
+
+            $('html, body').animate({
+                scrollTop: $("#" + selectedVal).offset().top - (height/2)
+            }, 500);
+        }
+    }
+});
+
+$.get(url.validation, function(validation) {
+    if (validation.status == 'invalid') {
+        displayValidatorErrors(validation.violations);
+    } else {
+        displayValidationSuccess();
+    }
+});
+
+function displayValidatorErrors(items){
+    var iconMap = {
+        'error': 'ban-circle',
+        'warning': 'exclamation-sign',
+        'notice': 'info-sign'
+    };
+
+    $('.validator.error .counter').text(items.length);
+
+    items.forEach(function(item) {
+        $('#validation-list').append(
+            '<li class="validation-item">' +
+            '<span class="glyphicon glyphicon-' + iconMap[item.severity] + '" aria-hidden="true"></span>' +
+            item.message + '<span data-node-id="'+ item.nodeId + '" class="find-node glyphicon glyphicon-eye-open" aria-hidden="true"></span></li>'
+        );
+    });
+
+    $('.validator.error').show();
+}
+
+function displayValidationSuccess()
+{
+    $('.validator.success').show();
+}
+
+function createGraph(id, graph)
+{
+    var svg = d3.select("body")
+        .append("div")
+            .attr("id",  "#graph-" + id)
+            .attr("class", "graph-container well")
+        .append("svg")
+            .attr("viewBox", "0 0 " + width + " " + height )
+            .attr("preserveAspectRatio", "xMidYMid meet");
+
+    // arrow
+    svg.append("svg:defs").selectAll("marker")
+        .data(["end"])
+        .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 12 12")
+        .attr("refX", 25)
+        .attr("refY", -1.5)
+        .attr("markerWidth", 7)
+        .attr("markerHeight", 7)
+        .attr("orient", "auto")
+        .append("path")
+        .attr("d", "M0,-5L10,0L0,5")
+        .style("stroke", "#4679BD")
+        .style("opacity", "0.6");
+
+    var force = d3.layout.force()
+        .charge(-1000)
+        .linkDistance(100)
+        .size([width, height]);
 
     force
         .nodes(graph.nodes)
@@ -112,100 +234,4 @@ d3.json(url.graph, function(error, graph) {
         }
 
     }
-
-    // search
-
-    var optArray = [];
-    for (var i = 0; i < graph.nodes.length - 1; i++) {
-        optArray.push(graph.nodes[i].id);
-    }
-    optArray = optArray.sort();
-
-    $("#search").autocomplete({
-        source: optArray
-    });
-});
-
-$.get(url.validation, function(validation) {
-    if (validation.status == 'invalid') {
-        displayValidatorErrors(validation.violations);
-    } else {
-        displayValidationSuccess();
-    }
-});
-
-// arrow
-svg.append("svg:defs").selectAll("marker")
-    .data(["end"])
-    .enter().append("marker")
-    .attr("id", String)
-    .attr("viewBox", "0 -5 12 12")
-    .attr("refX", 25)
-    .attr("refY", -1.5)
-    .attr("markerWidth", 7)
-    .attr("markerHeight", 7)
-    .attr("orient", "auto")
-    .append("path")
-    .attr("d", "M0,-5L10,0L0,5")
-    .style("stroke", "#4679BD")
-    .style("opacity", "0.6");
-
-function searchNode(selectedVal) {
-    //find the node
-    var node = svg.selectAll(".node");
-    if (selectedVal == "none") {
-        node.style("stroke", "white").style("stroke-width", "1");
-    } else {
-        var selected = node.filter(function (d, i) {
-            return d.id != selectedVal;
-        });
-        selected.style("opacity", "0");
-        var link = svg.selectAll(".link")
-        link.style("opacity", "0");
-        d3.selectAll(".node, .link").transition()
-            .duration(2000)
-            .style("opacity", 1);
-    }
 }
-
-function displayValidatorErrors(items){
-    var iconMap = {
-        'error': 'ban-circle',
-        'warning': 'exclamation-sign',
-        'notice': 'info-sign'
-    };
-
-    $('.validator.error .counter').text(items.length);
-
-    items.forEach(function(item) {
-        $('#validation-list').append(
-            '<li class="validation-item">' +
-            '<span class="glyphicon glyphicon-' + iconMap[item.severity] + '" aria-hidden="true"></span>' +
-            item.message + '<span data-node-id="'+ item.nodeId + '" class="find-node glyphicon glyphicon-eye-open" aria-hidden="true"></span></li>'
-        );
-    });
-
-    $('.validator.error').show();
-}
-
-function displayValidationSuccess()
-{
-    $('.validator.success').show();
-}
-
-$(document).on('submit', '.search-form', function(e) {
-    e.preventDefault();
-    var selectedVal = document.getElementById('search').value;
-    searchNode(selectedVal);
-});
-
-$(document).on('submit', '.search-form', function(e) {
-    e.preventDefault();
-    var selectedVal = document.getElementById('search').value;
-    searchNode(selectedVal);
-});
-
-$(document).on('click', '.validation-item .find-node', function() {
-    var nodeId = $(this).data('node-id');
-    searchNode(nodeId);
-});

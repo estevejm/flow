@@ -1,5 +1,5 @@
 ejm_flow_data_graph:
-    path:     /graph
+    path:     /graphs
     defaults: { _controller: EJMFlowBundle:Data:graph }
 
 ejm_flow_data_validation:

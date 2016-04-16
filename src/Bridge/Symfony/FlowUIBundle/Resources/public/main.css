@@ -6,12 +6,6 @@ body {
     background-color: #eee;
 }
 
-.canvas {
-    width: 100%;
-    height: 100%;
-    margin-top: 50px;
-}
-
 .node {
     stroke: #555;
     stroke-width: 1px;
@@ -96,4 +90,8 @@ body {
     height: auto;
     max-height: 300px;
     overflow-x: hidden;
+}
+
+.graph-container {
+    margin: 20px;
 }

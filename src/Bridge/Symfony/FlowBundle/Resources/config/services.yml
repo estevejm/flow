@@ -44,6 +44,9 @@ services:
         tags:
             - { name: flow.assembly_stage }
 
+    flow.network.splitter:
+        class: EJM\Flow\Network\Splitter
+
     flow.collector:
         class: EJM\Flow\Collector\Collector
         abstract: true

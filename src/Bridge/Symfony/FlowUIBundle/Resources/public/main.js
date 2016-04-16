@@ -52,7 +52,7 @@ d3.json(url.graph, function(error, graphs) {
         searchNode(selectedVal);
     });
 
-    $(document).on('click', '.validation-item .find-node', function() {
+    $(document).on('click', '.validation-item', function() {
         var nodeId = $(this).data('node-id');
         searchNode(nodeId);
     });
@@ -100,9 +100,9 @@ function displayValidatorErrors(items){
 
     items.forEach(function(item) {
         $('#validation-list').append(
-            '<li class="validation-item">' +
+            '<li class="validation-item" data-node-id="'+ item.nodeId + '">' +
             '<span class="glyphicon glyphicon-' + iconMap[item.severity] + '" aria-hidden="true"></span>' +
-            item.message + '<span data-node-id="'+ item.nodeId + '" class="find-node glyphicon glyphicon-eye-open" aria-hidden="true"></span></li>'
+            item.message + '</li>'
         );
     });
 

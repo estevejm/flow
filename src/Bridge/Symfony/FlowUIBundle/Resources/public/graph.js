@@ -69,9 +69,7 @@
         var force = d3.layout.force()
             .charge(flow.config.force.charge)
             .linkDistance(flow.config.force.linkDistance)
-            .size([flow.config.canvas.width, flow.config.canvas.height]);
-
-        force
+            .size([flow.config.canvas.width, flow.config.canvas.height])
             .nodes(graph.nodes)
             .links(graph.links)
             .start();
@@ -80,22 +78,20 @@
             .attr("class", "link")
             .attr("marker-end", "url(#end)");
 
-        nodes.enter().append("circle")
+        var circles = nodes.enter().append("circle")
             .attr("class", "node")
             .attr("id", function (d) { return d.id; })
             .attr("r", 8)
             .style("fill", function (d) { return color(d.type); })
-            .call(force.drag);
 
-        nodes.enter().append("text")
+        circles.call(force.drag);
+
+        var texts = nodes.enter().append("text")
             .attr("dx", 10)
             .attr("dy", "0.35em")
             .attr("class", "label")
             .attr("data-for-node", function (d) { return d.id; })
             .text(function(d) { return d.id });
-
-        var circles = d3.selectAll("circle");
-        var texts = d3.selectAll("text");
 
         force.on("tick", function() {
             links

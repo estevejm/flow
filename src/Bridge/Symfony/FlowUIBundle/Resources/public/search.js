@@ -8,7 +8,11 @@
             source: getNodeIds(graphs)
         });
 
-        setUpEvents();
+        $(document).on('submit', '#search-form', function(e) {
+            e.preventDefault();
+            var inputValue = document.getElementById('search-input').value;
+            flow.component.finder.find(inputValue);
+        });
     }
 
     function getNodeIds(graphs) {
@@ -26,19 +30,6 @@
         }
 
         return nodeIds.sort();
-    }
-
-    function setUpEvents() {
-        $(document).on('submit', '#search-form', function(e) {
-            e.preventDefault();
-            var inputValue = document.getElementById('search-input').value;
-            flow.component.finder.find(inputValue);
-        });
-
-        $(document).on('click', '.validation-item', function() {
-            var nodeId = $(this).data('node-id');
-            flow.component.finder.find(nodeId);
-        });
     }
 
     flow.component.search = {

@@ -7,7 +7,14 @@
             'notice': 'info-sign'
         };
 
-    $.get(flow.config.url.validation, show);
+    function init() {
+        $.get(flow.config.url.validation, show);
+
+        $(document).on('click', '.validation-item', function() {
+            var nodeId = $(this).data('node-id');
+            flow.component.finder.find(nodeId);
+        });
+    }
 
     function show(validation) {
         validation.status == STATUS_INVALID ? showViolations(validation.violations) : showSuccess();
@@ -41,6 +48,10 @@
 
     function getViolationIcon(severity) {
         return '<span class="glyphicon glyphicon-' + ICON_MAP[severity] + '" aria-hidden="true"></span>';
+    }
+
+    flow.component.validation = {
+        init: init
     }
 
 }(flow, jQuery));

@@ -1,4 +1,4 @@
-(function (flow, $) {
+(function (flow, $, PubSub) {
 
     var STATUS_INVALID = 'invalid',
         ICON_MAP = {
@@ -12,7 +12,7 @@
 
         $(document).on('click', '.validation-item', function() {
             var nodeId = $(this).data('node-id');
-            flow.component.finder.find(nodeId);
+            PubSub.publish('findNode', nodeId);
         });
     }
 
@@ -54,4 +54,4 @@
         load: load
     }
 
-}(flow, jQuery));
+}(flow, jQuery, PubSub));

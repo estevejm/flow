@@ -1,6 +1,6 @@
-(function (flow, $, d3) {
+(function (flow, $, d3, PubSub) {
 
-    function find(nodeId) {
+    PubSub.subscribe('findNode', function find(msg, nodeId) {
         var selectedNode = document.getElementById(nodeId);
 
         if (selectedNode !== null) {
@@ -8,7 +8,7 @@
         }
 
         temporaryFadeAllExcept(nodeId);
-    }
+    });
 
     function scrollToNode(node) {
         $('html, body').animate({
@@ -31,8 +31,4 @@
             .style("opacity", 1);
     }
 
-    flow.component.finder = {
-        find: find
-    };
-
-}(flow, jQuery, d3));
+}(flow, jQuery, d3, PubSub));

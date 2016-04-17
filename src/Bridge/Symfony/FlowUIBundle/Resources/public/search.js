@@ -1,4 +1,4 @@
-(function (flow, $) {
+(function (flow, $, PubSub) {
 
     function init(graphs) {
 
@@ -11,7 +11,7 @@
         $(document).on('submit', '#search-form', function(e) {
             e.preventDefault();
             var inputValue = document.getElementById('search-input').value;
-            flow.component.finder.find(inputValue);
+            PubSub.publish('findNode', inputValue);
         });
     }
 
@@ -36,4 +36,4 @@
         init: init
     };
 
-}(flow, jQuery));
+}(flow, jQuery, PubSub));

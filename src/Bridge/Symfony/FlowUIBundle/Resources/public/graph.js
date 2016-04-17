@@ -2,7 +2,7 @@
 
     var color = d3.scale.category20();
 
-    function load(uri) {
+    PubSub.subscribe('graph.load', function (msg, uri) {
         d3.json(uri, function(error, graphs) {
 
             if (error) throw "Error rendering graph: " + error;
@@ -17,7 +17,7 @@
 
             this.style.backgroundColor = color(type);
         });
-    }
+    });
 
     function createGraphs(graphs) {
         for (id in graphs) {
@@ -106,10 +106,6 @@
             .style("opacity", "0.6");
 
         return container;
-    }
-
-    flow.component.graph = {
-        load: load
     }
 
 }(flow, jQuery, d3));

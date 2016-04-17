@@ -38,7 +38,7 @@
     <script src="{{ asset('bundles/ejmflowui/validation.js') }}"></script>
 
     <script>
-        flow.component.graph.load('{{ graph_uri }}');
+        PubSub.publish('graph.load', '{{ graph_uri }}');
         PubSub.publish('validation.load', '{{ validation_uri }}');
     </script>
 

@@ -1,4 +1,4 @@
-(function ($, d3, flow) {
+(function ($, flow) {
 
     function init(graphs) {
 
@@ -48,20 +48,7 @@
             scrollToNode(selectedNode);
         }
 
-        temporaryFadeAllExcept("#" + id);
-    }
-
-    function temporaryFadeAllExcept(exceptionSelector) {
-        var nodes = d3.selectAll(".node:not(" + exceptionSelector + ")");
-        var links = d3.selectAll(".link");
-
-        nodes.style("opacity", "0");
-        links.style("opacity", "0");
-
-        d3.selectAll(".node, .link")
-            .transition()
-            .duration(2000)
-            .style("opacity", 1);
+        flow.component.graph.temporaryFadeAllExcept("#" + id);
     }
 
     function scrollToNode(node) {
@@ -74,4 +61,4 @@
         init: init
     };
 
-}(jQuery, d3, flow));
+}(jQuery, flow));

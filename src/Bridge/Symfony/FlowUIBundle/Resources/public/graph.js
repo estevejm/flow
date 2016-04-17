@@ -164,4 +164,21 @@
         links.style("opacity", 1);
     }
 
+    function temporaryFadeAllExcept(exceptionSelector) {
+        var nodes = d3.selectAll(".node:not(" + exceptionSelector + ")");
+        var links = d3.selectAll(".link");
+
+        nodes.style("opacity", "0");
+        links.style("opacity", "0");
+
+        d3.selectAll(".node, .link")
+            .transition()
+            .duration(2000)
+            .style("opacity", 1);
+    }
+
+    flow.component.graph = {
+        temporaryFadeAllExcept: temporaryFadeAllExcept
+    };
+
 }(d3));

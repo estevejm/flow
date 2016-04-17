@@ -35,10 +35,6 @@
         var nodes = container.selectAll(".node").data(graph.nodes);
 
         createForceLayout(graph, nodes, links);
-
-        drawLinks(links);
-        drawNodes(nodes);
-
         setupNodeNeighborhood(graph, nodes, links);
     }
 
@@ -80,6 +76,9 @@
             .nodes(graph.nodes)
             .links(graph.links)
             .start();
+
+        drawLinks(links);
+        drawNodes(nodes);
 
         nodes.call(force.drag);
 

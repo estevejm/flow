@@ -31,41 +31,6 @@
     function createGraph(id, graph) {
         var container = createGraphContainer(id);
 
-        var links = container.selectAll(".link").data(graph.links);
-        var nodes = container.selectAll(".node").data(graph.nodes);
-
-        createForceLayout(graph, nodes, links);
-    }
-
-    function createGraphContainer(id) {
-        var container = d3.select("body")
-            .append("div")
-            .attr("id",  "#graph-" + id)
-            .attr("class", "graph-container well")
-            .append("svg")
-            .attr("viewBox", "0 0 " + flow.config.canvas.width + " " + flow.config.canvas.height )
-            .attr("preserveAspectRatio", "xMidYMid meet");
-
-        // arrow
-        container.append("svg:defs").selectAll("marker")
-            .data(["end"])
-            .enter().append("marker")
-            .attr("id", String)
-            .attr("viewBox", "0 -5 12 12")
-            .attr("refX", 25)
-            .attr("refY", -1.5)
-            .attr("markerWidth", 7)
-            .attr("markerHeight", 7)
-            .attr("orient", "auto")
-            .append("path")
-            .attr("d", "M0,-5L10,0L0,5")
-            .style("stroke", "#4679BD")
-            .style("opacity", "0.6");
-
-        return container;
-    }
-
-    function createForceLayout(graph, nodes, links) {
         var force = d3.layout.force()
             .charge(flow.config.force.charge)
             .linkDistance(flow.config.force.linkDistance)
@@ -74,9 +39,14 @@
             .links(graph.links)
             .start();
 
-        links.enter().append("line")
+        var links = container.selectAll(".link")
+            .data(graph.links)
+            .enter().append("line")
             .attr("class", "link")
             .attr("marker-end", "url(#end)");
+
+        var nodes = container.selectAll(".node")
+            .data(graph.nodes);
 
         var circles = nodes.enter().append("circle")
             .attr("class", "node")
@@ -108,6 +78,34 @@
                 .attr("x", function (d) { return d.x; })
                 .attr("y", function (d) { return d.y; });
         });
+    }
+
+    function createGraphContainer(id) {
+        var container = d3.select("body")
+            .append("div")
+            .attr("id",  "#graph-" + id)
+            .attr("class", "graph-container well")
+            .append("svg")
+            .attr("viewBox", "0 0 " + flow.config.canvas.width + " " + flow.config.canvas.height )
+            .attr("preserveAspectRatio", "xMidYMid meet");
+
+        // arrow
+        container.append("svg:defs").selectAll("marker")
+            .data(["end"])
+            .enter().append("marker")
+            .attr("id", String)
+            .attr("viewBox", "0 -5 12 12")
+            .attr("refX", 25)
+            .attr("refY", -1.5)
+            .attr("markerWidth", 7)
+            .attr("markerHeight", 7)
+            .attr("orient", "auto")
+            .append("path")
+            .attr("d", "M0,-5L10,0L0,5")
+            .style("stroke", "#4679BD")
+            .style("opacity", "0.6");
+
+        return container;
     }
 
     function temporaryFadeAllExcept(nodeId) {

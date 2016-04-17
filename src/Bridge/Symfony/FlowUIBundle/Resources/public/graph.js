@@ -20,9 +20,22 @@
         }
     }
 
-    function createGraph(id, graph)
-    {
-        var svg = d3.select("body")
+    function createGraph(id, graph) {
+        var container = createGraphContainer(id);
+
+        var links = container.selectAll(".link").data(graph.links);
+        var nodes = container.selectAll(".node").data(graph.nodes);
+
+        createForceLayout(graph, nodes, links);
+
+        drawLinks(links);
+        drawNodes(nodes);
+
+        setupNodeNeighborhood(graph, nodes, links);
+    }
+
+    function createGraphContainer(id) {
+        var container = d3.select("body")
             .append("div")
             .attr("id",  "#graph-" + id)
             .attr("class", "graph-container well")
@@ -31,7 +44,7 @@
             .attr("preserveAspectRatio", "xMidYMid meet");
 
         // arrow
-        svg.append("svg:defs").selectAll("marker")
+        container.append("svg:defs").selectAll("marker")
             .data(["end"])
             .enter().append("marker")
             .attr("id", String)
@@ -46,6 +59,10 @@
             .style("stroke", "#4679BD")
             .style("opacity", "0.6");
 
+        return container;
+    }
+
+    function createForceLayout(graph, nodes, links) {
         var force = d3.layout.force()
             .charge(-1000)
             .linkDistance(100)
@@ -56,37 +73,16 @@
             .links(graph.links)
             .start();
 
-        var link = svg.selectAll(".link")
-            .data(graph.links)
-            .enter().append("line")
-            .attr("class", "link")
-            .attr("marker-end", "url(#end)");
-
-        var node = svg.selectAll(".node")
-            .data(graph.nodes)
-            .enter().append("g")
-            .attr("class", "node")
-            .attr("id", function (d) { return d.id; })
-            .call(force.drag)
-            .on('dblclick', connectedNodes); // show neighboring nodes
-
-        node.append("circle")
-            .attr("r", 8)
-            .style("fill", function (d) { return color(d.type); });
-
-        node.append("text")
-            .attr("dx", 10)
-            .attr("dy", "0.35em")
-            .text(function(d) { return d.id });
+        nodes.call(force.drag);
 
         force.on("tick", function() {
-            link.attr("x1", function(d) { return d.source.x; })
+            nodes.attr("cx", function(d) { return d.x; })
+                .attr("cy", function(d) { return d.y; });
+
+            links.attr("x1", function(d) { return d.source.x; })
                 .attr("y1", function(d) { return d.source.y; })
                 .attr("x2", function(d) { return d.target.x; })
                 .attr("y2", function(d) { return d.target.y; });
-
-            node.attr("cx", function(d) { return d.x; })
-                .attr("cy", function(d) { return d.y; });
 
             d3.selectAll("circle")
                 .attr("cx", function (d) { return d.x; })
@@ -96,49 +92,76 @@
                 .attr("x", function (d) { return d.x; })
                 .attr("y", function (d) { return d.y; });
         });
+    }
 
-        // show neighboring nodes
-        //Toggle stores whether the highlighting is on
+    function drawNodes(nodes) {
+        nodes.enter().append("g")
+            .attr("class", "node")
+            .attr("id", function (d) { return d.id; });
+
+        nodes.append("circle")
+            .attr("r", 8)
+            .style("fill", function (d) { return color(d.type); });
+
+        nodes.append("text")
+            .attr("dx", 10)
+            .attr("dy", "0.35em")
+            .text(function(d) { return d.id });
+    }
+
+    function drawLinks(links)
+    {
+        links.enter().append("line")
+            .attr("class", "link")
+            .attr("marker-end", "url(#end)");
+    }
+
+    function setupNodeNeighborhood(graph, nodes, links) {
+        var neighborhood = new Neighborhood(graph);
+
         var toggle = 0;
 
-        //Create an array logging what is connected to what
-        var linkedByIndex = {};
-        for (i = 0; i < graph.nodes.length; i++) {
-            linkedByIndex[i + "," + i] = 1;
-        }
-
-        graph.links.forEach(function (d) {
-            linkedByIndex[d.source.index + "," + d.target.index] = 1;
-        });
-
-        //This function looks up whether a pair are neighbours
-        function neighboring(a, b) {
-            return linkedByIndex[a.index + "," + b.index];
-        }
-
-        function connectedNodes() {
-
+        nodes.on('dblclick', function connectedNodes() {
             if (toggle == 0) {
-                //Reduce the opacity of all but the neighbouring nodes
-                d = d3.select(this).node().__data__;
-                node.style("opacity", function (o) {
-                    return neighboring(d, o) | neighboring(o, d) ? 1 : 0.1;
-                });
-
-                link.style("opacity", function (o) {
-                    return d.index==o.source.index | d.index==o.target.index ? 1 : 0.1;
-                });
-
-                //Reduce the op
-
+                showConnected(this, neighborhood, nodes, links);
                 toggle = 1;
             } else {
-                //Put them back to opacity=1
-                node.style("opacity", 1);
-                link.style("opacity", 1);
+                showAll(nodes, links);
                 toggle = 0;
             }
-
-        }
+        });
     }
+    function Neighborhood(graph) {
+        var self = this;
+        this.linkedNodes = {};
+
+        for (var i = 0; i < graph.nodes.length; i++) {
+            this.linkedNodes[i + "," + i] = 1;
+        }
+
+        graph.links.forEach(function (link) {
+            self.linkedNodes[link.source.index + "," + link.target.index] = 1;
+        });
+    }
+
+    Neighborhood.prototype.areNeighbors  = function(node1, node2) {
+        return this.linkedNodes[node1.index + "," + node2.index];
+    };
+
+    function showConnected(selectedNode, neighborhood, nodes, links) {
+        var d = d3.select(selectedNode).node().__data__;
+        nodes.style("opacity", function (o) {
+            return neighborhood.areNeighbors(d, o) || neighborhood.areNeighbors(o, d) ? 1 : 0.1;
+        });
+
+        links.style("opacity", function (o) {
+            return d.index == o.source.index || d.index == o.target.index ? 1 : 0.1;
+        });
+    }
+
+    function showAll(nodes, links) {
+        nodes.style("opacity", 1);
+        links.style("opacity", 1);
+    }
+
 }(d3));

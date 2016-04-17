@@ -32,29 +32,13 @@
         $(document).on('submit', '#search-form', function(e) {
             e.preventDefault();
             var inputValue = document.getElementById('search-input').value;
-            searchNode(inputValue);
+            flow.component.finder.find(inputValue);
         });
 
         $(document).on('click', '.validation-item', function() {
             var nodeId = $(this).data('node-id');
-            searchNode(nodeId);
+            flow.component.finder.find(nodeId);
         });
-    }
-
-    function searchNode(nodeId) {
-        var selectedNode = document.getElementById(nodeId);
-
-        if (selectedNode !== null) {
-            scrollToNode(selectedNode);
-        }
-
-        flow.component.graph.temporaryFadeAllExcept(nodeId);
-    }
-
-    function scrollToNode(node) {
-        $('html, body').animate({
-            scrollTop: $(node).offset().top - (flow.config.canvas.height/2)
-        }, 500);
     }
 
     flow.component.search = {

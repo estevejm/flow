@@ -7,11 +7,9 @@
 
             if (error) throw "Error rendering graph: " + error;
 
-            createGraphs(graphs);
+            PubSub.publish('graph.loaded', graphs);
 
-            if (typeof flow.component.search !== 'undefined') {
-                flow.component.search.init(graphs);
-            }
+            createGraphs(graphs);
         });
 
         $('.legend li').each(function() {

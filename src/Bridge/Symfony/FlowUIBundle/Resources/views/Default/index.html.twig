@@ -39,7 +39,7 @@
 
     <script>
         flow.component.graph.load('{{ graph_uri }}');
-        flow.component.validation.load('{{ validation_uri }}');
+        PubSub.publish('validation.load', '{{ validation_uri }}');
     </script>
 
 {% endblock %}

@@ -1,6 +1,6 @@
 (function (flow, $, d3, PubSub) {
 
-    PubSub.subscribe('findNode', function find(msg, nodeId) {
+    PubSub.subscribe('node.find', function (msg, nodeId) {
         var selectedNode = document.getElementById(nodeId);
 
         if (selectedNode !== null) {

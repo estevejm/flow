@@ -1,4 +1,4 @@
-(function (flow, $, PubSub) {
+(function ($, PubSub) {
 
     var STATUS_INVALID = 'invalid',
         ICON_MAP = {
@@ -7,14 +7,14 @@
             'notice': 'info-sign'
         };
 
-    function load(uri) {
+    PubSub.subscribe('validation.load', function (msg, uri) {
         $.get(uri, show);
 
         $(document).on('click', '.validation-item', function() {
             var nodeId = $(this).data('node-id');
-            PubSub.publish('findNode', nodeId);
+            PubSub.publish('node.find', nodeId);
         });
-    }
+    });
 
     function show(validation) {
         validation.status == STATUS_INVALID ? showViolations(validation.violations) : showSuccess();
@@ -50,8 +50,4 @@
         return '<span class="glyphicon glyphicon-' + ICON_MAP[severity] + '" aria-hidden="true"></span>';
     }
 
-    flow.component.validation = {
-        load: load
-    }
-
-}(flow, jQuery, PubSub));
+}(jQuery, PubSub));

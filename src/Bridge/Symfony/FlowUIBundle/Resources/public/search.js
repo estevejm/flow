@@ -1,7 +1,6 @@
-(function (flow, $, PubSub) {
+(function ($, PubSub) {
 
-    function init(graphs) {
-
+    PubSub.subscribe('graph.loaded', function (msg, graphs) {
         $("#search-form").show();
 
         $("#search-input").autocomplete({
@@ -11,9 +10,10 @@
         $(document).on('submit', '#search-form', function(e) {
             e.preventDefault();
             var inputValue = document.getElementById('search-input').value;
-            PubSub.publish('findNode', inputValue);
+            // todo: validate input value
+            PubSub.publish('node.find', inputValue);
         });
-    }
+    });
 
     function getNodeIds(graphs) {
         var nodeIds = [];
@@ -32,8 +32,4 @@
         return nodeIds.sort();
     }
 
-    flow.component.search = {
-        init: init
-    };
-
-}(flow, jQuery, PubSub));
+}(jQuery, PubSub));

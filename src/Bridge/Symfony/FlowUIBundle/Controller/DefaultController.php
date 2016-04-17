@@ -13,8 +13,8 @@ class DefaultController extends Controller
     public function indexAction()
     {
         return $this->render('EJMFlowUIBundle:Default:index.html.twig', [
-            'graph_url' => $this->generateUrl('ejm_flow_data_graph'),
-            'validation_url' => $this->generateUrl('ejm_flow_data_validation'),
+            'graph_uri' => $this->generateUrl('ejm_flow_data_graph'),
+            'validation_uri' => $this->generateUrl('ejm_flow_data_validation'),
         ]);
     }
 }

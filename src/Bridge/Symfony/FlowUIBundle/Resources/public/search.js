@@ -41,14 +41,14 @@
         });
     }
 
-    function searchNode(id) {
-        var selectedNode = document.getElementById(id);
+    function searchNode(nodeId) {
+        var selectedNode = document.getElementById(nodeId);
 
         if (selectedNode !== null) {
             scrollToNode(selectedNode);
         }
 
-        flow.component.graph.temporaryFadeAllExcept("#" + id);
+        flow.component.graph.temporaryFadeAllExcept(nodeId);
     }
 
     function scrollToNode(node) {

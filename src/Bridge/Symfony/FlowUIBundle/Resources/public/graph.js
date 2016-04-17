@@ -77,15 +77,24 @@
             .links(graph.links)
             .start();
 
-        drawLinks(links);
-        drawNodes(nodes);
+        links.enter().append("line")
+            .attr("class", "link")
+            .attr("marker-end", "url(#end)");
 
-        nodes.call(force.drag);
+        nodes.enter().append("circle")
+            .attr("class", "node")
+            .attr("id", function (d) { return d.id; })
+            .attr("r", 8)
+            .style("fill", function (d) { return color(d.type); })
+            .call(force.drag);
+
+        nodes.enter().append("text")
+            .attr("dx", 10)
+            .attr("dy", "0.35em")
+            .attr("data-for-node", function (d) { return d.id; })
+            .text(function(d) { return d.id });
 
         force.on("tick", function() {
-            nodes.attr("cx", function(d) { return d.x; })
-                .attr("cy", function(d) { return d.y; });
-
             links.attr("x1", function(d) { return d.source.x; })
                 .attr("y1", function(d) { return d.source.y; })
                 .attr("x2", function(d) { return d.target.x; })
@@ -99,28 +108,6 @@
                 .attr("x", function (d) { return d.x; })
                 .attr("y", function (d) { return d.y; });
         });
-    }
-
-    function drawNodes(nodes) {
-        nodes.enter().append("g")
-            .attr("class", "node")
-            .attr("id", function (d) { return d.id; });
-
-        nodes.append("circle")
-            .attr("r", 8)
-            .style("fill", function (d) { return color(d.type); });
-
-        nodes.append("text")
-            .attr("dx", 10)
-            .attr("dy", "0.35em")
-            .text(function(d) { return d.id });
-    }
-
-    function drawLinks(links)
-    {
-        links.enter().append("line")
-            .attr("class", "link")
-            .attr("marker-end", "url(#end)");
     }
 
     function setupNodeNeighborhood(graph, nodes, links) {
@@ -171,14 +158,16 @@
         links.style("opacity", 1);
     }
 
-    function temporaryFadeAllExcept(exceptionSelector) {
-        var nodes = d3.selectAll(".node:not(" + exceptionSelector + ")");
+    function temporaryFadeAllExcept(nodeId) {
+        var nodes = d3.selectAll(".node:not(#" + nodeId + ")");
+        var texts = d3.selectAll("text:not([data-for-node='" + nodeId + "'])");
         var links = d3.selectAll(".link");
 
         nodes.style("opacity", "0");
+        texts.style("opacity", "0");
         links.style("opacity", "0");
 
-        d3.selectAll(".node, .link")
+        d3.selectAll(".node, .link, text")
             .transition()
             .duration(2000)
             .style("opacity", 1);

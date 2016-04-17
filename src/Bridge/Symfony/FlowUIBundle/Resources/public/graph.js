@@ -35,7 +35,6 @@
         var nodes = container.selectAll(".node").data(graph.nodes);
 
         createForceLayout(graph, nodes, links);
-        setupNodeNeighborhood(graph, nodes, links);
     }
 
     function createGraphContainer(id) {
@@ -108,54 +107,6 @@
                 .attr("x", function (d) { return d.x; })
                 .attr("y", function (d) { return d.y; });
         });
-    }
-
-    function setupNodeNeighborhood(graph, nodes, links) {
-        var neighborhood = new Neighborhood(graph);
-
-        var toggle = 0;
-
-        nodes.on('dblclick', function connectedNodes() {
-            if (toggle == 0) {
-                showConnected(this, neighborhood, nodes, links);
-                toggle = 1;
-            } else {
-                showAll(nodes, links);
-                toggle = 0;
-            }
-        });
-    }
-    function Neighborhood(graph) {
-        var self = this;
-        this.linkedNodes = {};
-
-        for (var i = 0; i < graph.nodes.length; i++) {
-            this.linkedNodes[i + "," + i] = 1;
-        }
-
-        graph.links.forEach(function (link) {
-            self.linkedNodes[link.source.index + "," + link.target.index] = 1;
-        });
-    }
-
-    Neighborhood.prototype.areNeighbors  = function(node1, node2) {
-        return this.linkedNodes[node1.index + "," + node2.index];
-    };
-
-    function showConnected(selectedNode, neighborhood, nodes, links) {
-        var d = d3.select(selectedNode).node().__data__;
-        nodes.style("opacity", function (o) {
-            return neighborhood.areNeighbors(d, o) || neighborhood.areNeighbors(o, d) ? 1 : 0.1;
-        });
-
-        links.style("opacity", function (o) {
-            return d.index == o.source.index || d.index == o.target.index ? 1 : 0.1;
-        });
-    }
-
-    function showAll(nodes, links) {
-        nodes.style("opacity", 1);
-        links.style("opacity", 1);
     }
 
     function temporaryFadeAllExcept(nodeId) {

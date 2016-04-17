@@ -9,7 +9,6 @@
                 PubSub.publish('graph.error', error);
             } else {
                 PubSub.publish('graph.loaded', graphs);
-                createGraphs(graphs);
             }
         });
 
@@ -20,14 +19,14 @@
         });
     });
 
-    function createGraphs(graphs) {
+    PubSub.subscribe('graph.loaded', function (msg, graphs) {
         for (id in graphs) {
             if (graphs.hasOwnProperty(id)) {
                 var graph = graphs[id];
                 createGraph(id, graph);
             }
         }
-    }
+    });
 
     function createGraph(id, graph) {
         var container = createGraphContainer(id);

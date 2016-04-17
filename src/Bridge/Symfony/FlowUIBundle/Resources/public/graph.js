@@ -90,6 +90,7 @@
         nodes.enter().append("text")
             .attr("dx", 10)
             .attr("dy", "0.35em")
+            .attr("class", "label")
             .attr("data-for-node", function (d) { return d.id; })
             .text(function(d) { return d.id });
 
@@ -111,14 +112,14 @@
 
     function temporaryFadeAllExcept(nodeId) {
         var nodes = d3.selectAll(".node:not(#" + nodeId + ")");
-        var texts = d3.selectAll("text:not([data-for-node='" + nodeId + "'])");
+        var texts = d3.selectAll(".label:not([data-for-node='" + nodeId + "'])");
         var links = d3.selectAll(".link");
 
         nodes.style("opacity", "0");
         texts.style("opacity", "0");
         links.style("opacity", "0");
 
-        d3.selectAll(".node, .link, text")
+        d3.selectAll(".node, .link, .label")
             .transition()
             .duration(2000)
             .style("opacity", 1);

@@ -5,11 +5,12 @@
     PubSub.subscribe('graph.load', function (msg, uri) {
         d3.json(uri, function(error, graphs) {
 
-            if (error) throw "Error rendering graph: " + error;
-
-            PubSub.publish('graph.loaded', graphs);
-
-            createGraphs(graphs);
+            if (error) {
+                PubSub.publish('graph.error', error);
+            } else {
+                PubSub.publish('graph.loaded', graphs);
+                createGraphs(graphs);
+            }
         });
 
         $('.legend li').each(function() {

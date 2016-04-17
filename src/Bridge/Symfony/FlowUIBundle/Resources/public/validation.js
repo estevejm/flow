@@ -1,4 +1,4 @@
-(function ($, url) {
+(function (flow, $) {
 
     var STATUS_INVALID = 'invalid',
         ICON_MAP = {
@@ -7,7 +7,7 @@
             'notice': 'info-sign'
         };
 
-    $.get(url.validation, show);
+    $.get(flow.config.url.validation, show);
 
     function show(validation) {
         validation.status == STATUS_INVALID ? showViolations(validation.violations) : showSuccess();
@@ -43,4 +43,4 @@
         return '<span class="glyphicon glyphicon-' + ICON_MAP[severity] + '" aria-hidden="true"></span>';
     }
 
-}(jQuery, flow.url));
+}(flow, jQuery));

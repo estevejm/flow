@@ -1,6 +1,14 @@
-(function (d3) {
+(function (flow, $, d3) {
 
-    d3.json(flow.url.graph, function(error, graphs) {
+    var color = d3.scale.category20();
+
+    $('.legend li').each(function() {
+        var type = $(this).data('type');
+
+        this.style.backgroundColor = color(type);
+    });
+
+    d3.json(flow.config.url.graph, function(error, graphs) {
 
         if (error) throw "Error rendering graph: " + error;
 
@@ -40,7 +48,7 @@
             .attr("id",  "#graph-" + id)
             .attr("class", "graph-container well")
             .append("svg")
-            .attr("viewBox", "0 0 " + width + " " + height )
+            .attr("viewBox", "0 0 " + flow.config.canvas.width + " " + flow.config.canvas.height )
             .attr("preserveAspectRatio", "xMidYMid meet");
 
         // arrow
@@ -64,9 +72,9 @@
 
     function createForceLayout(graph, nodes, links) {
         var force = d3.layout.force()
-            .charge(-1000)
-            .linkDistance(100)
-            .size([width, height]);
+            .charge(flow.config.force.charge)
+            .linkDistance(flow.config.force.linkDistance)
+            .size([flow.config.canvas.width, flow.config.canvas.height]);
 
         force
             .nodes(graph.nodes)
@@ -181,4 +189,4 @@
         temporaryFadeAllExcept: temporaryFadeAllExcept
     };
 
-}(d3));
+}(flow, jQuery, d3));

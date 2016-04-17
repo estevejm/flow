@@ -18,17 +18,26 @@
 
     <script>
         var flow = {
-            component: {},
-            url: {
-                graph: '{{ graph_url }}',
-                validation: '{{ validation_url }}'
-            }
+            config: {
+                url: {
+                    graph: '{{ graph_url }}',
+                    validation: '{{ validation_url }}'
+                },
+                canvas: {
+                    width: window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
+                    height: window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
+                },
+                force: {
+                    charge: -1000,
+                    linkDistance: 100
+                }
+            },
+            component: {}
         };
     </script>
 
     <script src="{{ asset('bundles/ejmflowui/graph.js') }}"></script>
     <script src="{{ asset('bundles/ejmflowui/search.js') }}"></script>
     <script src="{{ asset('bundles/ejmflowui/validation.js') }}"></script>
-    <script src="{{ asset('bundles/ejmflowui/main.js') }}"></script>
 
 {% endblock %}

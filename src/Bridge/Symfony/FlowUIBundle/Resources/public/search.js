@@ -1,4 +1,4 @@
-(function ($, flow) {
+(function (flow, $) {
 
     function init(graphs) {
 
@@ -53,7 +53,7 @@
 
     function scrollToNode(node) {
         $('html, body').animate({
-            scrollTop: $(node).offset().top - (height/2)
+            scrollTop: $(node).offset().top - (flow.config.canvas.height/2)
         }, 500);
     }
 
@@ -61,4 +61,4 @@
         init: init
     };
 
-}(jQuery, flow));
+}(flow, jQuery));

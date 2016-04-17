@@ -32,9 +32,9 @@
         var container = createGraphContainer(id);
 
         var force = d3.layout.force()
-            .charge(flow.config.force.charge)
-            .linkDistance(flow.config.force.linkDistance)
-            .size([flow.config.canvas.width, flow.config.canvas.height])
+            .charge(flow.force.charge)
+            .linkDistance(flow.force.linkDistance)
+            .size([flow.canvas.width, flow.canvas.height])
             .nodes(graph.nodes)
             .links(graph.links)
             .start();
@@ -86,7 +86,7 @@
             .attr("id",  "#graph-" + id)
             .attr("class", "graph-container well")
             .append("svg")
-            .attr("viewBox", "0 0 " + flow.config.canvas.width + " " + flow.config.canvas.height )
+            .attr("viewBox", "0 0 " + flow.canvas.width + " " + flow.canvas.height )
             .attr("preserveAspectRatio", "xMidYMid meet");
 
         // arrow

@@ -12,7 +12,7 @@
 
     function scrollToNode(node) {
         $('html, body').animate({
-            scrollTop: $(node).offset().top - (flow.config.canvas.height/2)
+            scrollTop: $(node).offset().top - (flow.canvas.height/2)
         }, 500);
     }
 

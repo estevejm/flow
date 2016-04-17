@@ -7,7 +7,7 @@
             'notice': 'info-sign'
         };
 
-    function init() {
+    function load() {
         $.get(flow.config.url.validation, show);
 
         $(document).on('click', '.validation-item', function() {
@@ -51,7 +51,7 @@
     }
 
     flow.component.validation = {
-        init: init
+        load: load
     }
 
 }(flow, jQuery));

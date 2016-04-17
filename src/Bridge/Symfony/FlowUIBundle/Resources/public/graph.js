@@ -2,22 +2,24 @@
 
     var color = d3.scale.category20();
 
-    $('.legend li').each(function() {
-        var type = $(this).data('type');
+    function load() {
+        d3.json(flow.config.url.graph, function(error, graphs) {
 
-        this.style.backgroundColor = color(type);
-    });
+            if (error) throw "Error rendering graph: " + error;
 
-    d3.json(flow.config.url.graph, function(error, graphs) {
+            createGraphs(graphs);
 
-        if (error) throw "Error rendering graph: " + error;
+            if (typeof flow.component.search !== 'undefined') {
+                flow.component.search.init(graphs);
+            }
+        });
 
-        createGraphs(graphs);
+        $('.legend li').each(function() {
+            var type = $(this).data('type');
 
-        if (typeof flow.component.search !== 'undefined') {
-            flow.component.search.init(graphs);
-        }
-    });
+            this.style.backgroundColor = color(type);
+        });
+    }
 
     function createGraphs(graphs) {
         for (id in graphs) {
@@ -106,6 +108,10 @@
             .style("opacity", "0.6");
 
         return container;
+    }
+
+    flow.component.graph = {
+        load: load
     }
 
 }(flow, jQuery, d3));

@@ -94,17 +94,21 @@
             .attr("data-for-node", function (d) { return d.id; })
             .text(function(d) { return d.id });
 
+        var circles = d3.selectAll("circle");
+        var texts = d3.selectAll("text");
+
         force.on("tick", function() {
-            links.attr("x1", function(d) { return d.source.x; })
+            links
+                .attr("x1", function(d) { return d.source.x; })
                 .attr("y1", function(d) { return d.source.y; })
                 .attr("x2", function(d) { return d.target.x; })
                 .attr("y2", function(d) { return d.target.y; });
 
-            d3.selectAll("circle")
+            circles
                 .attr("cx", function (d) { return d.x; })
                 .attr("cy", function (d) { return d.y; });
 
-            d3.selectAll("text")
+            texts
                 .attr("x", function (d) { return d.x; })
                 .attr("y", function (d) { return d.y; });
         });

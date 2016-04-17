@@ -7,8 +7,8 @@
             'notice': 'info-sign'
         };
 
-    function load() {
-        $.get(flow.config.url.validation, show);
+    function load(uri) {
+        $.get(uri, show);
 
         $(document).on('click', '.validation-item', function() {
             var nodeId = $(this).data('node-id');

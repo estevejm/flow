@@ -2,8 +2,8 @@
 
     var color = d3.scale.category20();
 
-    function load() {
-        d3.json(flow.config.url.graph, function(error, graphs) {
+    function load(uri) {
+        d3.json(uri, function(error, graphs) {
 
             if (error) throw "Error rendering graph: " + error;
 

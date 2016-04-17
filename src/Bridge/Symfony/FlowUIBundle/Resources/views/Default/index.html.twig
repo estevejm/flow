@@ -19,10 +19,6 @@
     <script>
         var flow = {
             config: {
-                url: {
-                    graph: '{{ graph_url }}',
-                    validation: '{{ validation_url }}'
-                },
                 canvas: {
                     width: window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
                     height: window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
@@ -42,8 +38,8 @@
     <script src="{{ asset('bundles/ejmflowui/validation.js') }}"></script>
 
     <script>
-        flow.component.graph.load();
-        flow.component.validation.load();
+        flow.component.graph.load('{{ graph_url }}');
+        flow.component.validation.load('{{ validation_url }}');
     </script>
 
 {% endblock %}

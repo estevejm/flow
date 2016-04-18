@@ -39,6 +39,7 @@ class Event extends Node implements Message
     {
         if (!$this->subscribers->has($subscriber->getId())) {
             $this->subscribers->add($subscriber->getId(), $subscriber);
+            $subscriber->subscribesTo($this);
         }
 
         return $this;

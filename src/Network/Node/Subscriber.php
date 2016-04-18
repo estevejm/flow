@@ -30,8 +30,8 @@ class Subscriber extends MessagePublisher
     public function subscribesTo(Event $event)
     {
         if (!$this->events->has($event->getId())) {
-            $event->addSubscriber($this);
             $this->events->add($event->getId(), $event);
+            $event->addSubscriber($this);
         }
 
         return $this;

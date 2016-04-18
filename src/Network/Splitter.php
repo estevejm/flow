@@ -52,10 +52,6 @@ class Splitter
      */
     private function processNode($current, Node $node = null)
     {
-        if (!$node) {
-            return;
-        }
-
         if (isset($this->processed[$node->getId()])) {
             return;
         }

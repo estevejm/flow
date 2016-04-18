@@ -50,7 +50,9 @@ class Blueprint implements NetworkInterface
      */
     public function addCommand(Command $command)
     {
-        $this->commands->add($command->getId(), $command);
+        if (!$this->commands->has($command->getId())) {
+            $this->commands->add($command->getId(), $command);
+        }
 
         return $this;
     }
@@ -87,7 +89,9 @@ class Blueprint implements NetworkInterface
      */
     public function addEvent(Event $event)
     {
-        $this->events->add($event->getId(), $event);
+        if (!$this->events->has($event->getId())) {
+            $this->events->add($event->getId(), $event);
+        }
 
         return $this;
     }
@@ -124,7 +128,9 @@ class Blueprint implements NetworkInterface
      */
     public function addMessagePublisher(MessagePublisher $messagePublisher)
     {
-        $this->messagePublishers->add($messagePublisher->getId(), $messagePublisher);
+        if (!$this->messagePublishers->has($messagePublisher->getId())) {
+            $this->messagePublishers->add($messagePublisher->getId(), $messagePublisher);
+        }
 
         return $this;
     }

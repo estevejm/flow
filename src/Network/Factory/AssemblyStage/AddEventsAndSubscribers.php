@@ -37,7 +37,7 @@ class AddEventsAndSubscribers implements AssemblyStage
     public function assemble(Blueprint $blueprint)
     {
         foreach ($this->eventSubscribersMap as $eventId => $eventSubscribers) {
-            $event = $this->findOrCreateEvent($blueprint, $eventId);
+            $event = new Event($eventId);
             $blueprint->addEvent($event);
             foreach ($eventSubscribers as $subscriberData) {
                 $subscriber = $this->findOrCreateSubscriber($blueprint, $subscriberData);
@@ -45,20 +45,6 @@ class AddEventsAndSubscribers implements AssemblyStage
                 $blueprint->addMessagePublisher($subscriber);
             }
         }
-    }
-
-    /**
-     * @param Blueprint $blueprint
-     * @param string $eventId
-     * @return Event
-     */
-    private function findOrCreateEvent(Blueprint $blueprint, $eventId)
-    {
-        if ($blueprint->hasEvent($eventId)) {
-            return $blueprint->getEvent($eventId);
-        }
-
-        return new Event($eventId);
     }
 
     /**

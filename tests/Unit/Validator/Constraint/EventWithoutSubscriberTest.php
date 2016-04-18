@@ -59,7 +59,8 @@ class EventWithoutSubscriberTest extends PHPUnit_Framework_TestCase
     public function testValidateWithValidEvent()
     {
         $event = new Event('event_1');
-        $event->addSubscriber(new Subscriber('subscriber_1', '\EJM\Flow\Network\Node\Subscriber', $event));
+        $subscriber = new Subscriber('subscriber_1', '\EJM\Flow\Network\Node\Subscriber', $event);
+        $subscriber->subscribesTo($event);
 
         $constraint = new EventWithoutSubscriber();
         $violations = $constraint->validate($event);

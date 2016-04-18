@@ -2,13 +2,14 @@
 
 namespace EJM\Flow\Network\Node;
 
+use EJM\Flow\Common\Set;
 use EJM\Flow\Network\Node;
 
 class Event extends Node implements Message
 {
 
     /**
-     * @var Subscriber[]
+     * @var Set
      */
     private $subscribers;
 
@@ -19,7 +20,7 @@ class Event extends Node implements Message
     {
         parent::__construct($id, null, Node::TYPE_EVENT);
 
-        $this->subscribers = [];
+        $this->subscribers = new Set();
     }
 
     /**
@@ -27,15 +28,20 @@ class Event extends Node implements Message
      */
     public function getSubscribers()
     {
-        return $this->subscribers;
+        return $this->subscribers->getAll();
     }
 
     /**
      * @param Subscriber $subscriber
+     * @return $this
      */
     public function addSubscriber(Subscriber $subscriber)
     {
-        $this->subscribers[] = $subscriber;
+        if (!$this->subscribers->has($subscriber->getId())) {
+            $this->subscribers->add($subscriber->getId(), $subscriber);
+        }
+
+        return $this;
     }
 }
  

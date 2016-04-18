@@ -2,19 +2,38 @@
 
 namespace EJM\Flow\Network\Node;
 
+use EJM\Flow\Common\Set;
 use EJM\Flow\Network\Node;
 
 class Subscriber extends MessagePublisher
 {
     /**
+     * @var Set
+     */
+    private $events;
+
+    /**
      * @param string $id
      * @param string $className
-     * @param Event $event
      */
-    public function __construct($id, $className, Event $event)
+    public function __construct($id, $className)
     {
         parent::__construct($id, $className, Node::TYPE_SUBSCRIBER);
 
-        $event->addSubscriber($this);
+        $this->events = new Set();
+    }
+
+    /**
+     * @param Event $event
+     * @return $this
+     */
+    public function subscribesTo(Event $event)
+    {
+        if (!$this->events->has($event->getId())) {
+            $event->addSubscriber($this);
+            $this->events->add($event->getId(), $event);
+        }
+
+        return $this;
     }
 }

@@ -30,11 +30,14 @@ class AddEventsAndSubscribersTest extends PHPUnit_Framework_TestCase
         $className = get_class($this);
         
         $event1 = new Event('event_1');
-        $subscriber1 = new Subscriber('subscriber_1', $className, $event1);
+        $subscriber1 = new Subscriber('subscriber_1', $className);
+        $subscriber1->subscribesTo($event1);
 
         $event2 = new Event('event_2');
-        $subscriber2 = new Subscriber('subscriber_2', $className, $event2);
-        $subscriber3 = new Subscriber('subscriber_3', $className, $event2);
+        $subscriber2 = new Subscriber('subscriber_2', $className);
+        $subscriber3 = new Subscriber('subscriber_3', $className);
+        $subscriber2->subscribesTo($event2);
+        $subscriber3->subscribesTo($event2);
 
         return [
             'empty map' => [

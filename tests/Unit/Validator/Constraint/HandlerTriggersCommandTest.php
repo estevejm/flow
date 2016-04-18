@@ -39,7 +39,7 @@ class HandlerTriggersCommandTest extends PHPUnit_Framework_TestCase
                 'expected' => false,
             ],
             'subscriber' => [
-                'node' => new Subscriber('subscriber_1', '\EJM\Flow\Network\Node\Subscriber', new Event('event_1')),
+                'node' => new Subscriber('subscriber_1', '\EJM\Flow\Network\Node\Subscriber'),
                 'expected' => false,
             ],
         ];

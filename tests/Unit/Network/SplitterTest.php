@@ -31,8 +31,10 @@ class SplitterTest extends PHPUnit_Framework_TestCase
         $handler1 = new Handler('handler_1', $className);
         $command1 = new Command('command_1', $handler1);
         $event1 = new Event('event_1');
-        $subscriber1 = new Subscriber('subscriber_1', $className, $event1);
-        $subscriber2 = new Subscriber('subscriber_2', $className, $event1);
+        $subscriber1 = new Subscriber('subscriber_1', $className);
+        $subscriber2 = new Subscriber('subscriber_2', $className);
+        $subscriber1->subscribesTo($event1);
+        $subscriber2->subscribesTo($event1);
 
         $handler1->addMessage($event1);
         $subscriber2->addMessage($command1);
@@ -49,7 +51,8 @@ class SplitterTest extends PHPUnit_Framework_TestCase
         $command2 = new Command('command_2', $handler2);
 
         $event2 = new Event('event_2');
-        $subscriber3 = new Subscriber('subscriber_3', $className, $event2);
+        $subscriber3 = new Subscriber('subscriber_3', $className);
+        $subscriber3->subscribesTo($event2);
 
         return [
             'empty network' => [

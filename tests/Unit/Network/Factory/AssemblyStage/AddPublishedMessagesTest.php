@@ -18,7 +18,8 @@ class AddPublishedMessagesTest extends PHPUnit_Framework_TestCase
         $command1 = new Command('command_1', $handler1);
 
         $event1 = new Event('event_1');
-        $subscriber1 = new Subscriber('subscriber_1', '\EJM\Flow\Network\Node\Subscriber', $event1);
+        $subscriber1 = new Subscriber('subscriber_1', '\EJM\Flow\Network\Node\Subscriber');
+        $subscriber1->subscribesTo($event1);
 
         $blueprint = new Blueprint();
         $blueprint

@@ -39,16 +39,25 @@ class AddCommandsAndHandlers implements AssemblyStage
     public function assemble(Blueprint $blueprint)
     {
         foreach ($this->commandHandlerMap as $commandId => $handlerData) {
-            if ($blueprint->hasMessagePublisher($handlerData['id'])) {
-                $handler = $blueprint->getMessagePublisher($handlerData['id']);
-            } else {
-                $handler = new Handler($handlerData['id'], $handlerData['class']);
-            }
-
+            $handler = $this->findOrCreateHandler($blueprint, $handlerData);
             $command = new Command($commandId, $handler);
 
             $blueprint->addCommand($command);
             $blueprint->addMessagePublisher($handler);
         }
+    }
+
+    /**
+     * @param Blueprint $blueprint
+     * @param array $handlerData
+     * @return Handler
+     */
+    private function findOrCreateHandler(Blueprint $blueprint, array $handlerData)
+    {
+        if ($blueprint->hasMessagePublisher($handlerData['id'])) {
+            return $blueprint->getMessagePublisher($handlerData['id']);
+        }
+
+        return new Handler($handlerData['id'], $handlerData['class']);
     }
 }

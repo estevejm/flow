@@ -3,7 +3,6 @@
 namespace EJM\Flow\Tests\Unit\Validator;
 
 use EJM\Flow\Network\Network;
-use EJM\Flow\Network\Node\Command;
 use EJM\Flow\Network\Node\Event;
 use EJM\Flow\Validator\Validation;
 use EJM\Flow\Validator\Validator;
@@ -14,7 +13,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 {
     public function testValidate()
     {
-        $network = new Network([new Command('command', new Event('event'))]);
+        $network = new Network([new Event('event')]);
 
         $validator = new Validator();
 

@@ -22,13 +22,16 @@ class EventWithoutSubscriberTest extends PHPUnit_Framework_TestCase
 
     public function supportsNodeDataProvider()
     {
+        $handler = new Handler('handler_1', '\EJM\Flow\Network\Node\Handler');
+        $command = new Command('command_1', $handler);
+
         return [
             'command' => [
-                'node' => new Command('command_1'),
+                'node' => $command,
                 'expected' => false,
             ],
             'handler' => [
-                'node' => new Handler('handler_1', '\EJM\Flow\Network\Node\Handler', new Command('command_1')),
+                'node' => $handler,
                 'expected' => false,
             ],
             'event' => [

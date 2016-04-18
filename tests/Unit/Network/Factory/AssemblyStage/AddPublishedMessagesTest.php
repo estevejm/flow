@@ -14,8 +14,8 @@ class AddPublishedMessagesTest extends PHPUnit_Framework_TestCase
 {
     public function testAssemble()
     {
-        $command1 = new Command('command_1');
-        $handler1 = new Handler('handler_1', '\EJM\Flow\Network\Node\Handler', $command1);
+        $handler1 = new Handler('handler_1', '\EJM\Flow\Network\Node\Handler');
+        $command1 = new Command('command_1', $handler1);
 
         $event1 = new Event('event_1');
         $subscriber1 = new Subscriber('subscriber_1', '\EJM\Flow\Network\Node\Subscriber', $event1);

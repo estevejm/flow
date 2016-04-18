@@ -28,8 +28,8 @@ class SplitterTest extends PHPUnit_Framework_TestCase
     public function mapDataProvider()
     {
         $className = get_class($this);
-        $command1 = new Command('command_1');
-        $handler1 = new Handler('handler_1', $className, $command1);
+        $handler1 = new Handler('handler_1', $className);
+        $command1 = new Command('command_1', $handler1);
         $event1 = new Event('event_1');
         $subscriber1 = new Subscriber('subscriber_1', $className, $event1);
         $subscriber2 = new Subscriber('subscriber_2', $className, $event1);
@@ -45,13 +45,11 @@ class SplitterTest extends PHPUnit_Framework_TestCase
             'subscriber_2' => $subscriber2,
         ]);
 
-        $command2 = new Command('command_2');
-        $handler2 = new Handler('handler_2', $className, $command2);
+        $handler2 = new Handler('handler_2', $className);
+        $command2 = new Command('command_2', $handler2);
 
         $event2 = new Event('event_2');
         $subscriber3 = new Subscriber('subscriber_3', $className, $event2);
-
-        $command3 = new Command('command_3');
 
         return [
             'empty network' => [
@@ -68,7 +66,6 @@ class SplitterTest extends PHPUnit_Framework_TestCase
                     'handler_2' => $handler2,
                     'event_2' => $event2,
                     'subscriber_3' => $subscriber3,
-                    'command_3' => $command3,
                 ]),
                 'expected' => [
                     new Network([
@@ -78,9 +75,6 @@ class SplitterTest extends PHPUnit_Framework_TestCase
                     new Network([
                         'event_2' => $event2,
                         'subscriber_3' => $subscriber3,
-                    ]),
-                    new Network([
-                        'command_3' => $command3,
                     ]),
                 ],
             ],

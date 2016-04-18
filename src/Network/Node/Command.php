@@ -14,10 +14,15 @@ class Command extends Node implements Message
 
     /**
      * @param string $id
+     * @param Handler $handler
      */
-    public function __construct($id)
+    public function __construct($id, Handler $handler)
     {
         parent::__construct($id, null, Node::TYPE_COMMAND);
+
+        $handler->handles($this);
+
+        $this->handler = $handler;
     }
 
     /**
@@ -26,14 +31,6 @@ class Command extends Node implements Message
     public function getHandler()
     {
         return $this->handler;
-    }
-
-    /**
-     * @param Handler $handler
-     */
-    public function setHandler(Handler $handler)
-    {
-        $this->handler = $handler;
     }
 }
  

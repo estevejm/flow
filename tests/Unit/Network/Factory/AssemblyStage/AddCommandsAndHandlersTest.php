@@ -21,7 +21,7 @@ class AddCommandsAndHandlersTest extends PHPUnit_Framework_TestCase
 
         $stage->assemble($blueprint);
 
-        $this->assertEquals($expectedCommands['command_3'], $blueprint->getCommand('command_3'));
+        $this->assertEquals($expectedCommands, $blueprint->getCommands());
         $this->assertEquals($expectedHandlers, $blueprint->getMessagePublishers());
     }
 
@@ -37,25 +37,25 @@ class AddCommandsAndHandlersTest extends PHPUnit_Framework_TestCase
         $command3 = new Command('command_3', $handler2);
 
         return [
-//            'empty map' => [
-//                'map' => [],
-//                'commands' => [],
-//                'handlers' => [],
-//            ],
-//            'basic map' => [
-//                'map' => [
-//                    'command_1' => [
-//                        'id' => 'handler_1',
-//                        'class' => $className,
-//                    ]
-//                ],
-//                'commands' => [
-//                    'command_1' => $command1,
-//                ],
-//                'handlers' => [
-//                    'handler_1' => $handler1,
-//                ],
-//            ],
+            'empty map' => [
+                'map' => [],
+                'commands' => [],
+                'handlers' => [],
+            ],
+            'basic map' => [
+                'map' => [
+                    'command_1' => [
+                        'id' => 'handler_1',
+                        'class' => $className,
+                    ]
+                ],
+                'commands' => [
+                    'command_1' => $command1,
+                ],
+                'handlers' => [
+                    'handler_1' => $handler1,
+                ],
+            ],
             'complex map' => [
                 'map' => [
                     'command_1' => [
@@ -88,7 +88,7 @@ class AddCommandsAndHandlersTest extends PHPUnit_Framework_TestCase
      * @dataProvider assemblyStageInvalidMapProvider
      * @expectedException \Assert\InvalidArgumentException
      */
-    public function qqtestAssembleWithInvalidMap($map)
+    public function testAssembleWithInvalidMap($map)
     {
         new AddCommandsAndHandlers($map);
     }

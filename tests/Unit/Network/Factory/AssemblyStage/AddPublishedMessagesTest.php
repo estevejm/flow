@@ -12,13 +12,17 @@ use PHPUnit_Framework_TestCase;
 
 class AddPublishedMessagesTest extends PHPUnit_Framework_TestCase
 {
+    const HANDLER_CLASS = '\EJM\Flow\Network\Node\Handler';
+
+    const SUBSCRIBER_CLASS = '\EJM\Flow\Network\Node\Subscriber';
+
     public function testAssemble()
     {
-        $handler1 = new Handler('handler_1', '\EJM\Flow\Network\Node\Handler');
+        $handler1 = new Handler('handler_1', self::HANDLER_CLASS);
         $command1 = new Command('command_1', $handler1);
 
         $event1 = new Event('event_1');
-        $subscriber1 = new Subscriber('subscriber_1', '\EJM\Flow\Network\Node\Subscriber');
+        $subscriber1 = new Subscriber('subscriber_1', self::SUBSCRIBER_CLASS);
         $subscriber1->subscribesTo($event1);
 
         $blueprint = new Blueprint();
@@ -35,8 +39,8 @@ class AddPublishedMessagesTest extends PHPUnit_Framework_TestCase
         $collector->expects($this->exactly(2))
             ->method('collect')
             ->will($this->returnValueMap([
-                ['\EJM\Flow\Network\Node\Handler', ['event_1']],
-                ['\EJM\Flow\Network\Node\Subscriber', ['command_1', 'event_2']],
+                [self::HANDLER_CLASS, ['event_1']],
+                [self::SUBSCRIBER_CLASS, ['command_1', 'event_2']],
             ]));
 
         $stage = new AddPublishedMessages($collector);

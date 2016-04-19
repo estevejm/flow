@@ -27,24 +27,7 @@ class SplitterTest extends PHPUnit_Framework_TestCase
 
     public function mapDataProvider()
     {
-        $handler1 = new Handler('handler_1');
-        $command1 = new Command('command_1', $handler1);
-        $event1 = new Event('event_1');
-        $subscriber1 = new Subscriber('subscriber_1');
-        $subscriber2 = new Subscriber('subscriber_2');
-        $subscriber1->subscribesTo($event1);
-        $subscriber2->subscribesTo($event1);
-
-        $handler1->addMessage($event1);
-        $subscriber2->addMessage($command1);
-
-        $connectedNetwork = new Network([
-            'command_1' => $command1,
-            'handler_1' => $handler1,
-            'event_1' => $event1,
-            'subscriber_1' => $subscriber1,
-            'subscriber_2' => $subscriber2,
-        ]);
+        $connectedNetwork = $this->getConnectedNetwork();
 
         $handler2 = new Handler('handler_2');
         $command2 = new Command('command_2', $handler2);
@@ -81,5 +64,30 @@ class SplitterTest extends PHPUnit_Framework_TestCase
                 ],
             ],
         ];
+    }
+
+    /**
+     * @return Network
+     */
+    private function getConnectedNetwork()
+    {
+        $handler1 = new Handler('handler_1');
+        $command1 = new Command('command_1', $handler1);
+        $event1 = new Event('event_1');
+        $subscriber1 = new Subscriber('subscriber_1');
+        $subscriber2 = new Subscriber('subscriber_2');
+        $subscriber1->subscribesTo($event1);
+        $subscriber2->subscribesTo($event1);
+
+        $handler1->addMessage($event1);
+        $subscriber2->addMessage($command1);
+
+        return new Network([
+            'command_1' => $command1,
+            'handler_1' => $handler1,
+            'event_1' => $event1,
+            'subscriber_1' => $subscriber1,
+            'subscriber_2' => $subscriber2,
+        ]);
     }
 }

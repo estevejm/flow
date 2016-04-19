@@ -27,12 +27,10 @@ class AddCommandsAndHandlersTest extends PHPUnit_Framework_TestCase
 
     public function assemblyStageMapProvider()
     {
-        $className = get_class($this);
-
-        $handler1 = new Handler('handler_1', $className);
+        $handler1 = new Handler('handler_1');
         $command1 = new Command('command_1', $handler1);
 
-        $handler2 = new Handler('handler_2', $className);
+        $handler2 = new Handler('handler_2');
         $command2 = new Command('command_2', $handler2);
         $command3 = new Command('command_3', $handler2);
 
@@ -46,7 +44,7 @@ class AddCommandsAndHandlersTest extends PHPUnit_Framework_TestCase
                 'map' => [
                     'command_1' => [
                         'id' => 'handler_1',
-                        'class' => $className,
+                        'class' => null,
                     ]
                 ],
                 'commands' => [
@@ -60,15 +58,15 @@ class AddCommandsAndHandlersTest extends PHPUnit_Framework_TestCase
                 'map' => [
                     'command_1' => [
                         'id' => 'handler_1',
-                        'class' => $className,
+                        'class' => null,
                     ],
                     'command_2' => [
                         'id' => 'handler_2',
-                        'class' => $className,
+                        'class' => null,
                     ],
                     'command_3' => [
                         'id' => 'handler_2',
-                        'class' => $className,
+                        'class' => null,
                     ],
                 ],
                 'commands' => [
@@ -113,14 +111,6 @@ class AddCommandsAndHandlersTest extends PHPUnit_Framework_TestCase
                 'map' => [
                     'command1' => [
                         'id' => '1',
-                    ],
-                ]
-            ],
-            'items array with valid keys and not string data' => [
-                'map' => [
-                    'command1' => [
-                        'id' => true,
-                        'class' => 25,
                     ],
                 ]
             ],

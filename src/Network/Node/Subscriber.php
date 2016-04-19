@@ -16,7 +16,7 @@ class Subscriber extends MessagePublisher
      * @param string $id
      * @param string $className
      */
-    public function __construct($id, $className)
+    public function __construct($id, $className = null)
     {
         parent::__construct($id, $className, Node::TYPE_SUBSCRIBER);
 

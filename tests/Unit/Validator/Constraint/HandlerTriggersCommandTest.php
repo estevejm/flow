@@ -22,7 +22,7 @@ class HandlerTriggersCommandTest extends PHPUnit_Framework_TestCase
 
     public function supportsNodeDataProvider()
     {
-        $handler = new Handler('handler_1', '\EJM\Flow\Network\Node\Handler');
+        $handler = new Handler('handler_1');
         $command = new Command('command_1', $handler);
 
         return [
@@ -39,7 +39,7 @@ class HandlerTriggersCommandTest extends PHPUnit_Framework_TestCase
                 'expected' => false,
             ],
             'subscriber' => [
-                'node' => new Subscriber('subscriber_1', '\EJM\Flow\Network\Node\Subscriber'),
+                'node' => new Subscriber('subscriber_1'),
                 'expected' => false,
             ],
         ];
@@ -47,10 +47,10 @@ class HandlerTriggersCommandTest extends PHPUnit_Framework_TestCase
 
     public function testValidateWithInvalidEvent()
     {
-        $handler1 = new Handler('handler_1', '\EJM\Flow\Network\Node\Handler');
+        $handler1 = new Handler('handler_1');
         $command1 = new Command('command_1', $handler1);
 
-        $handler2 = new Handler('handler_2', '\EJM\Flow\Network\Node\Handler');
+        $handler2 = new Handler('handler_2');
         $command2 = new Command('command_2', $handler2);
 
         $handler1->addMessage($command2)->addMessage(new Event('event_1'));
@@ -64,7 +64,7 @@ class HandlerTriggersCommandTest extends PHPUnit_Framework_TestCase
 
     public function testValidateWithValidEvent()
     {
-        $handler = new Handler('handler_1', '\EJM\Flow\Network\Node\Handler');
+        $handler = new Handler('handler_1');
         $command = new Command('command_1', $handler);
         $handler->addMessage(new Event('event_1'));
 

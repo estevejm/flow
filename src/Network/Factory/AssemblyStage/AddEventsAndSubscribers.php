@@ -24,7 +24,9 @@ class AddEventsAndSubscribers implements AssemblyStage
             Assert\that($event)->string();
             Assert\that($subscribers)->isArray();
             foreach ($subscribers as $subscriber) {
-                Assert\that($subscriber)->isArray()->keyExists('id')->keyExists('class');
+                Assert\that($subscriber)->isArray()
+                    ->keyExists('id')
+                    ->keyExists('class');
             }
         }
 

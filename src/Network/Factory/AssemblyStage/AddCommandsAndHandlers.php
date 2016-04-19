@@ -25,9 +25,7 @@ class AddCommandsAndHandlers implements AssemblyStage
             Assert\that($handler)
                 ->isArray()
                 ->keyExists('id')
-                ->keyExists('class')
-                ->all()
-                ->string();
+                ->keyExists('class');
         }
 
         $this->commandHandlerMap = $commandHandlerMap;

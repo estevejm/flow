@@ -27,16 +27,14 @@ class AddEventsAndSubscribersTest extends PHPUnit_Framework_TestCase
 
     public function assemblyStageMapProvider()
     {
-        $className = get_class($this);
-        
         $event1 = new Event('event_1');
-        $subscriber1 = new Subscriber('subscriber_1', $className);
+        $subscriber1 = new Subscriber('subscriber_1');
         $subscriber1->subscribesTo($event1);
 
         $event2 = new Event('event_2');
         $event3 = new Event('event_3');
-        $subscriber2 = new Subscriber('subscriber_2', $className);
-        $subscriber3 = new Subscriber('subscriber_3', $className);
+        $subscriber2 = new Subscriber('subscriber_2');
+        $subscriber3 = new Subscriber('subscriber_3');
         $subscriber2->subscribesTo($event2);
         $subscriber3
             ->subscribesTo($event2)
@@ -54,7 +52,7 @@ class AddEventsAndSubscribersTest extends PHPUnit_Framework_TestCase
                     'event_1' => [
                         [
                             'id' => 'subscriber_1',
-                            'class' => $className,
+                            'class' => null,
                         ]
                     ]
                 ],
@@ -70,23 +68,23 @@ class AddEventsAndSubscribersTest extends PHPUnit_Framework_TestCase
                     'event_1' => [
                         [
                             'id' => 'subscriber_1',
-                            'class' => $className,
+                            'class' => null,
                         ],
                     ],
                     'event_2' => [
                         [
                             'id' => 'subscriber_2',
-                            'class' => $className,
+                            'class' => null,
                         ],
                         [
                             'id' => 'subscriber_3',
-                            'class' => $className,
+                            'class' => null,
                         ],
                     ],
                     'event_3' => [
                         [
                             'id' => 'subscriber_3',
-                            'class' => $className,
+                            'class' => null,
                         ],
                     ],
                 ],
@@ -144,14 +142,6 @@ class AddEventsAndSubscribersTest extends PHPUnit_Framework_TestCase
                         [
                             'id' => '1',
                         ],
-                    ],
-                ]
-            ],
-            'items array with valid keys and not string data' => [
-                'map' => [
-                    'event1' => [
-                        'id' => true,
-                        'class' => 25,
                     ],
                 ]
             ],

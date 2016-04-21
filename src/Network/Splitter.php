@@ -69,13 +69,21 @@ class Splitter
                 $this->blueprints[$current]->addEvent($node);
 
                 $this->processNodes($current, $node->getSubscribers());
+                $this->processNodes($current, $node->getPublishers());
                 break;
 
             case Node::TYPE_HANDLER:
-            case Node::TYPE_SUBSCRIBER:
                 $this->blueprints[$current]->addMessagePublisher($node);
 
+                $this->processNodes($current, $node->getCommandsToHandle());
                 $this->processNodes($current, $node->getMessages());
+                break;
+
+            case Node::TYPE_SUBSCRIBER:
+            $this->blueprints[$current]->addMessagePublisher($node);
+
+            $this->processNodes($current, $node->getEventsSubscribedTo());
+            $this->processNodes($current, $node->getMessages());
         }
     }
 

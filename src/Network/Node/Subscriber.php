@@ -36,4 +36,12 @@ class Subscriber extends MessagePublisher
 
         return $this;
     }
+
+    /**
+     * @return Event[]
+     */
+    public function getEventsSubscribedTo()
+    {
+        return $this->events->getAll();
+    }
 }

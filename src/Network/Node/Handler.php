@@ -35,5 +35,13 @@ class Handler extends MessagePublisher
 
         return $this;
     }
+
+    /**
+     * @return Command[]
+     */
+    public function getCommandsToHandle()
+    {
+        return $this->commands->getAll();
+    }
 }
  

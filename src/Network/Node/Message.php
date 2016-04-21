@@ -28,7 +28,7 @@ class Message extends Node
      * @param Publisher $publisher
      * @return Message
      */
-    public function isPublishedBy(Publisher $publisher)
+    public function isBeingPublishedBy(Publisher $publisher)
     {
         if (!$this->publishers->has($publisher->getId())) {
             $this->publishers->add($publisher->getId(), $publisher);

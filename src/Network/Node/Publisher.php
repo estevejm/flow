@@ -34,7 +34,7 @@ class Publisher extends Node
             $this->messages->add($message->getId(), $message);
         }
 
-        $message->isPublishedBy($this);
+        $message->isBeingPublishedBy($this);
 
         return $this;
     }

@@ -34,7 +34,7 @@ class Event extends Message
      * @param Subscriber $subscriber
      * @return $this
      */
-    public function addSubscriber(Subscriber $subscriber)
+    public function isBeingSubscribedBy(Subscriber $subscriber)
     {
         if (!$this->subscribers->has($subscriber->getId())) {
             $this->subscribers->add($subscriber->getId(), $subscriber);

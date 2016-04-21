@@ -31,7 +31,7 @@ class Subscriber extends Publisher
     {
         if (!$this->events->has($event->getId())) {
             $this->events->add($event->getId(), $event);
-            $event->addSubscriber($this);
+            $event->isBeingSubscribedBy($this);
         }
 
         return $this;

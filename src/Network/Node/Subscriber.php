@@ -42,6 +42,6 @@ class Subscriber extends MessagePublisher
      */
     public function getEventsSubscribedTo()
     {
-        return $this->events->getAll();
+        return $this->events->toArray();
     }
 }

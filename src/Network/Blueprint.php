@@ -38,9 +38,9 @@ class Blueprint implements NetworkInterface
     public function getNodes()
     {
         return array_merge(
-            $this->commands->getAll(),
-            $this->events->getAll(),
-            $this->messagePublishers->getAll()
+            $this->commands->toArray(),
+            $this->events->toArray(),
+            $this->messagePublishers->toArray()
         );
     }
 
@@ -62,7 +62,7 @@ class Blueprint implements NetworkInterface
      */
     public function getCommands()
     {
-        return $this->commands->getAll();
+        return $this->commands->toArray();
     }
 
     /**
@@ -101,7 +101,7 @@ class Blueprint implements NetworkInterface
      */
     public function getEvents()
     {
-        return $this->events->getAll();
+        return $this->events->toArray();
     }
 
     /**
@@ -140,7 +140,7 @@ class Blueprint implements NetworkInterface
      */
     public function getMessagePublishers()
     {
-        return $this->messagePublishers->getAll();
+        return $this->messagePublishers->toArray();
     }
 
     /**

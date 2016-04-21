@@ -29,7 +29,7 @@ class MessagePublisher extends Node
      */
     public function getMessages()
     {
-        return $this->messages->getAll();
+        return $this->messages->toArray();
     }
 
     /**

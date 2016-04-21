@@ -33,7 +33,7 @@ class Event extends Node implements Message
      */
     public function getSubscribers()
     {
-        return $this->subscribers->getAll();
+        return $this->subscribers->toArray();
     }
 
     /**
@@ -68,7 +68,7 @@ class Event extends Node implements Message
      */
     public function getPublishers()
     {
-        return $this->publishers->getAll();
+        return $this->publishers->toArray();
     }
 }
  

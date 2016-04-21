@@ -21,7 +21,7 @@ class Set
     /**
      * @return array
      */
-    public function getAll()
+    public function toArray()
     {
         return $this->values;
     }

@@ -58,7 +58,7 @@ class Command extends Node implements Message
      */
     public function getPublishers()
     {
-        return $this->publishers->getAll();
+        return $this->publishers->toArray();
     }
 }
  

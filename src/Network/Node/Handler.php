@@ -41,7 +41,7 @@ class Handler extends MessagePublisher
      */
     public function getCommandsToHandle()
     {
-        return $this->commands->getAll();
+        return $this->commands->toArray();
     }
 }
  

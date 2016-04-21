@@ -65,7 +65,7 @@ class ForceLayoutMapper
         $this->init();
         $this->processNodes($network->getNodes());
 
-        return new Layout($this->nodes->getAll(), $this->links);
+        return new Layout($this->nodes->toArray(), $this->links);
     }
 
     private function init()

@@ -10,7 +10,7 @@ class MessagePublisher extends Node
     /**
      * @var Set
      */
-    private $messages = [];
+    private $messages;
 
     /**
      * @param string $id

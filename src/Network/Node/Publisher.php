@@ -36,7 +36,7 @@ class Publisher extends Node
      * @param Message $message
      * @return $this
      */
-    public function addMessage(Message $message)
+    public function publishes(Message $message)
     {
         if (!$this->messages->has($message->getId())) {
             $this->messages->add($message->getId(), $message);

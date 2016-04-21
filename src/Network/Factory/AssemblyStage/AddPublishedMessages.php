@@ -31,7 +31,7 @@ class AddPublishedMessages implements AssemblyStage
             $messageIds = $this->messagesUsedCollector->collect($publisher->getClassName());
             foreach ($messageIds as $messageId) {
                 if ($blueprint->hasCommand($messageId)) {
-                    $publisher->addMessage($blueprint->getCommand($messageId));
+                    $publisher->publishes($blueprint->getCommand($messageId));
                     continue;
                 }
 
@@ -39,7 +39,7 @@ class AddPublishedMessages implements AssemblyStage
                     $blueprint->addEvent(new Event($messageId));
                 }
 
-                $publisher->addMessage($blueprint->getEvent($messageId));
+                $publisher->publishes($blueprint->getEvent($messageId));
             }
         }
     }

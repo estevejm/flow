@@ -54,8 +54,8 @@ class HandlerTriggersCommandTest extends PHPUnit_Framework_TestCase
         $command2 = new Command('command_2', $handler2);
 
         $handler1
-            ->addMessage($command2)
-            ->addMessage(new Event('event_1'));
+            ->publishes($command2)
+            ->publishes(new Event('event_1'));
 
         $constraint = new HandlerTriggersCommand();
         $violations = $constraint->validate($handler1);
@@ -68,7 +68,7 @@ class HandlerTriggersCommandTest extends PHPUnit_Framework_TestCase
     {
         $handler = new Handler('handler_1');
         $command = new Command('command_1', $handler);
-        $handler->addMessage(new Event('event_1'));
+        $handler->publishes(new Event('event_1'));
 
         $constraint = new HandlerTriggersCommand();
         $violations = $constraint->validate($handler);

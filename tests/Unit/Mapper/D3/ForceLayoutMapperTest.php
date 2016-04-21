@@ -43,8 +43,8 @@ class ForceLayoutMapperTest extends \PHPUnit_Framework_TestCase
         $subscriber1->subscribesTo($event1);
         $subscriber2->subscribesTo($event1);
 
-        $handler1->addMessage($event1);
-        $subscriber2->addMessage($command1);
+        $handler1->publishes($event1);
+        $subscriber2->publishes($command1);
 
         $network = new Network([$command1, $handler1, $event1, $subscriber1, $subscriber2]);
 

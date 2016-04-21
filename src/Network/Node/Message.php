@@ -32,7 +32,7 @@ class Message extends Node
     {
         if (!$this->publishers->has($publisher->getId())) {
             $this->publishers->add($publisher->getId(), $publisher);
-            $publisher->addMessage($this);
+            $publisher->publishes($this);
         }
 
         return $this;

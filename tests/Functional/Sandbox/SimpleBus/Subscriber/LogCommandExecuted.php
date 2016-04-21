@@ -11,6 +11,5 @@ class LogCommandExecuted
      */
     public function __invoke(CommandExecuted $event)
     {
-        var_dump("command was executed -> ", $event);
     }
 }

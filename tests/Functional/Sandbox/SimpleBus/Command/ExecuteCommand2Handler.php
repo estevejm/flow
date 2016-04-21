@@ -28,8 +28,6 @@ class ExecuteCommand2Handler
      */
     public function __invoke(ExecuteCommand2 $command)
     {
-        var_dump("handle -> ", $command);
-
         $fuck = new Command2Executed($command->getCreatedAt(), 'done: ' . $command->getMessage());
         $this->eventRecorder->record(new Command2Executed($command->getCreatedAt(), 'done: ' . $command->getMessage()));
         $this->eventRecorder->record(new \EJM\Flow\Tests\Functional\Sandbox\SimpleBus\Event\CommandExecuted($command->getCreatedAt(), 'done: ' . $command->getMessage()));

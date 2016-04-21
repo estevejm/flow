@@ -25,8 +25,6 @@ class ExecuteCommandHandler
      */
     public function __invoke(ExecuteCommand $command)
     {
-        var_dump("handle -> ", $command);
-
         $this->eventRecorder->record(new CommandExecuted($command->getCreatedAt(), 'done: ' . $command->getMessage()));
     }
 }

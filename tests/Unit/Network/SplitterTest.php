@@ -22,7 +22,6 @@ class SplitterTest extends PHPUnit_Framework_TestCase
 
         $networks = $splitter->split($network);
 
-        var_dump($networks[2]);
         $this->assertEquals($expected, $networks);
     }
 

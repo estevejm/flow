@@ -71,6 +71,8 @@ class SplitterTest extends PHPUnit_Framework_TestCase
         $handler7 = new Handler('handler_7');
         $command7 = new Command('command_7', $handler7);
         $subscriber6->addMessage($command6)->addMessage($command7);
+        $subscriber7 = new Subscriber('subscriber_7');
+        $subscriber7->addMessage($command7);
 
         return [
             'empty network' => [
@@ -110,6 +112,7 @@ class SplitterTest extends PHPUnit_Framework_TestCase
                     'handler_6' => $handler6,
                     'command_7' => $command7,
                     'handler_7' => $handler7,
+                    'subscriber_7' => $subscriber7
                 ]),
                 'expected' => [
                     new Network([
@@ -144,6 +147,7 @@ class SplitterTest extends PHPUnit_Framework_TestCase
                         'handler_6' => $handler6,
                         'command_7' => $command7,
                         'handler_7' => $handler7,
+                        'subscriber_7' => $subscriber7
                     ]),
                 ],
             ],

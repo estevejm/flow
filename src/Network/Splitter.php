@@ -62,14 +62,15 @@ class Splitter
             case Node::TYPE_COMMAND:
                 $this->blueprints[$current]->addCommand($node);
 
+                $this->processNodes($current, $node->getPublishers());
                 $this->processNode($current, $node->getHandler());
                 break;
 
             case Node::TYPE_EVENT:
                 $this->blueprints[$current]->addEvent($node);
 
-                $this->processNodes($current, $node->getSubscribers());
                 $this->processNodes($current, $node->getPublishers());
+                $this->processNodes($current, $node->getSubscribers());
                 break;
 
             case Node::TYPE_HANDLER:

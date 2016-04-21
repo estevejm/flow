@@ -25,10 +25,10 @@ class Message extends Node
     }
 
     /**
-     * @param MessagePublisher $publisher
+     * @param Publisher $publisher
      * @return Message
      */
-    public function isPublishedBy(MessagePublisher $publisher)
+    public function isPublishedBy(Publisher $publisher)
     {
         if (!$this->publishers->has($publisher->getId())) {
             $this->publishers->add($publisher->getId(), $publisher);
@@ -39,7 +39,7 @@ class Message extends Node
     }
 
     /**
-     * @return MessagePublisher[]
+     * @return Publisher[]
      */
     public function getPublishers()
     {

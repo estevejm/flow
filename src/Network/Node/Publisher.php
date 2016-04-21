@@ -5,7 +5,7 @@ namespace EJM\Flow\Network\Node;
 use EJM\Flow\Common\Set;
 use EJM\Flow\Network\Node;
 
-class MessagePublisher extends Node
+class Publisher extends Node
 {
     /**
      * @var Set

@@ -6,7 +6,7 @@ use EJM\Flow\Common\Set;
 use EJM\Flow\Network\Node;
 use EJM\Flow\Network\Node\Command;
 use EJM\Flow\Network\Node\Event;
-use EJM\Flow\Network\Node\MessagePublisher;
+use EJM\Flow\Network\Node\Publisher;
 
 class Blueprint implements NetworkInterface
 {
@@ -123,10 +123,10 @@ class Blueprint implements NetworkInterface
     }
 
     /**
-     * @param MessagePublisher $messagePublisher
+     * @param Publisher $messagePublisher
      * @return $this
      */
-    public function addMessagePublisher(MessagePublisher $messagePublisher)
+    public function addMessagePublisher(Publisher $messagePublisher)
     {
         if (!$this->messagePublishers->has($messagePublisher->getId())) {
             $this->messagePublishers->add($messagePublisher->getId(), $messagePublisher);
@@ -136,7 +136,7 @@ class Blueprint implements NetworkInterface
     }
 
     /**
-     * @return MessagePublisher[]
+     * @return Publisher[]
      */
     public function getMessagePublishers()
     {
@@ -145,7 +145,7 @@ class Blueprint implements NetworkInterface
 
     /**
      * @param string $id
-     * @return MessagePublisher
+     * @return Publisher
      */
     public function getMessagePublisher($id)
     {

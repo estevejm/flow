@@ -25,14 +25,6 @@ class Publisher extends Node
     }
 
     /**
-     * @return Message[]
-     */
-    public function getMessages()
-    {
-        return $this->messages->toArray();
-    }
-
-    /**
      * @param Message $message
      * @return $this
      */
@@ -45,5 +37,13 @@ class Publisher extends Node
         $message->isPublishedBy($this);
 
         return $this;
+    }
+
+    /**
+     * @return Message[]
+     */
+    public function getMessagesToPublish()
+    {
+        return $this->messages->toArray();
     }
 }

@@ -25,7 +25,7 @@ class HandlerTriggersCommand implements Constraint
     public function validate(Node $node)
     {
         $violations = [];
-        foreach ($node->getMessages() as $message) {
+        foreach ($node->getMessagesToPublish() as $message) {
             if ($message instanceof Command) {
                 $violations[] = new Violation(
                     $node,

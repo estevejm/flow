@@ -47,12 +47,12 @@ class AddPublishedMessagesTest extends PHPUnit_Framework_TestCase
 
         $stage->assemble($blueprint);
 
-        $this->assertContains($event1, $blueprint->getMessagePublisher('handler_1')->getMessages());
-        $this->assertContains($command1, $blueprint->getMessagePublisher('subscriber_1')->getMessages());
+        $this->assertContains($event1, $blueprint->getMessagePublisher('handler_1')->getMessagesToPublish());
+        $this->assertContains($command1, $blueprint->getMessagePublisher('subscriber_1')->getMessagesToPublish());
         $this->assertTrue($blueprint->hasEvent('event_2'));
         $this->assertContains(
             $blueprint->getEvent('event_2'),
-            $blueprint->getMessagePublisher('subscriber_1')->getMessages()
+            $blueprint->getMessagePublisher('subscriber_1')->getMessagesToPublish()
         );
     }
 }

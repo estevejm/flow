@@ -114,9 +114,9 @@ class ForceLayoutMapper
             case NetworkNode::TYPE_SUBSCRIBER:
                 if ($this->hasMappingEnabled($node)) {
                     $this->addNode($node, $parent);
-                    $this->processNodes($node->getMessages(), $node);
+                    $this->processNodes($node->getMessagesToPublish(), $node);
                 } else {
-                    $this->processNodes($node->getMessages(), $parent);
+                    $this->processNodes($node->getMessagesToPublish(), $parent);
                 }
         }
     }

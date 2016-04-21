@@ -23,13 +23,13 @@ class Blueprint implements NetworkInterface
     /**
      * @var Set
      */
-    private $messagePublishers;
+    private $publishers;
 
     public function __construct()
     {
         $this->commands = new Set();
         $this->events = new Set();
-        $this->messagePublishers = new Set();
+        $this->publishers = new Set();
     }
 
     /**
@@ -40,7 +40,7 @@ class Blueprint implements NetworkInterface
         return array_merge(
             $this->commands->toArray(),
             $this->events->toArray(),
-            $this->messagePublishers->toArray()
+            $this->publishers->toArray()
         );
     }
 
@@ -126,10 +126,10 @@ class Blueprint implements NetworkInterface
      * @param Publisher $messagePublisher
      * @return $this
      */
-    public function addMessagePublisher(Publisher $messagePublisher)
+    public function addPublisher(Publisher $messagePublisher)
     {
-        if (!$this->messagePublishers->has($messagePublisher->getId())) {
-            $this->messagePublishers->add($messagePublisher->getId(), $messagePublisher);
+        if (!$this->publishers->has($messagePublisher->getId())) {
+            $this->publishers->add($messagePublisher->getId(), $messagePublisher);
         }
 
         return $this;
@@ -138,26 +138,26 @@ class Blueprint implements NetworkInterface
     /**
      * @return Publisher[]
      */
-    public function getMessagePublishers()
+    public function getPublishers()
     {
-        return $this->messagePublishers->toArray();
+        return $this->publishers->toArray();
     }
 
     /**
      * @param string $id
      * @return Publisher
      */
-    public function getMessagePublisher($id)
+    public function getPublisher($id)
     {
-        return $this->messagePublishers->get($id);
+        return $this->publishers->get($id);
     }
 
     /**
      * @param string $id
      * @return bool
      */
-    public function hasMessagePublisher($id)
+    public function hasPublisher($id)
     {
-        return $this->messagePublishers->has($id);
+        return $this->publishers->has($id);
     }
 }

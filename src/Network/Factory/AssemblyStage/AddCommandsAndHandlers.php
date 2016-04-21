@@ -41,7 +41,7 @@ class AddCommandsAndHandlers implements AssemblyStage
             $command = new Command($commandId, $handler);
 
             $blueprint->addCommand($command);
-            $blueprint->addMessagePublisher($handler);
+            $blueprint->addPublisher($handler);
         }
     }
 
@@ -52,8 +52,8 @@ class AddCommandsAndHandlers implements AssemblyStage
      */
     private function findOrCreateHandler(Blueprint $blueprint, array $handlerData)
     {
-        if ($blueprint->hasMessagePublisher($handlerData['id'])) {
-            return $blueprint->getMessagePublisher($handlerData['id']);
+        if ($blueprint->hasPublisher($handlerData['id'])) {
+            return $blueprint->getPublisher($handlerData['id']);
         }
 
         return new Handler($handlerData['id'], $handlerData['class']);

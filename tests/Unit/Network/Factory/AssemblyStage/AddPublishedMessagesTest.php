@@ -28,9 +28,9 @@ class AddPublishedMessagesTest extends PHPUnit_Framework_TestCase
         $blueprint = new Blueprint();
         $blueprint
             ->addCommand($command1)
-            ->addMessagePublisher($handler1)
+            ->addPublisher($handler1)
             ->addEvent($event1)
-            ->addMessagePublisher($subscriber1);
+            ->addPublisher($subscriber1);
 
         $collector = $this->getMockBuilder('\EJM\Flow\Collector\Collector')
             ->disableOriginalConstructor()
@@ -47,12 +47,12 @@ class AddPublishedMessagesTest extends PHPUnit_Framework_TestCase
 
         $stage->assemble($blueprint);
 
-        $this->assertContains($event1, $blueprint->getMessagePublisher('handler_1')->getMessagesToPublish());
-        $this->assertContains($command1, $blueprint->getMessagePublisher('subscriber_1')->getMessagesToPublish());
+        $this->assertContains($event1, $blueprint->getPublisher('handler_1')->getMessagesToPublish());
+        $this->assertContains($command1, $blueprint->getPublisher('subscriber_1')->getMessagesToPublish());
         $this->assertTrue($blueprint->hasEvent('event_2'));
         $this->assertContains(
             $blueprint->getEvent('event_2'),
-            $blueprint->getMessagePublisher('subscriber_1')->getMessagesToPublish()
+            $blueprint->getPublisher('subscriber_1')->getMessagesToPublish()
         );
     }
 }

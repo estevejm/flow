@@ -22,7 +22,7 @@ class AddCommandsAndHandlersTest extends PHPUnit_Framework_TestCase
         $stage->assemble($blueprint);
 
         $this->assertEquals($expectedCommands, $blueprint->getCommands());
-        $this->assertEquals($expectedHandlers, $blueprint->getMessagePublishers());
+        $this->assertEquals($expectedHandlers, $blueprint->getPublishers());
     }
 
     public function assemblyStageMapProvider()

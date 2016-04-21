@@ -27,7 +27,7 @@ class AddPublishedMessages implements AssemblyStage
      */
     public function assemble(Blueprint $blueprint)
     {
-        foreach($blueprint->getMessagePublishers() as $publisher) {
+        foreach($blueprint->getPublishers() as $publisher) {
             $messageIds = $this->messagesUsedCollector->collect($publisher->getClassName());
             foreach ($messageIds as $messageId) {
                 if ($blueprint->hasCommand($messageId)) {

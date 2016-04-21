@@ -22,7 +22,7 @@ class AddEventsAndSubscribersTest extends PHPUnit_Framework_TestCase
         $stage->assemble($blueprint);
 
         $this->assertEquals($expectedEvents, $blueprint->getEvents());
-        $this->assertEquals($expectedSubscribers, $blueprint->getMessagePublishers());
+        $this->assertEquals($expectedSubscribers, $blueprint->getPublishers());
     }
 
     public function assemblyStageMapProvider()

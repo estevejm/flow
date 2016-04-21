@@ -44,7 +44,7 @@ class AddEventsAndSubscribers implements AssemblyStage
             foreach ($eventSubscribers as $subscriberData) {
                 $subscriber = $this->findOrCreateSubscriber($blueprint, $subscriberData);
                 $subscriber->subscribesTo($event);
-                $blueprint->addMessagePublisher($subscriber);
+                $blueprint->addPublisher($subscriber);
             }
         }
     }
@@ -56,8 +56,8 @@ class AddEventsAndSubscribers implements AssemblyStage
      */
     private function findOrCreateSubscriber(Blueprint $blueprint, $subscriberData)
     {
-        if ($blueprint->hasMessagePublisher($subscriberData['id'])) {
-            return $blueprint->getMessagePublisher($subscriberData['id']);
+        if ($blueprint->hasPublisher($subscriberData['id'])) {
+            return $blueprint->getPublisher($subscriberData['id']);
         }
 
         return new Subscriber($subscriberData['id'], $subscriberData['class']);

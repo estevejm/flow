@@ -40,7 +40,7 @@ class MessagesToPublishCollectorTest extends PHPUnit_Framework_TestCase
 
         $this->collector = new MessagesToPublishCollector();
         $this->collector->setParser($this->parser);
-        $this->collector->setSourceCodeReader($this->reader);
+        $this->collector->setReader($this->reader);
         $this->collector->setVisitor($this->visitor);
     }
 

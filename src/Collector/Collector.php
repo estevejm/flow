@@ -4,6 +4,7 @@ namespace EJM\Flow\Collector;
 
 use Assert\Assertion;
 use EJM\Flow\Collector\Reader\FileReader;
+use EJM\Flow\Collector\Reader\Reader;
 use EJM\Flow\Collector\Reader\SourceCodeReader;
 use EJM\Flow\Collector\Parser\DataCollectorNodeVisitor;
 use PhpParser\NodeTraverser;
@@ -19,9 +20,9 @@ abstract class Collector
     private $parser;
 
     /**
-     * @var SourceCodeReader
+     * @var Reader
      */
-    private $sourceCodeReader;
+    private $reader;
 
     /**
      * @var DataCollectorNodeVisitor
@@ -31,7 +32,7 @@ abstract class Collector
     public function __construct()
     {
         $this->parser = $this->getDefaultParser();
-        $this->sourceCodeReader = $this->getDefaultReader();
+        $this->reader = $this->getDefaultReader();
         $this->visitor = $this->getVisitor();
 
         Assertion::isInstanceOf($this->visitor, '\EJM\Flow\Collector\Parser\DataCollectorNodeVisitor');
@@ -46,7 +47,7 @@ abstract class Collector
     }
 
     /**
-     * @return SourceCodeReader
+     * @return Reader
      */
     private function getDefaultReader()
     {
@@ -66,7 +67,7 @@ abstract class Collector
     {
         Assertion::classExists($className);
 
-        $sourceCode = $this->sourceCodeReader->read($className);
+        $sourceCode = $this->reader->read($className);
         $nodes = $this->parser->parse($sourceCode);
 
         return $this->collectData($nodes);
@@ -105,12 +106,12 @@ abstract class Collector
     }
 
     /**
-     * @param SourceCodeReader $sorceCodeReader
+     * @param Reader $reader
      * @return $this
      */
-    public function setSourceCodeReader(SourceCodeReader $sorceCodeReader)
+    public function setReader(Reader $reader)
     {
-        $this->sourceCodeReader = $sorceCodeReader;
+        $this->reader = $reader;
 
         return $this;
     }

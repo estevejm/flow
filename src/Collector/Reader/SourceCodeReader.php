@@ -5,7 +5,7 @@ namespace EJM\Flow\Collector\Reader;
 use Assert\Assertion;
 use ReflectionClass;
 
-class SourceCodeReader
+class SourceCodeReader implements Reader
 {
     /**
      * @var FileReader

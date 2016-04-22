@@ -2,7 +2,7 @@
 
 namespace EJM\Flow\Collector\Reader;
 
-class FileReader
+class FileReader implements Reader
 {
     /**
      * @param string $filename

@@ -1,10 +1,10 @@
 <?php
 
-namespace EJM\Flow\Network\Factory\AssemblyStage;
+namespace EJM\Flow\Network\Builder\AssemblyStage;
 
 use EJM\Flow\Collector\Collector;
 use EJM\Flow\Network\Blueprint;
-use EJM\Flow\Network\Factory\AssemblyStage;
+use EJM\Flow\Network\Builder\AssemblyStage;
 use EJM\Flow\Network\Node\Event;
 
 class AddPublishedMessages implements AssemblyStage

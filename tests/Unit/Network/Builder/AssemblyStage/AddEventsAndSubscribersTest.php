@@ -1,9 +1,9 @@
 <?php
 
-namespace EJM\Flow\Tests\Unit\Network\Factory\AssemblyStage;
+namespace EJM\Flow\Tests\Unit\Network\Builder\AssemblyStage;
 
 use EJM\Flow\Network\Blueprint;
-use EJM\Flow\Network\Factory\AssemblyStage\AddEventsAndSubscribers;
+use EJM\Flow\Network\Builder\AssemblyStage\AddEventsAndSubscribers;
 use EJM\Flow\Network\Node\Event;
 use EJM\Flow\Network\Node\Subscriber;
 use PHPUnit_Framework_TestCase;

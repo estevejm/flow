@@ -1,6 +1,6 @@
 <?php
 
-namespace EJM\Flow\Network\Factory;
+namespace EJM\Flow\Network\Builder;
 
 use EJM\Flow\Network\Blueprint;
 

@@ -2,19 +2,19 @@
 
 namespace EJM\Flow\Tests\Unit\Network;
 
-use EJM\Flow\Network\Factory;
-use EJM\Flow\Network\Factory\AssemblyStage;
+use EJM\Flow\Network\Builder;
+use EJM\Flow\Network\Builder\AssemblyStage;
 use EJM\Flow\Network\Network;
 use PHPUnit_Framework_TestCase;
 
-class FactoryTest extends PHPUnit_Framework_TestCase
+class BuilderTest extends PHPUnit_Framework_TestCase
 {
     public function testCreate()
     {
         $stage1 = $this->getAssemblyStageMock();
         $stage2 = $this->getAssemblyStageMock();
 
-        $factory = new Factory();
+        $factory = new Builder();
         $factory->addAssemblyStage($stage1);
         $factory->addAssemblyStage($stage2);
 
@@ -28,7 +28,7 @@ class FactoryTest extends PHPUnit_Framework_TestCase
      */
     private function getAssemblyStageMock()
     {
-        $stage = $this->getMock('\EJM\Flow\Network\Factory\AssemblyStage');
+        $stage = $this->getMock('\EJM\Flow\Network\Builder\AssemblyStage');
 
         $stage->expects($this->once())
             ->method('assemble')

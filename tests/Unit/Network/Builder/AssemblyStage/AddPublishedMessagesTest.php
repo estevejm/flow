@@ -1,9 +1,9 @@
 <?php
 
-namespace EJM\Flow\Tests\Unit\Network\Factory\AssemblyStage;
+namespace EJM\Flow\Tests\Unit\Network\Builder\AssemblyStage;
 
 use EJM\Flow\Network\Blueprint;
-use EJM\Flow\Network\Factory\AssemblyStage\AddPublishedMessages;
+use EJM\Flow\Network\Builder\AssemblyStage\AddPublishedMessages;
 use EJM\Flow\Network\Node\Command;
 use EJM\Flow\Network\Node\Event;
 use EJM\Flow\Network\Node\Handler;

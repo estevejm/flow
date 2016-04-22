@@ -1,10 +1,10 @@
 <?php
 
-namespace EJM\Flow\Network\Factory\AssemblyStage;
+namespace EJM\Flow\Network\Builder\AssemblyStage;
 
 use Assert;
 use EJM\Flow\Network\Blueprint;
-use EJM\Flow\Network\Factory\AssemblyStage;
+use EJM\Flow\Network\Builder\AssemblyStage;
 use EJM\Flow\Network\Node\Event;
 use EJM\Flow\Network\Node\Subscriber;
 

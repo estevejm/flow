@@ -7,10 +7,10 @@ use EJM\Flow\Collector\Parser\Visitor\MessagesUsedNodeVisitor;
 use EJM\Flow\Collector\Reader\FileReader;
 use EJM\Flow\Collector\Reader\SourceCodeReader;
 use EJM\Flow\Mapper\D3\ForceLayoutMapper;
-use EJM\Flow\Network\Factory;
-use EJM\Flow\Network\Factory\AssemblyStage\AddCommandsAndHandlers;
-use EJM\Flow\Network\Factory\AssemblyStage\AddEventsAndSubscribers;
-use EJM\Flow\Network\Factory\AssemblyStage\AddPublishedMessages;
+use EJM\Flow\Network\Builder;
+use EJM\Flow\Network\Builder\AssemblyStage\AddCommandsAndHandlers;
+use EJM\Flow\Network\Builder\AssemblyStage\AddEventsAndSubscribers;
+use EJM\Flow\Network\Builder\AssemblyStage\AddPublishedMessages;
 use EJM\Flow\Network\Splitter;
 use PhpParser\NodeTraverser;
 use PhpParser\ParserFactory;
@@ -221,7 +221,7 @@ class GetGraphTest extends WebTestCase
         $messagesUsedCollector = new Collector($parser, new NodeTraverser(), $reader);
         $messagesUsedCollector->setVisitor(new MessagesUsedNodeVisitor());
 
-        $factory = new Factory();
+        $factory = new Builder();
         $factory->addAssemblyStage(new AddCommandsAndHandlers($commandHandlerMap));
         $factory->addAssemblyStage(new AddEventsAndSubscribers($eventSubscribersMap));
         $factory->addAssemblyStage(new AddPublishedMessages($messagesUsedCollector));

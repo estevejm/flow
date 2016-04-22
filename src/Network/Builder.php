@@ -2,9 +2,9 @@
 
 namespace EJM\Flow\Network;
 
-use EJM\Flow\Network\Factory\AssemblyStage;
+use EJM\Flow\Network\Builder\AssemblyStage;
 
-class Factory
+class Builder
 {
     /**
      * @var AssemblyStage[]

@@ -17,11 +17,11 @@ services:
         factory: ['@flow.network.factory', 'create']
 
     flow.network.factory:
-        class: EJM\Flow\Network\Factory
+        class: EJM\Flow\Network\Builder
         public: false
 
     flow.network.factory.stage.add_commands_and_handlers:
-        class: EJM\Flow\Network\Factory\AssemblyStage\AddCommandsAndHandlers
+        class: EJM\Flow\Network\Builder\AssemblyStage\AddCommandsAndHandlers
         public: false
         arguments:
             - '%flow.map.command_handler%' # defined in registerHandlers compiler pass
@@ -29,7 +29,7 @@ services:
             - { name: flow.assembly_stage }
 
     flow.network.factory.stage.add_events_and_subscribers:
-        class: EJM\Flow\Network\Factory\AssemblyStage\AddEventsAndSubscribers
+        class: EJM\Flow\Network\Builder\AssemblyStage\AddEventsAndSubscribers
         public: false
         arguments:
             - '%flow.map.events_subscribers%' # defined in registerSubscribers compiler pass
@@ -37,7 +37,7 @@ services:
             - { name: flow.assembly_stage }
 
     flow.network.factory.stage.add_published_messages:
-        class: EJM\Flow\Network\Factory\AssemblyStage\AddPublishedMessages
+        class: EJM\Flow\Network\Builder\AssemblyStage\AddPublishedMessages
         public: false
         arguments:
             - '@flow.collector.messages_used'

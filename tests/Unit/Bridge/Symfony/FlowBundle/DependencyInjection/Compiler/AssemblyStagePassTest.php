@@ -28,11 +28,11 @@ class AssemblyStagePassTest extends PHPUnit_Framework_TestCase
 
         $factoryService->expects($this->at(0))
             ->method('addMethodCall')
-            ->with('addAssemblyStage', [$taggedService1]);
+            ->with('withAssemblyStage', [$taggedService1]);
 
         $factoryService->expects($this->at(1))
             ->method('addMethodCall')
-            ->with('addAssemblyStage', [$taggedService2]);
+            ->with('withAssemblyStage', [$taggedService2]);
 
         $container = $this->getContainerBuilderMock();
 

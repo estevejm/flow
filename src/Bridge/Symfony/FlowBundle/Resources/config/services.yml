@@ -14,7 +14,7 @@ services:
 
     flow.network:
         class: EJM\Flow\Network\Network
-        factory: ['@flow.network.factory', 'create']
+        factory: ['@flow.network.factory', 'build']
 
     flow.network.factory:
         class: EJM\Flow\Network\Builder

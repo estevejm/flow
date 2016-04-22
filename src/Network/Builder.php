@@ -14,7 +14,7 @@ class Builder
     /**
      * @param AssemblyStage $stage
      */
-    public function addAssemblyStage(AssemblyStage $stage)
+    public function withAssemblyStage(AssemblyStage $stage)
     {
         $this->stages[] = $stage;
     }
@@ -22,7 +22,7 @@ class Builder
     /**
      * @return Network
      */
-    public function create()
+    public function build()
     {
         $blueprint = new Blueprint();
 

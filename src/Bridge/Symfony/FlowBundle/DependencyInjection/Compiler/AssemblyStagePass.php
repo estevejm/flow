@@ -21,7 +21,7 @@ class AssemblyStagePass implements CompilerPassInterface
         $definition = $container->findDefinition(self::FACTORY_SERVICE_ID);
 
         foreach ($container->findTaggedServiceIds('flow.assembly_stage') as $serviceId => $tags) {
-            $definition->addMethodCall('addAssemblyStage', [$container->findDefinition($serviceId)]);
+            $definition->addMethodCall('withAssemblyStage', [$container->findDefinition($serviceId)]);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace EJM\Flow\Tests\Functional\Features;
 
-use EJM\Flow\Collector\MessagesToPublishCollector;
+use EJM\Flow\Collector\Collector;
 use EJM\Flow\Collector\Parser\Visitor\MessagesToPublishNodeVisitor;
 use EJM\Flow\Mapper\D3\ForceLayoutMapper;
 use EJM\Flow\Network\Builder;
@@ -218,7 +218,7 @@ class GetGraphTest extends WebTestCase
         ];
 
         $visitor = new MessagesToPublishNodeVisitor();
-        $collector = new MessagesToPublishCollector($visitor);
+        $collector = new Collector($visitor);
 
         $builder = new Builder();
         $builder->withAssemblyStage(new AddCommandsAndHandlers($commandHandlerMap));

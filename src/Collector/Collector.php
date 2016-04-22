@@ -11,7 +11,7 @@ use PhpParser\NodeVisitor;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
 
-class MessagesToPublishCollector
+class Collector
 {
     /**
      * @var Parser

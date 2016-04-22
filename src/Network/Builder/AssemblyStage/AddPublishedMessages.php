@@ -2,7 +2,7 @@
 
 namespace EJM\Flow\Network\Builder\AssemblyStage;
 
-use EJM\Flow\Collector\MessagesToPublishCollector;
+use EJM\Flow\Collector\Collector;
 use EJM\Flow\Network\Blueprint;
 use EJM\Flow\Network\Builder\AssemblyStage;
 use EJM\Flow\Network\Node\Event;
@@ -10,14 +10,14 @@ use EJM\Flow\Network\Node\Event;
 class AddPublishedMessages implements AssemblyStage
 {
     /**
-     * @var MessagesToPublishCollector $collector
+     * @var Collector $collector
      */
     private $collector;
 
     /**
-     * @param MessagesToPublishCollector $collector
+     * @param Collector $collector
      */
-    public function __construct(MessagesToPublishCollector $collector)
+    public function __construct(Collector $collector)
     {
         $this->collector = $collector;
     }

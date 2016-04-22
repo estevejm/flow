@@ -2,13 +2,13 @@
 
 namespace EJM\Flow\Tests\Unit\Collector;
 
-use EJM\Flow\Collector\Collector;
+use EJM\Flow\Collector\MessagesToPublishCollector;
 use EJM\Flow\Collector\Parser\DataCollectorNodeVisitor;
 use PhpParser\Parser;
 use PHPUnit_Framework_MockObject_MockObject;
 use PHPUnit_Framework_TestCase;
 
-class CollectorTest extends PHPUnit_Framework_TestCase
+class MessagesToPublishCollectorTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
@@ -21,7 +21,7 @@ class CollectorTest extends PHPUnit_Framework_TestCase
     private $reader;
 
     /**
-     * @var Collector
+     * @var MessagesToPublishCollector
      */
     private $collector;
 
@@ -38,9 +38,10 @@ class CollectorTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->collector = new Collector($this->visitor);
+        $this->collector = new MessagesToPublishCollector();
         $this->collector->setParser($this->parser);
         $this->collector->setSourceCodeReader($this->reader);
+        $this->collector->setVisitor($this->visitor);
     }
 
     public function testCollectWithExistingClass()

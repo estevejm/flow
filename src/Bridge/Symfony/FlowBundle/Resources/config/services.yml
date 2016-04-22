@@ -48,13 +48,7 @@ services:
         class: EJM\Flow\Network\Splitter
 
     flow.collector.messages_to_publish:
-        class: EJM\Flow\Collector\Collector
-        arguments:
-            - '@flow.collector.visitor.messages_to_publish'
-
-    flow.collector.visitor.messages_to_publish:
-        class: EJM\Flow\Collector\Parser\Visitor\MessagesToPublishNodeVisitor
-        public: false
+        class: EJM\Flow\Collector\MessagesToPublishCollector
 
     flow.validator:
         class: EJM\Flow\Validator\Validator

@@ -11,7 +11,7 @@ use PhpParser\NodeVisitor;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
 
-class Collector
+abstract class Collector
 {
     /**
      * @var Parser
@@ -28,15 +28,35 @@ class Collector
      */
     private $visitor;
 
-    /**
-     * @param DataCollectorNodeVisitor $visitor
-     */
-    public function __construct(DataCollectorNodeVisitor $visitor)
+    public function __construct()
     {
         $this->parser = $this->getDefaultParser();
         $this->sourceCodeReader = $this->getDefaultReader();
-        $this->visitor = $visitor;
+        $this->visitor = $this->getVisitor();
+
+        Assertion::isInstanceOf($this->visitor, '\EJM\Flow\Collector\Parser\DataCollectorNodeVisitor');
     }
+
+    /**
+     * @return Parser
+     */
+    private function getDefaultParser()
+    {
+        return (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+    }
+
+    /**
+     * @return SourceCodeReader
+     */
+    private function getDefaultReader()
+    {
+        return new SourceCodeReader(new FileReader());
+    }
+
+    /**
+     * @return DataCollectorNodeVisitor
+     */
+    protected abstract function getVisitor();
 
     /**
      * @param string $className
@@ -45,12 +65,32 @@ class Collector
     public function collect($className)
     {
         Assertion::classExists($className);
-        Assertion::notNull($this->visitor);
 
         $sourceCode = $this->sourceCodeReader->read($className);
         $nodes = $this->parser->parse($sourceCode);
 
         return $this->collectData($nodes);
+    }
+
+    /**
+     * @param $nodes
+     * @return mixed
+     */
+    private function collectData($nodes)
+    {
+        $this->traverseNodes($nodes);
+
+        return $this->visitor->getData();
+    }
+
+    /**
+     * @param $nodes
+     */
+    private function traverseNodes($nodes)
+    {
+        $traverser = new NodeTraverser();
+        $traverser->addVisitor($this->visitor);
+        $traverser->traverse($nodes);
     }
 
     /**
@@ -76,39 +116,10 @@ class Collector
     }
 
     /**
-     * @return Parser
+     * @param DataCollectorNodeVisitor $visitor
      */
-    private function getDefaultParser()
+    public function setVisitor(DataCollectorNodeVisitor $visitor)
     {
-        return (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
-    }
-
-    /**
-     * @return SourceCodeReader
-     */
-    private function getDefaultReader()
-    {
-        return new SourceCodeReader(new FileReader());
-    }
-
-    /**
-     * @param $nodes
-     * @return mixed
-     */
-    private function collectData($nodes)
-    {
-        $this->traverseNodes($nodes);
-
-        return $this->visitor->getData();
-    }
-
-    /**
-     * @param $nodes
-     */
-    private function traverseNodes($nodes)
-    {
-        $traverser = new NodeTraverser();
-        $traverser->addVisitor($this->visitor);
-        $traverser->traverse($nodes);
+        $this->visitor = $visitor;
     }
 }

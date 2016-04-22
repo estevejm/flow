@@ -40,23 +40,19 @@ services:
         class: EJM\Flow\Network\Builder\AssemblyStage\AddPublishedMessages
         public: false
         arguments:
-            - '@flow.collector.messages_used'
+            - '@flow.collector.messages_to_publish'
         tags:
             - { name: flow.assembly_stage }
 
     flow.network.splitter:
         class: EJM\Flow\Network\Splitter
 
-    flow.collector:
+    flow.collector.messages_to_publish:
         class: EJM\Flow\Collector\MessagesToPublishCollector
-        abstract: true
         arguments:
             - '@flow.vendor.php_parser'
             - '@flow.vendor.php_parser.node_traverser'
             - '@flow.collector.source_code_reader'
-
-    flow.collector.messages_used:
-        parent: flow.collector
         calls:
             - [setVisitor, ['@flow.collector.visitor.messages_to_publish']]
 

@@ -33,7 +33,7 @@ class CollectorTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->parser = $this->getMock('\PhpParser\Parser');
-        $this->visitor = $this->getVisitorMock();
+        $this->visitor = $this->getMock('\EJM\Flow\Collector\Parser\DataCollectorNodeVisitor');
         $this->reader = $this->getMockBuilder('\EJM\Flow\Collector\Reader\SourceCodeReader')
             ->disableOriginalConstructor()
             ->getMock();
@@ -74,21 +74,9 @@ class CollectorTest extends PHPUnit_Framework_TestCase
      */
     public function testCollectWithUnexistingClass()
     {
-        $visitor = $this->getVisitorMock();
-
-        $this->collector->setVisitor($visitor);
-
         $this->reader->expects($this->never())
             ->method('read');
 
         $this->collector->collect('\Unexisting\Class');
-    }
-
-    /**
-     * @return PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getVisitorMock()
-    {
-        return $this->getMock('\EJM\Flow\Collector\Parser\DataCollectorNodeVisitor');
     }
 }

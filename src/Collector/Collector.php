@@ -19,11 +19,6 @@ class Collector
     private $parser;
 
     /**
-     * @var NodeTraverser
-     */
-    private $traverser;
-
-    /**
      * @var SourceCodeReader
      */
     private $sourceCodeReader;
@@ -38,11 +33,9 @@ class Collector
      */
     public function __construct(DataCollectorNodeVisitor $visitor)
     {
-        $this->parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
-        $this->traverser = new NodeTraverser();
-        $this->sourceCodeReader = new SourceCodeReader(new FileReader());
-
-        $this->setVisitor($visitor);
+        $this->parser = $this->getDefaultParser();
+        $this->sourceCodeReader = $this->getDefaultReader();
+        $this->visitor = $visitor;
     }
 
     /**
@@ -57,25 +50,11 @@ class Collector
         $sourceCode = $this->sourceCodeReader->read($className);
         $nodes = $this->parser->parse($sourceCode);
 
-        $this->traverser->traverse($nodes);
+        $traverser = new NodeTraverser();
+        $traverser->addVisitor($this->visitor);
+        $traverser->traverse($nodes);
 
         return $this->visitor->getData();
-    }
-
-    /**
-     * @param DataCollectorNodeVisitor $visitor
-     * @return $this
-     */
-    public function setVisitor(DataCollectorNodeVisitor $visitor)
-    {
-        if ($this->visitor instanceof DataCollectorNodeVisitor) {
-            $this->traverser->removeVisitor($this->visitor);
-        }
-
-        $this->visitor = $visitor;
-        $this->traverser->addVisitor($this->visitor);
-
-        return $this;
     }
 
     /**
@@ -98,5 +77,21 @@ class Collector
         $this->sourceCodeReader = $sorceCodeReader;
 
         return $this;
+    }
+
+    /**
+     * @return Parser
+     */
+    private function getDefaultParser()
+    {
+        return (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+    }
+
+    /**
+     * @return SourceCodeReader
+     */
+    private function getDefaultReader()
+    {
+        return new SourceCodeReader(new FileReader());
     }
 }

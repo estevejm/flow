@@ -32,7 +32,7 @@ class AddPublishedMessagesTest extends PHPUnit_Framework_TestCase
             ->addEvent($event1)
             ->addPublisher($subscriber1);
 
-        $collector = $this->getMockBuilder('\EJM\Flow\Collector\Collector')
+        $collector = $this->getMockBuilder('\EJM\Flow\Collector\MessagesToPublishCollector')
             ->disableOriginalConstructor()
             ->getMock();
 

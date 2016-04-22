@@ -9,7 +9,7 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
 use PhpParser\Parser;
 
-class Collector
+class MessagesToPublishCollector
 {
     /**
      * @var Parser

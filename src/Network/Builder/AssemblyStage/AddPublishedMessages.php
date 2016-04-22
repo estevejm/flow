@@ -2,7 +2,7 @@
 
 namespace EJM\Flow\Network\Builder\AssemblyStage;
 
-use EJM\Flow\Collector\Collector;
+use EJM\Flow\Collector\MessagesToPublishCollector;
 use EJM\Flow\Network\Blueprint;
 use EJM\Flow\Network\Builder\AssemblyStage;
 use EJM\Flow\Network\Node\Event;
@@ -10,16 +10,16 @@ use EJM\Flow\Network\Node\Event;
 class AddPublishedMessages implements AssemblyStage
 {
     /**
-     * @var Collector $messagesUsedCollector
+     * @var MessagesToPublishCollector $collector
      */
-    private $messagesUsedCollector;
+    private $collector;
 
     /**
-     * @param Collector $messagesUsedCollector
+     * @param MessagesToPublishCollector $collector
      */
-    public function __construct(Collector $messagesUsedCollector)
+    public function __construct(MessagesToPublishCollector $collector)
     {
-        $this->messagesUsedCollector = $messagesUsedCollector;
+        $this->collector = $collector;
     }
 
     /**
@@ -28,7 +28,7 @@ class AddPublishedMessages implements AssemblyStage
     public function assemble(Blueprint $blueprint)
     {
         foreach($blueprint->getPublishers() as $publisher) {
-            $messageIds = $this->messagesUsedCollector->collect($publisher->getClassName());
+            $messageIds = $this->collector->collect($publisher->getClassName());
             foreach ($messageIds as $messageId) {
                 if ($blueprint->hasCommand($messageId)) {
                     $publisher->publishes($blueprint->getCommand($messageId));

@@ -2,7 +2,7 @@
 
 namespace EJM\Flow\Tests\Functional\Features;
 
-use EJM\Flow\Collector\Collector;
+use EJM\Flow\Collector\MessagesToPublishCollector;
 use EJM\Flow\Collector\Parser\Visitor\MessagesToPublishNodeVisitor;
 use EJM\Flow\Collector\Reader\FileReader;
 use EJM\Flow\Collector\Reader\SourceCodeReader;
@@ -223,13 +223,13 @@ class GetGraphTest extends WebTestCase
 
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
         $reader = new SourceCodeReader(new FileReader());
-        $messagesUsedCollector = new Collector($parser, new NodeTraverser(), $reader);
-        $messagesUsedCollector->setVisitor(new MessagesToPublishNodeVisitor());
+        $collector = new MessagesToPublishCollector($parser, new NodeTraverser(), $reader);
+        $collector->setVisitor(new MessagesToPublishNodeVisitor());
 
         $builder = new Builder();
         $builder->withAssemblyStage(new AddCommandsAndHandlers($commandHandlerMap));
         $builder->withAssemblyStage(new AddEventsAndSubscribers($eventSubscribersMap));
-        $builder->withAssemblyStage(new AddPublishedMessages($messagesUsedCollector));
+        $builder->withAssemblyStage(new AddPublishedMessages($collector));
 
         $network = $builder->build();
 

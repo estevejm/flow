@@ -48,7 +48,7 @@ services:
         class: EJM\Flow\Network\Splitter
 
     flow.collector:
-        class: EJM\Flow\Collector\Collector
+        class: EJM\Flow\Collector\MessagesToPublishCollector
         abstract: true
         arguments:
             - '@flow.vendor.php_parser'

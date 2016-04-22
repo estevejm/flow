@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class AssemblyStagePass implements CompilerPassInterface
 {
-    const FACTORY_SERVICE_ID = 'flow.network.factory';
+    const FACTORY_SERVICE_ID = 'flow.network.builder';
 
     /**
      * @param ContainerBuilder $container

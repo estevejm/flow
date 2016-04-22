@@ -14,13 +14,13 @@ services:
 
     flow.network:
         class: EJM\Flow\Network\Network
-        factory: ['@flow.network.factory', 'build']
+        factory: ['@flow.network.builder', 'build']
 
-    flow.network.factory:
+    flow.network.builder:
         class: EJM\Flow\Network\Builder
         public: false
 
-    flow.network.factory.stage.add_commands_and_handlers:
+    flow.network.builder.stage.add_commands_and_handlers:
         class: EJM\Flow\Network\Builder\AssemblyStage\AddCommandsAndHandlers
         public: false
         arguments:
@@ -28,7 +28,7 @@ services:
         tags:
             - { name: flow.assembly_stage }
 
-    flow.network.factory.stage.add_events_and_subscribers:
+    flow.network.builder.stage.add_events_and_subscribers:
         class: EJM\Flow\Network\Builder\AssemblyStage\AddEventsAndSubscribers
         public: false
         arguments:
@@ -36,7 +36,7 @@ services:
         tags:
             - { name: flow.assembly_stage }
 
-    flow.network.factory.stage.add_published_messages:
+    flow.network.builder.stage.add_published_messages:
         class: EJM\Flow\Network\Builder\AssemblyStage\AddPublishedMessages
         public: false
         arguments:

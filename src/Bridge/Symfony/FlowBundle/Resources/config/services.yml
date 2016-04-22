@@ -58,10 +58,10 @@ services:
     flow.collector.messages_used:
         parent: flow.collector
         calls:
-            - [setVisitor, ['@flow.collector.visitor.messages_used']]
+            - [setVisitor, ['@flow.collector.visitor.messages_to_publish']]
 
-    flow.collector.visitor.messages_used:
-        class: EJM\Flow\Collector\Parser\Visitor\MessagesUsedNodeVisitor
+    flow.collector.visitor.messages_to_publish:
+        class: EJM\Flow\Collector\Parser\Visitor\MessagesToPublishNodeVisitor
         public: false
 
     flow.collector.source_code_reader:

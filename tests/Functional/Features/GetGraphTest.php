@@ -3,7 +3,7 @@
 namespace EJM\Flow\Tests\Functional\Features;
 
 use EJM\Flow\Collector\Collector;
-use EJM\Flow\Collector\Parser\Visitor\MessagesUsedNodeVisitor;
+use EJM\Flow\Collector\Parser\Visitor\MessagesToPublishNodeVisitor;
 use EJM\Flow\Collector\Reader\FileReader;
 use EJM\Flow\Collector\Reader\SourceCodeReader;
 use EJM\Flow\Mapper\D3\ForceLayoutMapper;
@@ -224,7 +224,7 @@ class GetGraphTest extends WebTestCase
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
         $reader = new SourceCodeReader(new FileReader());
         $messagesUsedCollector = new Collector($parser, new NodeTraverser(), $reader);
-        $messagesUsedCollector->setVisitor(new MessagesUsedNodeVisitor());
+        $messagesUsedCollector->setVisitor(new MessagesToPublishNodeVisitor());
 
         $builder = new Builder();
         $builder->withAssemblyStage(new AddCommandsAndHandlers($commandHandlerMap));

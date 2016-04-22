@@ -6,7 +6,7 @@ use EJM\Flow\Collector\Parser\DataCollectorNodeVisitor;
 use PhpParser\Node;
 use ReflectionClass;
 
-class MessagesUsedNodeVisitor extends DataCollectorNodeVisitor
+class MessagesToPublishNodeVisitor extends DataCollectorNodeVisitor
 {
     /**
      * @var string

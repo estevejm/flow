@@ -221,12 +221,12 @@ class GetGraphTest extends WebTestCase
         $messagesUsedCollector = new Collector($parser, new NodeTraverser(), $reader);
         $messagesUsedCollector->setVisitor(new MessagesUsedNodeVisitor());
 
-        $factory = new Builder();
-        $factory->withAssemblyStage(new AddCommandsAndHandlers($commandHandlerMap));
-        $factory->withAssemblyStage(new AddEventsAndSubscribers($eventSubscribersMap));
-        $factory->withAssemblyStage(new AddPublishedMessages($messagesUsedCollector));
+        $builder = new Builder();
+        $builder->withAssemblyStage(new AddCommandsAndHandlers($commandHandlerMap));
+        $builder->withAssemblyStage(new AddEventsAndSubscribers($eventSubscribersMap));
+        $builder->withAssemblyStage(new AddPublishedMessages($messagesUsedCollector));
 
-        $network = $factory->build();
+        $network = $builder->build();
 
         $splitter = new Splitter();
 

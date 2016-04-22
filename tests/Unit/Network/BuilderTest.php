@@ -14,11 +14,11 @@ class BuilderTest extends PHPUnit_Framework_TestCase
         $stage1 = $this->getAssemblyStageMock();
         $stage2 = $this->getAssemblyStageMock();
 
-        $factory = new Builder();
-        $factory->withAssemblyStage($stage1);
-        $factory->withAssemblyStage($stage2);
+        $builder = new Builder();
+        $builder->withAssemblyStage($stage1);
+        $builder->withAssemblyStage($stage2);
 
-        $network = $factory->build();
+        $network = $builder->build();
 
         $this->assertEquals(new Network([]), $network);
     }

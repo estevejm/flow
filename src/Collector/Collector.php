@@ -50,11 +50,7 @@ class Collector
         $sourceCode = $this->sourceCodeReader->read($className);
         $nodes = $this->parser->parse($sourceCode);
 
-        $traverser = new NodeTraverser();
-        $traverser->addVisitor($this->visitor);
-        $traverser->traverse($nodes);
-
-        return $this->visitor->getData();
+        return $this->collectData($nodes);
     }
 
     /**
@@ -93,5 +89,26 @@ class Collector
     private function getDefaultReader()
     {
         return new SourceCodeReader(new FileReader());
+    }
+
+    /**
+     * @param $nodes
+     * @return mixed
+     */
+    private function collectData($nodes)
+    {
+        $this->traverseNodes($nodes);
+
+        return $this->visitor->getData();
+    }
+
+    /**
+     * @param $nodes
+     */
+    private function traverseNodes($nodes)
+    {
+        $traverser = new NodeTraverser();
+        $traverser->addVisitor($this->visitor);
+        $traverser->traverse($nodes);
     }
 }

@@ -4,16 +4,12 @@ namespace EJM\Flow\Tests\Functional\Features;
 
 use EJM\Flow\Collector\MessagesToPublishCollector;
 use EJM\Flow\Collector\Parser\Visitor\MessagesToPublishNodeVisitor;
-use EJM\Flow\Collector\Reader\FileReader;
-use EJM\Flow\Collector\Reader\SourceCodeReader;
 use EJM\Flow\Mapper\D3\ForceLayoutMapper;
 use EJM\Flow\Network\Builder;
 use EJM\Flow\Network\Builder\AssemblyStage\AddCommandsAndHandlers;
 use EJM\Flow\Network\Builder\AssemblyStage\AddEventsAndSubscribers;
 use EJM\Flow\Network\Builder\AssemblyStage\AddPublishedMessages;
 use EJM\Flow\Network\Splitter;
-use PhpParser\NodeTraverser;
-use PhpParser\ParserFactory;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class GetGraphTest extends WebTestCase
@@ -221,10 +217,8 @@ class GetGraphTest extends WebTestCase
             ],
         ];
 
-        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
-        $reader = new SourceCodeReader(new FileReader());
-        $collector = new MessagesToPublishCollector($parser, new NodeTraverser(), $reader);
-        $collector->setVisitor(new MessagesToPublishNodeVisitor());
+        $visitor = new MessagesToPublishNodeVisitor();
+        $collector = new MessagesToPublishCollector($visitor);
 
         $builder = new Builder();
         $builder->withAssemblyStage(new AddCommandsAndHandlers($commandHandlerMap));

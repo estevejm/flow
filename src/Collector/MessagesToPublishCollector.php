@@ -3,11 +3,13 @@
 namespace EJM\Flow\Collector;
 
 use Assert\Assertion;
+use EJM\Flow\Collector\Reader\FileReader;
 use EJM\Flow\Collector\Reader\SourceCodeReader;
 use EJM\Flow\Collector\Parser\DataCollectorNodeVisitor;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
 use PhpParser\Parser;
+use PhpParser\ParserFactory;
 
 class MessagesToPublishCollector
 {
@@ -24,7 +26,7 @@ class MessagesToPublishCollector
     /**
      * @var SourceCodeReader
      */
-    private $sorceCodeReader;
+    private $sourceCodeReader;
 
     /**
      * @var DataCollectorNodeVisitor
@@ -32,28 +34,15 @@ class MessagesToPublishCollector
     private $visitor;
 
     /**
-     * @param Parser $parser
-     * @param NodeTraverser $traverser
-     * @param SourceCodeReader $sorceCodeReader
-     */
-    public function __construct(Parser $parser, NodeTraverser $traverser, SourceCodeReader $sorceCodeReader)
-    {
-        $this->parser = $parser;
-        $this->traverser = $traverser;
-        $this->sorceCodeReader = $sorceCodeReader;
-    }
-
-    /**
      * @param DataCollectorNodeVisitor $visitor
      */
-    public function setVisitor(DataCollectorNodeVisitor $visitor)
+    public function __construct(DataCollectorNodeVisitor $visitor)
     {
-        if ($this->visitor instanceof DataCollectorNodeVisitor) {
-            $this->traverser->removeVisitor($this->visitor);
-        }
+        $this->parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+        $this->traverser = new NodeTraverser();
+        $this->sourceCodeReader = new SourceCodeReader(new FileReader());
 
-        $this->visitor = $visitor;
-        $this->traverser->addVisitor($this->visitor);
+        $this->setVisitor($visitor);
     }
 
     /**
@@ -65,11 +54,49 @@ class MessagesToPublishCollector
         Assertion::classExists($className);
         Assertion::notNull($this->visitor);
 
-        $sourceCode = $this->sorceCodeReader->read($className);
+        $sourceCode = $this->sourceCodeReader->read($className);
         $nodes = $this->parser->parse($sourceCode);
 
         $this->traverser->traverse($nodes);
 
         return $this->visitor->getData();
+    }
+
+    /**
+     * @param DataCollectorNodeVisitor $visitor
+     * @return $this
+     */
+    public function setVisitor(DataCollectorNodeVisitor $visitor)
+    {
+        if ($this->visitor instanceof DataCollectorNodeVisitor) {
+            $this->traverser->removeVisitor($this->visitor);
+        }
+
+        $this->visitor = $visitor;
+        $this->traverser->addVisitor($this->visitor);
+
+        return $this;
+    }
+
+    /**
+     * @param Parser $parser
+     * @return $this
+     */
+    public function setParser(Parser $parser)
+    {
+        $this->parser = $parser;
+
+        return $this;
+    }
+
+    /**
+     * @param SourceCodeReader $sorceCodeReader
+     * @return $this
+     */
+    public function setSourceCodeReader(SourceCodeReader $sorceCodeReader)
+    {
+        $this->sourceCodeReader = $sorceCodeReader;
+
+        return $this;
     }
 }

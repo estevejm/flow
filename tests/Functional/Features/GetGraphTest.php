@@ -111,6 +111,11 @@ class GetGraphTest extends WebTestCase
 
     public function testPackageAction()
     {
+        $mapperConfig = [
+            ForceLayoutMapper::MAP_HANDLERS => true,
+            ForceLayoutMapper::MAP_SUBSCRIBERS => true,
+        ];
+
         $commandHandlerMap = [
             'execute_command' => [
                 'id' => 'execute_command_handler',
@@ -232,10 +237,7 @@ class GetGraphTest extends WebTestCase
 
         $networks = $splitter->split($network);
 
-        $mapper = new ForceLayoutMapper([
-            ForceLayoutMapper::MAP_HANDLERS => true,
-            ForceLayoutMapper::MAP_SUBSCRIBERS => true,
-        ]);
+        $mapper = new ForceLayoutMapper($mapperConfig);
 
         $result = array_map(
             function($network) use ($mapper) {

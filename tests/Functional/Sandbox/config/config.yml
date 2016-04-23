@@ -1,7 +1,0 @@
-imports:
-    - { resource: services.yml }
-
-framework:
-    test: ~
-    secret: ThisIsSecret
-    router: { resource: "%kernel.root_dir%/config/routing.yml" }

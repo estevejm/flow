@@ -54,6 +54,15 @@ class ForceLayoutMapper
     }
 
     /**
+     * @param array $networks
+     * @return array
+     */
+    public function arrayMap(array $networks)
+    {
+        return array_map([$this, 'map'], $networks);
+    }
+
+    /**
      * @param Network $network
      * @return Layout
      */

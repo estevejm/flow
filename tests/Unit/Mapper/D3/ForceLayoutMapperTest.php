@@ -27,18 +27,7 @@ class ForceLayoutMapperTest extends \PHPUnit_Framework_TestCase
 
     public function mapDataProvider()
     {
-        $handler1 = new Handler('handler_1');
-        $command1 = new Command('command_1', $handler1);
-        $event1 = new Event('event_1');
-        $subscriber1 = new Subscriber('subscriber_1');
-        $subscriber2 = new Subscriber('subscriber_2');
-        $subscriber1->subscribesTo($event1);
-        $subscriber2->subscribesTo($event1);
-
-        $handler1->publishes($event1);
-        $subscriber2->publishes($command1);
-
-        $network = new Network([$command1, $handler1, $event1, $subscriber1, $subscriber2]);
+        $network = $this->getNetwork();
 
         return [
             'empty network' => [
@@ -130,5 +119,53 @@ class ForceLayoutMapperTest extends \PHPUnit_Framework_TestCase
                 ),
             ],
         ];
+    }
+
+    public function testArrayMap()
+    {
+        $network = $this->getNetwork();
+
+        $layout = new Layout(
+            [
+                $node1 = new Node(0, 'command_1', NetworkNode::TYPE_COMMAND),
+                $node2 = new Node(1, 'handler_1', NetworkNode::TYPE_HANDLER),
+                $node3 = new Node(2, 'event_1', NetworkNode::TYPE_EVENT),
+                $node4 = new Node(3, 'subscriber_1', NetworkNode::TYPE_SUBSCRIBER),
+                $node5 = new Node(4, 'subscriber_2', NetworkNode::TYPE_SUBSCRIBER),
+            ],
+            [
+                new Link($node1, $node2),
+                new Link($node2, $node3),
+                new Link($node3, $node4),
+                new Link($node3, $node5),
+                new Link($node5, $node1),
+            ]
+        );
+
+        $networks = [$network, $network];
+        $expected = [$layout, $layout];
+
+        $mapper = new ForceLayoutMapper();
+
+        $this->assertEquals($expected, $mapper->arrayMap($networks));
+    }
+
+    /**
+     * @return Network
+     */
+    private function getNetwork()
+    {
+        $handler1 = new Handler('handler_1');
+        $command1 = new Command('command_1', $handler1);
+        $event1 = new Event('event_1');
+        $subscriber1 = new Subscriber('subscriber_1');
+        $subscriber2 = new Subscriber('subscriber_2');
+        $subscriber1->subscribesTo($event1);
+        $subscriber2->subscribesTo($event1);
+
+        $handler1->publishes($event1);
+        $subscriber2->publishes($command1);
+
+        return new Network([$command1, $handler1, $event1, $subscriber1, $subscriber2]);
     }
 }

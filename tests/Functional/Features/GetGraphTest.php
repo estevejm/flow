@@ -15,11 +15,6 @@ class GetGraphTest extends PHPUnit_Framework_TestCase
 {
     public function testAction()
     {
-        $mapperConfig = [
-            ForceLayoutMapper::MAP_HANDLERS => true,
-            ForceLayoutMapper::MAP_SUBSCRIBERS => true,
-        ];
-
         $commandHandlerMap = [
             'execute_command' => [
                 'id' => 'execute_command_handler',
@@ -136,7 +131,7 @@ class GetGraphTest extends PHPUnit_Framework_TestCase
 
         $networks = $splitter->split($network);
 
-        $mapper = new ForceLayoutMapper($mapperConfig);
+        $mapper = new ForceLayoutMapper();
 
         $graph = array_map(
             function($network) use ($mapper) {

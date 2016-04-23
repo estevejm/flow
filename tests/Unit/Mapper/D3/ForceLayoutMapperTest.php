@@ -16,14 +16,6 @@ use EJM\Flow\Network\Node\Subscriber;
 class ForceLayoutMapperTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @expectedException \Assert\InvalidArgumentException
-     */
-    public function testInvalidConfiguration()
-    {
-        new ForceLayoutMapper([]);
-    }
-
-    /**
      * @dataProvider mapDataProvider
      */
     public function testMap($config, $network, $layout)

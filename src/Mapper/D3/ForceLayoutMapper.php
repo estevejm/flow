@@ -48,12 +48,9 @@ class ForceLayoutMapper
     /**
      * @param array $config
      */
-    public function __construct(array $config)
+    public function __construct(array $config = [])
     {
-        Assertion::keyExists($config, self::MAP_HANDLERS);
-        Assertion::keyExists($config, self::MAP_SUBSCRIBERS);
-
-        $this->config = $config;
+        $this->config = array_merge($this->getDefaultConfig(), $config);
     }
 
     /**
@@ -198,6 +195,17 @@ class ForceLayoutMapper
     private function hasIndexAssigned(NetworkNode $node)
     {
         return $this->indexMap->has($node->getId());
+    }
+
+    /**
+     * @return array
+     */
+    private function getDefaultConfig()
+    {
+        return [
+            ForceLayoutMapper::MAP_HANDLERS => true,
+            ForceLayoutMapper::MAP_SUBSCRIBERS => true,
+        ];
     }
 }
  

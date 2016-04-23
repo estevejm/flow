@@ -1,44 +1,17 @@
 <?php
 
-namespace EJM\Flow\Tests\Integration\Features;
+namespace EJM\Flow\Tests\Functional\Features;
 
-use EJM\Flow\Collector\MessagesToPublishCollector;
 use EJM\Flow\Mapper\D3\ForceLayoutMapper;
 use EJM\Flow\Network\Builder;
-use EJM\Flow\Network\Builder\AssemblyStage\AddCommandsAndHandlers;
-use EJM\Flow\Network\Builder\AssemblyStage\AddEventsAndSubscribers;
-use EJM\Flow\Network\Builder\AssemblyStage\AddPublishedMessages;
 use EJM\Flow\Network\Splitter;
+use EJM\Flow\Tests\Functional\TestHelper;
 use PHPUnit_Framework_TestCase;
 
 class GetGraphTest extends PHPUnit_Framework_TestCase
 {
     public function testAction()
     {
-        $commandHandlerMap = [
-            'execute_command' => [
-                'id' => 'execute_command_handler',
-                'class' => 'EJM\\Flow\\Tests\\Functional\\Sandbox\\SimpleBus\\Command\\ExecuteCommandHandler',
-            ],
-            'execute_command_2' => [
-                'id' => 'execute_command_2_handler',
-                'class' => 'EJM\\Flow\\Tests\\Functional\\Sandbox\\SimpleBus\\Command\\ExecuteCommand2Handler',
-            ],
-        ];
-
-        $eventSubscribersMap = [
-            'command_executed' => [
-                [
-                    'id' => 'log_command_executed',
-                    'class' => 'EJM\\Flow\\Tests\\Functional\\Sandbox\\SimpleBus\\Subscriber\\LogCommandExecuted',
-                ],
-                [
-                    'id' => 'trigger_execute_command_2',
-                    'class' => 'EJM\\Flow\\Tests\\Functional\\Sandbox\\SimpleBus\\Subscriber\\TriggerExecuteCommand2',
-                ],
-            ],
-        ];
-
         $expectedGraph = [
             [
                 'nodes' =>[
@@ -120,18 +93,11 @@ class GetGraphTest extends PHPUnit_Framework_TestCase
             ],
         ];
 
-        $builder = new Builder();
-        $builder->withAssemblyStage(new AddCommandsAndHandlers($commandHandlerMap));
-        $builder->withAssemblyStage(new AddEventsAndSubscribers($eventSubscribersMap));
-        $builder->withAssemblyStage(new AddPublishedMessages(new MessagesToPublishCollector()));
-
-        $network = $builder->build();
-
+        $network = TestHelper::getNetwork();
         $splitter = new Splitter();
+        $mapper = new ForceLayoutMapper();
 
         $networks = $splitter->split($network);
-
-        $mapper = new ForceLayoutMapper();
 
         $graph = array_map(
             function($network) use ($mapper) {
@@ -140,6 +106,6 @@ class GetGraphTest extends PHPUnit_Framework_TestCase
             $networks
         );
 
-        $this->assertEquals($expectedGraph, json_decode(json_encode($graph), true));
+        $this->assertEquals($expectedGraph, TestHelper::objectToArray($graph));
     }
 }

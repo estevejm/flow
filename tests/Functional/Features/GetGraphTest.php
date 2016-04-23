@@ -93,18 +93,9 @@ class GetGraphTest extends PHPUnit_Framework_TestCase
             ],
         ];
 
-        $network = TestHelper::getNetwork();
-        $splitter = new Splitter();
-        $mapper = new ForceLayoutMapper();
-
-        $networks = $splitter->split($network);
-
-        $graph = array_map(
-            function($network) use ($mapper) {
-                return $mapper->map($network);
-            },
-            $networks
-        );
+        $network  = TestHelper::getNetwork();
+        $networks = (new Splitter())->split($network);
+        $graph    = (new ForceLayoutMapper())->arrayMap($networks);
 
         $this->assertEquals($expectedGraph, TestHelper::objectToArray($graph));
     }

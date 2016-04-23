@@ -15,18 +15,9 @@ class DataController extends Controller
     {
         $network = $this->get('flow.network');
         $networks = $this->get('flow.network.splitter')->split($network);
-
-        $result = array_map([$this, 'map'], $networks);
+        $result = $this->get('flow.mapper')->arrayMap($networks);
 
         return new JsonResponse($result);
-    }
-
-    /**
-     * @param Network $network
-     * @return array
-     */
-    private function map(Network $network) {
-        return $this->get('flow.mapper')->map($network);
     }
 
     /**

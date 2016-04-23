@@ -3,13 +3,11 @@
 namespace EJM\Flow\Tests\Functional;
 
 use EJM\Flow\Collector\MessagesToPublishCollector;
-use EJM\Flow\Mapper\D3\ForceLayoutMapper;
 use EJM\Flow\Network\Builder;
 use EJM\Flow\Network\Builder\AssemblyStage\AddCommandsAndHandlers;
 use EJM\Flow\Network\Builder\AssemblyStage\AddEventsAndSubscribers;
 use EJM\Flow\Network\Builder\AssemblyStage\AddPublishedMessages;
 use EJM\Flow\Network\Network;
-use EJM\Flow\Network\Splitter;
 use EJM\Flow\Validator\Constraint\EventWithoutSubscriber;
 use EJM\Flow\Validator\Constraint\HandlerTriggersCommand;
 use EJM\Flow\Validator\Validator;

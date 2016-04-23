@@ -12,28 +12,17 @@
 >
     <php>
         <ini name="error_reporting" value="-1" />
-        <server name="KERNEL_DIR" value="tests/Functional/Sandbox" />
     </php>
 
     <testsuites>
         <testsuite name="EJM Flow Test Suit">
             <directory>tests</directory>
         </testsuite>
-        <testsuite name="EJMFlowBundle Test Suit">
-            <directory>src/Bridge/Symfony/FlowBundle/Tests</directory>
-        </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
             <directory>src</directory>
-            <exclude>
-                <directory>src/Bridge/Symfony/FlowBundle/Resources</directory>
-                <directory>src/Bridge/Symfony/FlowBundle/Tests</directory>
-            </exclude>
         </whitelist>
     </filter>
-    <logging>
-        <log type="coverage-clover" target="build/logs/clover.xml"/>
-    </logging>
 </phpunit>

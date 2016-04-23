@@ -1,3 +1,0 @@
-ejm_flow_index:
-    path:     /
-    defaults: { _controller: EJMFlowUIBundle:Default:index }
